@@ -16,7 +16,7 @@ What Bussola does and how to find your way around it once it is running. Back to
 - **Transactions.** Expenses, income and transfers between accounts, entered on a keypad that does arithmetic, with search and month-by-month browsing.
 - **Summaries.** A yearly chart of income and expenses by month, a per-category breakdown and a monthly detail view.
 - **Portfolio.** Holdings per account (ETFs, stocks, bonds, funds, crypto, deposit accounts…), allocation across four pillars (*cash*, *emergency fund*, *planned expenses*, *long term*), diversification by type, issuer, country and currency, and a monthly snapshot kept as history. ETF and crypto prices can update automatically through a quote service (see [Price updates](configuration.md#price-updates)); without one, you enter values by hand.
-- **Several people, shared wallets.** Everyone creates the wallets they need, and whoever created one can share it with other people as *read and write* or *read only*. Isolation between wallets is enforced by the database itself, not by application code.
+- **Multi-user, multi-wallets.** Everyone has their own account and creates the wallets they need, and whoever created one can share it with other people with *read* or *read-write* permissions. Isolation between wallets is enforced by the database itself, not by application code.
 - **Six interface languages:** English, Italian, French, German, Spanish and Chinese (Simplified). Each person picks their own.
 - **A currency per wallet** (EUR, USD, GBP, CHF, JPY, AUD, CAD, CNY, HKD, SEK). Amounts are formatted the way your language writes them.
 - **Bank mode.** One toggle (or `H`) blurs every amount on screen, for when someone is looking over your shoulder.

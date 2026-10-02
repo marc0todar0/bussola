@@ -79,12 +79,12 @@ works fully with values you type in. Each is a few lines in `.env`:
 
 ## Features
 
+- **Multi-user, multi-wallets**: one installation hosts as many people as you like, each with their own account and as many wallets as they need; share a wallet with **read** or **read-write** permissions (read-write with your partner, read with your accountant), and the database itself enforces who sees what
 - **Accounts, categories and transactions**: expenses, income and transfers, entered on a keypad that does arithmetic
 - **Search and history**: filter by account, category, type and words, and page back through years of transactions
 - **Summaries**: a year at a time, then month by month and category by category
 - **Portfolio**: ETFs, stocks, bonds, funds, crypto and deposit accounts across four pillars (cash, emergency fund, planned expenses, long term), with diversification by type, issuer, country and currency
 - **Monthly snapshots** of the portfolio, kept as history
-- **Shared wallets**: share a wallet read-write with your partner or read-only with your accountant; the database itself enforces who sees what
 - **Six languages** (English, Italian, French, German, Spanish, Chinese) and **a currency per wallet**
 - **Import and export**: any bank's CSV through a mapping wizard, and a whole wallet as one archive that imports into any installation
 - **Bank mode**: one key (`H`) blurs every amount on screen
@@ -98,11 +98,13 @@ The full list, with the details, is in [Using Bussola](docs/using.md#features).
 
 ## Who's it for?
 
-For one person or a household that wants to see **where the money goes and what
-it adds up to** in the same place, without handing either to a cloud service.
-You need a machine that can run Docker: a home server, a Raspberry Pi, a small
-VPS or your own computer. One installation can host several people, each with
-their own wallets.
+For anyone who wants to see **where the money goes and what it adds up to** in
+the same place, without handing either to a cloud service. Bussola is
+**multi-user and multi-wallets**: one installation serves a whole household or a
+group of friends, everyone with their own account and wallets, and a wallet is
+shared only with the people its owner picks, with **read** or **read-write**
+permissions. You need a machine that can run Docker: a home server, a Raspberry
+Pi, a small VPS or your own computer.
 
 ## Screenshots
 
