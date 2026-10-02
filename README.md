@@ -5,8 +5,9 @@
 <h1 align="center">Bussola</h1>
 
 <p align="center">
-  A free and open source personal finance app for your spending <em>and</em> your investments<br>
-  Self-hosted, no telemetry, privacy-friendly<br>
+  <strong>All your money, in one place, adding up.</strong><br>
+  Every bank, card, wallet, broker and pocket of cash: your spending <em>and</em> your net worth, in one app you run yourself<br>
+  Free and open source, self-hosted, no telemetry<br>
   <a href="https://demo-bussola.marcotodaro.dev"><strong>Try the demo</strong></a>
 </p>
 
@@ -22,15 +23,135 @@
   <img src="docs/screenshots/summary.png" width="820" alt="The yearly summary: income, expenses and net, and a chart by month">
 </p>
 
-## Introduction
+## Why Bussola
 
-Bussola is a personal finance app you run on your own machine. It keeps
-**day-to-day spending and invested wealth in one place**: bank accounts,
-categories and transactions on one side, an investment portfolio split into four
-"pillars" on the other, with monthly and yearly summaries across both.
+Two banks, a credit card, PayPal or Satispay, a broker, a crypto exchange, the
+cash in your pocket. Each app shows you its own slice, and none of them tells
+you where the money goes overall or what it all adds up to. Bussola does, on a
+server of your own.
+
+- **Every account, one total.** Banks, cards, payment apps, brokers, exchanges
+  and cash are all just accounts. Open new ones and close old ones as often as
+  you like: archive what you no longer use and its history stays.
+- **Spending and net worth together.** Expenses and income month by month, and
+  next to them everything you own: ETFs, stocks, bonds, crypto and deposits
+  across four pillars, with a snapshot every month and, if you want them,
+  automatic prices.
+- **No aggregator, no bank passwords.** Your phone forwards each bank
+  notification; a language model of your choice turns it into a draft, and you
+  accept it in one tap. Or import any bank's CSV.
+- **Yours, shared on your terms.** Self-hosted, **multi-user, multi-wallets**:
+  share a wallet with **read** or **read-write** permissions, and PostgreSQL
+  row-level security keeps every wallet apart. MIT licence, no telemetry.
 
 The demo runs entirely in your browser, on invented data; the
 [project site](https://bussola.marcotodaro.dev) has a short tour.
+
+## Screenshots
+
+All taken from the fictional [demo dataset](docs/install.md#demo-data-optional).
+
+| | |
+|:---:|:---:|
+| ![A new expense on the keypad: from Cartesio Bank to Groceries, 42.50](docs/screenshots/transaction-form.png) | ![The yearly summary: income, expenses and net, and a chart by month](docs/screenshots/summary.png) |
+| **Adding a transaction.** A keypad that does arithmetic, driven entirely from the keyboard. | **Summary.** A year at a time, then month by month and category by category. |
+| ![The portfolio split across the four pillars, and its history](docs/screenshots/portfolio.png) | ![The accounts list with every amount blurred](docs/screenshots/bank-mode.png) |
+| **Portfolio.** Wealth across the four pillars, with a monthly history. | **Bank mode.** One key (`H`) hides every amount on screen. |
+| ![The yearly summary in the dark theme](docs/screenshots/summary-dark.png) | ![The sign-in card with a "Sign in with a passkey" button](docs/screenshots/passkey.png) |
+| **Dark theme**, or follow the system. | **Passkeys.** Sign in with a fingerprint or face instead of typing the password. |
+
+<p align="center">
+  <img src="docs/screenshots/mobile-transactions.png" alt="The transaction list on a phone" width="200">
+  <img src="docs/screenshots/mobile-keypad.png" alt="A new expense on the keypad, on a phone" width="200">
+  <img src="docs/screenshots/mobile-summary.png" alt="The yearly summary on a phone" width="200">
+  <img src="docs/screenshots/mobile-portfolio.png" alt="The portfolio's four pillars on a phone" width="200">
+</p>
+<p align="center"><b>On a phone</b>, the same app.</p>
+
+## Features
+
+- **Accounts, categories and transactions**: expenses, income and transfers, entered on a keypad that does arithmetic (`12.40+7.90` is one entry); archive an account or category you no longer use and its history stays
+- **Search and history**: filter by account, category, type and words, and page back through years of transactions
+- **Summaries**: a year at a time, then month by month and category by category
+- **Portfolio**: ETFs, ETCs, stocks, bonds, funds, crypto and deposit accounts across four pillars (cash, emergency fund, planned expenses, long term), each holding's return and annualised return, and diversification by type, issuer, country and currency. Your bank balances count as cash, so the total is your net worth
+- **Monthly snapshots** of the portfolio, kept as history
+- **Automatic prices** (optional): ETFs, ETCs and stocks by ISIN, and crypto, from official APIs and in your wallet's currency
+- **Transactions from bank notifications**: your phone sends each bank notification to an inbox; a language model of your choice (on your network or hosted) drops offers and codes, fills in the rest as a draft, and you **accept** it in one tap or review it first
+- **Phone notifications**: install Bussola as an app (PWA) and get a notification when a draft waits in your inbox, with no third-party app (Web Push)
+- **Multi-user, multi-wallets**: one installation hosts as many people as you like, each with their own account and as many wallets as they need; share a wallet with **read** or **read-write** permissions (read-write with your partner, read with your accountant). Isolation is enforced by PostgreSQL row-level security, not by application code
+- **Import and export**: any bank's CSV through a mapping wizard, with a preview and probable duplicates flagged, and a whole wallet as one archive that imports into any installation
+- **Bank mode**: one key (`H`) blurs every amount on screen
+- **Passkeys**: sign in with a fingerprint or your face, with the password as a fallback
+- **Six languages** (English, Italian, French, German, Spanish, Chinese) and **a currency per wallet**
+- **Keyboard shortcuts** for nearly everything (`?` lists them), a dark theme, and a layout that works on a phone
+- **Self-contained**: three Docker containers (four with price updates), one published port, images for amd64 and arm64, no telemetry, no external account
+- **A demo in your browser**, on invented data: [demo-bussola.marcotodaro.dev](https://demo-bussola.marcotodaro.dev)
+
+The full list, with the details, is in [Using Bussola](docs/using.md#features).
+
+## How it compares
+
+Other good open source projects, each strong at what it sets out to do. Pick
+the one that fits.
+
+| | **Bussola** | Firefly III | Actual Budget | Ghostfolio | Sure |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Self-hosted | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Free and open source | ✅ MIT | ✅ AGPL-3.0 | ✅ MIT | ✅ AGPL-3.0 | ✅ AGPL-3.0 |
+| Several people, shared with read or read-write permissions | ✅ per wallet | ❌ each user separate | Partial: shared budgets, needs an OpenID provider | Partial: view-only access | ✅ per account |
+| Spending: transactions and categories | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Investments, with automatic prices | ✅ optional | ❌ | ❌ balances by hand | ✅ | ✅ |
+| Spending and net worth in one app | ✅ | Partial: no portfolio | Partial: no portfolio | ❌ no spending | ✅ |
+| Budgets | ❌ | ✅ | ✅ envelope | ❌ | ✅ |
+| Rules for transactions | ❌ | ✅ | ✅ | ❌ | ✅ |
+| Bank sync (open banking) | ❌ by design | ✅ via its data importer | ✅ | ❌ | ✅ |
+| Bank CSV import | ✅ | ✅ | ✅ | Partial: activities only | ✅ |
+| Transactions from phone notifications, read by a language model | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Passkeys | ✅ | ❌ 2FA codes | ❌ password or OpenID | ✅ fingerprint sign-in | ✅ |
+| On a phone | ✅ PWA, push notifications | Partial: community apps | ✅ PWA | ✅ PWA | ✅ PWA, companion app |
+| Interface languages | 6 | Many | Many | Many | Many |
+| Raspberry Pi (arm64 images) | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+<sub>As of October 2026, from each project's documentation and repository. ❌ means we found no such feature there.
+Firefly III, Actual Budget, Ghostfolio and Sure are the names of their own projects; Bussola is not affiliated with any of them.
+Spotted a mistake? [Open an issue](https://github.com/marc0todar0/bussola/issues).</sub>
+
+In short: for budgets, rules and bank sync, look at Firefly III or Actual
+Budget; for investments alone, Ghostfolio; for an all-in-one with bank sync,
+Sure. Bussola is for keeping many accounts, your spending and your wealth
+together without giving a bank login to anyone, in a small stack a Raspberry Pi
+runs.
+
+## Who it's for
+
+For anyone whose money is spread across **many places** (several banks, cards,
+payment apps, brokers, exchanges, cash), who opens and closes accounts often,
+and wants to see **where the money goes and what it adds up to** in one place,
+without handing either to a cloud service. Bussola is **multi-user and
+multi-wallets**: one installation serves a whole household or a group of
+friends, everyone with their own account and wallets, and a wallet is shared
+only with the people its owner picks, with **read** or **read-write**
+permissions. You need a machine that can run Docker: a home server, a Raspberry
+Pi, a NAS, a small VPS or your own computer.
+
+### Who it's not for
+
+- **One bank account and no cash?** Your bank's app already shows you
+  everything. You do not need this.
+- **You want transactions to arrive by themselves from the bank.** Bussola has
+  no open banking sync, on purpose: it never holds a bank login. It reads your
+  bank's notifications and its CSV files instead, and you confirm each movement.
+- **You budget with envelopes or zero-based.** There are no budgets, rules or
+  recurring transactions. Bussola shows what you actually spent, category by
+  category and month by month, and the *planned expenses* pillar keeps the money
+  for known costs apart.
+- **You trade actively.** A holding has one purchase price, a return and an
+  annualised return; there is no trade-by-trade history or dividend tracking.
+  Ghostfolio does that well.
+- **You run a business.** No invoicing, no double-entry accounting, no tax
+  reports.
+- **You cannot or will not run Docker.** There is no hosted version: Bussola
+  runs on a machine of yours, or nowhere.
 
 ## Getting started
 
@@ -76,56 +197,6 @@ works fully with values you type in. Each is a few lines in `.env`:
 | **Price updates** for ETFs, stocks and crypto (the `quotes` container) | Off: no container, refresh buttons disabled | `COMPOSE_PROFILES=quotes` and, for ETFs and stocks, a free key from a price provider | [Price updates](docs/price-updates.md) |
 | **Bank notifications read by a language model** (inbox, MacroDroid, iPhone Shortcuts, phone notifications) | Off: notifications that are only text are refused | `BUSSOLA_AI_URL` and `BUSSOLA_AI_MODEL`: your own Ollama, or a hosted model | [Bank notifications](docs/notifications.md) |
 
-
-## Features
-
-- **Multi-user, multi-wallets**: one installation hosts as many people as you like, each with their own account and as many wallets as they need; share a wallet with **read** or **read-write** permissions (read-write with your partner, read with your accountant), and the database itself enforces who sees what
-- **Accounts, categories and transactions**: expenses, income and transfers, entered on a keypad that does arithmetic
-- **Search and history**: filter by account, category, type and words, and page back through years of transactions
-- **Summaries**: a year at a time, then month by month and category by category
-- **Portfolio**: ETFs, stocks, bonds, funds, crypto and deposit accounts across four pillars (cash, emergency fund, planned expenses, long term), with diversification by type, issuer, country and currency
-- **Monthly snapshots** of the portfolio, kept as history
-- **Six languages** (English, Italian, French, German, Spanish, Chinese) and **a currency per wallet**
-- **Import and export**: any bank's CSV through a mapping wizard, and a whole wallet as one archive that imports into any installation
-- **Bank mode**: one key (`H`) blurs every amount on screen
-- **Passkeys**: sign in with a fingerprint or your face, with the password as a fallback
-- **Transactions from bank notifications**: your phone sends each bank notification to an inbox; a language model of your choice (on your network or hosted) drops offers and codes, fills in the rest as a draft, and you **accept** it in one tap or review it first
-- **Phone notifications**: install Bussola as an app and get a notification when a draft waits in your inbox, with no third-party app (Web Push)
-- **Keyboard shortcuts** for nearly everything, a dark theme, and a layout that works on a phone
-- **Self-contained**: three Docker containers (four with price updates), one published port, no telemetry, no external account
-
-The full list, with the details, is in [Using Bussola](docs/using.md#features).
-
-## Who's it for?
-
-For anyone who wants to see **where the money goes and what it adds up to** in
-the same place, without handing either to a cloud service. Bussola is
-**multi-user and multi-wallets**: one installation serves a whole household or a
-group of friends, everyone with their own account and wallets, and a wallet is
-shared only with the people its owner picks, with **read** or **read-write**
-permissions. You need a machine that can run Docker: a home server, a Raspberry
-Pi, a small VPS or your own computer.
-
-## Screenshots
-
-All taken from the fictional [demo dataset](docs/install.md#demo-data-optional).
-
-| | |
-|:---:|:---:|
-| ![A new expense on the keypad: from Cartesio Bank to Groceries, 42.50](docs/screenshots/transaction-form.png) | ![The yearly summary: income, expenses and net, and a chart by month](docs/screenshots/summary.png) |
-| **Adding a transaction.** A keypad that does arithmetic, driven entirely from the keyboard. | **Summary.** A year at a time, then month by month and category by category. |
-| ![The portfolio split across the four pillars, and its history](docs/screenshots/portfolio.png) | ![The accounts list with every amount blurred](docs/screenshots/bank-mode.png) |
-| **Portfolio.** Wealth across the four pillars, with a monthly history. | **Bank mode.** One key (`H`) hides every amount on screen. |
-| ![The yearly summary in the dark theme](docs/screenshots/summary-dark.png) | ![The sign-in card with a "Sign in with a passkey" button](docs/screenshots/passkey.png) |
-| **Dark theme**, or follow the system. | **Passkeys.** Sign in with a fingerprint or face instead of typing the password. |
-
-<p align="center">
-  <img src="docs/screenshots/mobile-transactions.png" alt="The transaction list on a phone" width="200">
-  <img src="docs/screenshots/mobile-keypad.png" alt="A new expense on the keypad, on a phone" width="200">
-  <img src="docs/screenshots/mobile-summary.png" alt="The yearly summary on a phone" width="200">
-  <img src="docs/screenshots/mobile-portfolio.png" alt="The portfolio's four pillars on a phone" width="200">
-</p>
-<p align="center"><b>On a phone</b>, the same app.</p>
 
 ## How it fits together
 
@@ -200,21 +271,6 @@ spells out what is sent and which free tiers are safe for financial data.
 
 Without any reading model, a notification that is only text is refused and
 nothing is kept; a sender that posts a ready-made draft still works.
-
-## Bussola or Firefly III?
-
-[Firefly III](https://www.firefly-iii.org/) is double-entry bookkeeping with
-budgets, rules, recurring transactions and an API. It is powerful, but there is
-a method to learn, and it does not track investments.
-[Ghostfolio](https://ghostfol.io/) tracks investments only;
-[Actual Budget](https://actualbudget.org/) does envelope budgeting. All three
-are good at what they set out to do.
-
-Bussola keeps spending and wealth together: your accounts and transactions, and
-what you own split across four pillars (cash, emergency fund, planned expenses,
-long term), in an interface you can use without a manual.
-
-If you need budgets, rules and double-entry, use Firefly III.
 
 ## Documentation
 

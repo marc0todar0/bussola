@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bussola — personal finance you run yourself</title>
-<meta name="description" content="Bussola keeps your spending and your investments in one app that runs on your own server. Free software, MIT licence.">
+<title>Bussola — all your money, added up, on your own server</title>
+<meta name="description" content="Every bank, card, wallet, broker and pocket of cash in one place: your spending and your net worth, added up in an app you run yourself. Free software, MIT licence.">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:title" content="Bussola">
-<meta property="og:description" content="Your spending and your investments, in one app you run yourself.">
+<meta property="og:description" content="Every bank, card, wallet, broker and pocket of cash in one place: spending and net worth, added up on a server of your own.">
 <meta property="og:image" content="https://bussola.marcotodaro.dev/screenshots/summary.png">
 <meta property="og:url" content="https://bussola.marcotodaro.dev/">
 <link rel="preload" href="fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
@@ -20,6 +20,7 @@
 <header class="top">
   <a class="brand" href="/"><img src="icon.svg" alt="" width="28" height="28">Bussola</a>
   <nav aria-label="Links">
+    <a href="#compare">Compare</a>
     <a href="https://demo-bussola.marcotodaro.dev">Demo</a>
     <a href="https://github.com/marc0todar0/bussola">GitHub</a>
   </nav>
@@ -29,18 +30,19 @@
 
 <section class="hero">
   <div class="hero-text">
-    <h1>Your spending and your investments, in one app you run yourself.</h1>
-    <p class="lede">Bussola tracks bank accounts, expenses and income, and the
-    investments you hold, on a server of your own. It is multi-user and
-    multi-wallets: one installation serves a whole household, everyone with
-    their own account and wallets, shared with read or read-write permissions.
-    Nothing goes to a cloud service.</p>
+    <h1>All your money, in one place, adding up.</h1>
+    <p class="lede">Two banks, a credit card, PayPal or Satispay, a broker, a
+    crypto exchange, the cash in your pocket. Each app shows you its own slice;
+    Bussola adds them all up: where the money goes, and what it is worth
+    altogether. It runs on a server of your own, and no bank password ever
+    leaves your hands.</p>
     <div class="actions">
       <a class="button primary" href="https://demo-bussola.marcotodaro.dev">Try the demo</a>
-      <a class="button" href="https://github.com/marc0todar0/bussola">Source on GitHub</a>
+      <a class="button" href="https://github.com/marc0todar0/bussola#getting-started">Install it</a>
     </div>
     <p class="note">The demo runs in your browser on invented data. Nothing
-    you type leaves the tab, and a reload starts it over.</p>
+    you type leaves the tab, and a reload starts it over. Bussola itself is
+    free and open source, MIT licence.</p>
   </div>
 
   <figure class="rose" aria-label="The Bussola compass rose. Its four points are the four pillars of the portfolio: cash, emergency fund, planned expenses and long term.">
@@ -68,6 +70,36 @@
   </figure>
 </section>
 
+<section class="reasons" aria-labelledby="reasons-title">
+  <h2 id="reasons-title" class="visually-hidden">Why Bussola</h2>
+  <ol>
+    <li>
+      <h3>Every account, one total</h3>
+      <p>Banks, cards, payment apps, brokers, exchanges and cash are all just
+      accounts. Open new ones and close old ones as often as you like:
+      archive what you no longer use and its history stays.</p>
+    </li>
+    <li>
+      <h3>Spending and net worth together</h3>
+      <p>Expenses and income month by month, and next to them everything you
+      own: ETFs, stocks, bonds, crypto, deposits, across four pillars, with a
+      snapshot every month.</p>
+    </li>
+    <li>
+      <h3>No aggregator, no bank passwords</h3>
+      <p>Your phone forwards each bank notification; a language model of your
+      choice turns it into a draft, and you accept it in one tap. Or import
+      any bank's CSV.</p>
+    </li>
+    <li>
+      <h3>Yours, shared on your terms</h3>
+      <p>Self-hosted and multi-user, multi-wallets: share a wallet with read
+      or read-write permissions. PostgreSQL row-level security keeps wallets
+      apart. No telemetry.</p>
+    </li>
+  </ol>
+</section>
+
 <figure class="shot wide">
   <picture>
     <source srcset="screenshots/summary-dark.png" media="(prefers-color-scheme: dark)">
@@ -81,18 +113,21 @@
     <h2>Day to day</h2>
     <p>Accounts, categories and transactions: what you spend, what you earn
     and what you move between accounts. The keypad does sums, so
-    <kbd>12.40+7.90</kbd> is one entry and not a trip to the calculator.
-    Search, filter, and page back through years of history.</p>
+    <kbd>12.40+7.90</kbd> is one entry and not a trip to the calculator, and
+    the whole form runs from the keyboard. Search, filter, and page back
+    through years of history.</p>
     <figure class="shot">
       <img src="screenshots/transaction-form.png" width="2560" height="1600" loading="lazy" alt="A new expense on the keypad: from Cartesio Bank to Groceries, 42.50">
     </figure>
   </article>
   <article>
     <h2>What you own</h2>
-    <p>ETFs, shares, bonds, funds, crypto and deposit accounts, split across
-    four pillars: cash, emergency fund, planned expenses and long term.
-    A snapshot at the end of every month keeps the history. Automatic ETF
-    and crypto prices come from an optional service that runs next to it.</p>
+    <p>ETFs, ETCs, stocks, bonds, funds, crypto and deposit accounts, split
+    across four pillars: cash, emergency fund, planned expenses and long
+    term, with each holding's return and its diversification by type, issuer,
+    country and currency. A snapshot at the start of every month keeps the
+    history. ETF, stock and crypto prices can update by themselves through an
+    optional service that runs next to it.</p>
     <figure class="shot">
       <img src="screenshots/portfolio.png" width="2560" height="1600" loading="lazy" alt="The portfolio split across the four pillars, with its total, and its value over time">
     </figure>
@@ -101,6 +136,8 @@
 
 <section class="phones" aria-labelledby="phones-title">
   <h2 id="phones-title">On a phone, the same app</h2>
+  <p class="section-lede">Install it on the home screen like any app, and get
+  a notification when a bank movement is waiting for you.</p>
   <div class="phone-row">
     <img src="screenshots/mobile-transactions.png" width="1170" height="2532" loading="lazy" alt="The transaction list on a phone">
     <img src="screenshots/mobile-keypad.png" width="1170" height="2532" loading="lazy" alt="A new expense on the keypad, on a phone">
@@ -110,29 +147,133 @@
 </section>
 
 <section class="details" aria-labelledby="details-title">
-  <h2 id="details-title">Smaller things that matter</h2>
+  <h2 id="details-title">Everything it does</h2>
   <dl>
+    <div><dt>Bank notifications become drafts</dt>
+      <dd>An Android automation app or an iPhone Shortcut sends each bank
+      notification to Bussola's inbox. A language model of your choice, on
+      your own network or hosted, drops offers and codes and fills in the
+      amount, day, account and category. Accept it in one tap, or review it
+      first.</dd></div>
+    <div><dt>Notifications on your phone</dt>
+      <dd>Install Bussola as an app and it tells you when a draft is waiting:
+      Web Push, from Bussola itself, with no third-party app.</dd></div>
     <div><dt>Multi-user, multi-wallets</dt>
       <dd>Everyone has their own account and as many wallets as they need.
       Share one with read-write permissions with your partner, or read
-      permissions with your accountant. The database itself enforces who sees
-      what.</dd></div>
+      permissions with your accountant. PostgreSQL row-level security, not
+      application code, decides who sees what.</dd></div>
+    <div><dt>Any bank's CSV</dt>
+      <dd>A wizard reads any bank's export, guesses separator, dates and
+      decimals, and shows a preview with likely duplicates before anything is
+      saved.</dd></div>
+    <div><dt>Your data comes and goes</dt>
+      <dd>Export a whole wallet as one archive and import it into another
+      wallet or another installation, balances included.</dd></div>
+    <div><dt>Automatic prices, if you want them</dt>
+      <dd>An optional container fetches ETF, ETC, stock and crypto prices from
+      official APIs, in your wallet's currency. Without it, you type values in.</dd></div>
     <div><dt>Bank mode</dt>
       <dd>Press <kbd>H</kbd> and every amount on screen blurs, for when
       someone is looking over your shoulder.</dd></div>
+    <div><dt>Keyboard first</dt>
+      <dd>Shortcuts for nearly everything; press <kbd>?</kbd> to see them.
+      A dark theme, and a layout that works on a phone.</dd></div>
     <div><dt>Passkeys</dt>
       <dd>Sign in with a fingerprint or your face. The password stays as a
       fallback.</dd></div>
     <div><dt>Your language, your currency</dt>
-      <dd>English, Italian, French, German, Spanish and Chinese, and a
-      currency for each wallet.</dd></div>
-    <div><dt>Your data comes and goes</dt>
-      <dd>Import any bank's CSV. Export a whole wallet as one file, and
-      import it into another installation.</dd></div>
+      <dd>English, Italian, French, German, Spanish and Chinese, each person
+      their own, and a currency for each wallet.</dd></div>
+    <div><dt>Small and self-contained</dt>
+      <dd>Three Docker containers, one port, images for amd64 and arm64: a
+      Raspberry Pi or a NAS is enough.</dd></div>
     <div><dt>Nothing phones home</dt>
-      <dd>No telemetry and no account with anyone. Prices for ETFs and crypto
-      are the only thing it asks the internet for.</dd></div>
+      <dd>No telemetry and no account with anyone. It only reaches out for
+      prices, for push messages and for a hosted model, and only if you turn
+      them on.</dd></div>
   </dl>
+</section>
+
+<section class="compare" id="compare" aria-labelledby="compare-title">
+  <h2 id="compare-title">How it compares</h2>
+  <p class="section-lede">Other good open source projects, each strong at
+  what it sets out to do. Pick the one that fits.</p>
+  <div class="table-scroll" role="region" aria-labelledby="compare-title" tabindex="0">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col"><span class="visually-hidden">Feature</span></th>
+          <th scope="col" class="us">Bussola</th>
+          <th scope="col">Firefly III</th>
+          <th scope="col">Actual Budget</th>
+          <th scope="col">Ghostfolio</th>
+          <th scope="col">Sure</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Self-hosted</th>
+          <td class="us y">Yes</td><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td></tr>
+        <tr><th scope="row">Free and open source</th>
+          <td class="us y">MIT</td><td class="y">AGPL-3.0</td><td class="y">MIT</td><td class="y">AGPL-3.0</td><td class="y">AGPL-3.0</td></tr>
+        <tr><th scope="row">Several people, shared with read or read-write permissions</th>
+          <td class="us y">Per wallet</td><td class="n">No: each user separate</td><td class="p">Shared budgets, needs an OpenID provider</td><td class="p">View-only access</td><td class="y">Per account</td></tr>
+        <tr><th scope="row">Spending: transactions and categories</th>
+          <td class="us y">Yes</td><td class="y">Yes</td><td class="y">Yes</td><td class="n">No</td><td class="y">Yes</td></tr>
+        <tr><th scope="row">Investments, with automatic prices</th>
+          <td class="us y">Optional</td><td class="n">No</td><td class="n">No: balances by hand</td><td class="y">Yes</td><td class="y">Yes</td></tr>
+        <tr><th scope="row">Spending and net worth in one app</th>
+          <td class="us y">Yes</td><td class="p">No portfolio</td><td class="p">No portfolio</td><td class="n">No spending</td><td class="y">Yes</td></tr>
+        <tr><th scope="row">Budgets</th>
+          <td class="us n">No</td><td class="y">Yes</td><td class="y">Envelope</td><td class="n">No</td><td class="y">Yes</td></tr>
+        <tr><th scope="row">Rules for transactions</th>
+          <td class="us n">No</td><td class="y">Yes</td><td class="y">Yes</td><td class="n">No</td><td class="y">Yes</td></tr>
+        <tr><th scope="row">Bank sync (open banking)</th>
+          <td class="us n">No, by design</td><td class="y">Via its data importer</td><td class="y">Yes</td><td class="n">No</td><td class="y">Yes</td></tr>
+        <tr><th scope="row">Bank CSV import</th>
+          <td class="us y">Yes</td><td class="y">Yes</td><td class="y">Yes</td><td class="p">Activities only</td><td class="y">Yes</td></tr>
+        <tr><th scope="row">Transactions from phone notifications, read by a language model</th>
+          <td class="us y">Yes</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="n">No</td></tr>
+        <tr><th scope="row">Passkeys</th>
+          <td class="us y">Yes</td><td class="n">No: 2FA codes</td><td class="n">No: password or OpenID</td><td class="y">Fingerprint sign-in</td><td class="y">Yes</td></tr>
+        <tr><th scope="row">On a phone</th>
+          <td class="us y">PWA, push notifications</td><td class="p">Community apps</td><td class="y">PWA</td><td class="y">PWA</td><td class="y">PWA, companion app</td></tr>
+        <tr><th scope="row">Interface languages</th>
+          <td class="us p">6</td><td class="y">Many</td><td class="y">Many</td><td class="y">Many</td><td class="y">Many</td></tr>
+        <tr><th scope="row">Raspberry Pi (arm64 images)</th>
+          <td class="us y">Yes</td><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="footnote">As of October 2026, from each project's documentation
+  and repository. “No” means we found no such feature there. Firefly III,
+  Actual Budget, Ghostfolio and Sure are the names of their own projects; this
+  page is not affiliated with any of them. Spotted a mistake?
+  <a href="https://github.com/marc0todar0/bussola/issues">Tell us</a>.</p>
+</section>
+
+<section class="notfor" aria-labelledby="notfor-title">
+  <h2 id="notfor-title">Who it is not for</h2>
+  <p class="section-lede">Bussola is not for everyone, and it is better to know now.</p>
+  <ul>
+    <li><strong>One bank account and no cash?</strong> Your bank's app already
+    shows you everything. You do not need this.</li>
+    <li><strong>You want transactions to arrive by themselves from the
+    bank.</strong> Bussola has no open banking sync, on purpose: it never holds
+    a bank login. It reads your bank's notifications and its CSV files instead,
+    and you confirm each movement.</li>
+    <li><strong>You budget with envelopes or zero-based.</strong> There are no
+    budgets, rules or recurring transactions. Bussola shows what you actually
+    spent, category by category and month by month, and the planned expenses
+    pillar keeps the money for known costs apart.</li>
+    <li><strong>You trade actively.</strong> A holding has one purchase price,
+    a return and an annualised return; there is no trade-by-trade history or
+    dividend tracking. Ghostfolio does that well.</li>
+    <li><strong>You run a business.</strong> No invoicing, no double-entry
+    accounting, no tax reports.</li>
+    <li><strong>You cannot or will not run Docker.</strong> There is no hosted
+    version: Bussola runs on a machine of yours, or nowhere.</li>
+  </ul>
 </section>
 
 <section class="run" aria-labelledby="run-title">
@@ -147,7 +288,8 @@ curl -L -o .env https://github.com/marc0todar0/bussola/releases/latest/download/
 docker compose up -d</code></pre>
     <p>Then open <code>http://localhost:3000</code>. The
     <a href="https://github.com/marc0todar0/bussola#readme">README</a>
-    links the guides to HTTPS, passkeys and updates.</p>
+    links the guides to HTTPS, passkeys, price updates, bank notifications
+    and upgrades.</p>
   </div>
   <aside id="support" aria-labelledby="support-title">
     <h2 id="support-title">Free, and it stays free</h2>

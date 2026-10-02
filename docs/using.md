@@ -12,10 +12,12 @@ What Bussola does and how to find your way around it once it is running. Back to
 
 ## Features
 
-- **Accounts and categories.** Where money is kept, and what it is spent on or earned from.
+- **Accounts and categories.** Where money is kept (banks, cards, payment apps, brokers, exchanges, cash), and what it is spent on or earned from. An account or category you no longer use can be archived: it leaves the lists and its history stays.
 - **Transactions.** Expenses, income and transfers between accounts, entered on a keypad that does arithmetic, with search and month-by-month browsing.
 - **Summaries.** A yearly chart of income and expenses by month, a per-category breakdown and a monthly detail view.
-- **Portfolio.** Holdings per account (ETFs, stocks, bonds, funds, crypto, deposit accounts…), allocation across four pillars (*cash*, *emergency fund*, *planned expenses*, *long term*), diversification by type, issuer, country and currency, and a monthly snapshot kept as history. ETF and crypto prices can update automatically through a quote service (see [Price updates](configuration.md#price-updates)); without one, you enter values by hand.
+- **Portfolio.** Holdings per account (ETFs, ETCs, stocks, bonds, funds, crypto, deposit accounts…) with their return and annualised return, allocation across four pillars (*cash*, *emergency fund*, *planned expenses*, *long term*), diversification by type, issuer, country and currency, and a monthly snapshot kept as history. The balances of your other accounts count as cash, so the total is your net worth. ETF, ETC, stock and crypto prices can update automatically through the optional quotes service (see [Price updates](price-updates.md)); without it, you enter values by hand.
+- **Import and export.** Any bank's CSV through a wizard, with a preview, and a whole wallet as one archive. See [Import and export](#import-and-export).
+- **No budgets, rules or bank sync.** Bussola shows what you actually spent rather than a plan, and never holds a bank login: transactions come from your typing, your bank's notifications or its CSV files.
 - **Multi-user, multi-wallets.** Everyone has their own account and creates the wallets they need, and whoever created one can share it with other people with *read* or *read-write* permissions. Isolation between wallets is enforced by the database itself, not by application code.
 - **Six interface languages:** English, Italian, French, German, Spanish and Chinese (Simplified). Each person picks their own.
 - **A currency per wallet** (EUR, USD, GBP, CHF, JPY, AUD, CAD, CNY, HKD, SEK). Amounts are formatted the way your language writes them.
@@ -24,7 +26,8 @@ What Bussola does and how to find your way around it once it is running. Back to
 - **Transactions from bank notifications.** An iPhone automation or an Android app sends your bank's notifications to Bussola with a personal token; they wait as drafts on the Transactions page until you accept them in one tap or review them in the form. A reading model (any OpenAI-compatible endpoint you point Bussola at, yours or hosted) drops offers and codes and fills in the rest. See [Transactions from bank notifications](notifications.md).
 - **Notifications on the phone.** Install Bussola as an app (Android: Install app; iPhone: Add to Home Screen) and turn notifications on in your profile: a message appears when a draft waits in the inbox, from Bussola itself, with no other app. Needs HTTPS. See [Getting a notification on your phone](notifications.md#getting-a-notification-on-your-phone).
 - **Keyboard shortcuts** for nearly everything, and a layout that works on a phone.
-- **Self-contained.** Three Docker containers, one published port, no telemetry, no external account needed.
+- **Self-contained.** Three Docker containers (four with price updates), one published port, images for amd64 and arm64, no telemetry, no external account needed.
+- **A demo in your browser** on invented data, nothing to install: [demo-bussola.marcotodaro.dev](https://demo-bussola.marcotodaro.dev).
 
 ## Screenshots
 
