@@ -15,7 +15,9 @@
 // the log; the question goes to <base>/chat/completions (json_schema, Bearer
 // key, 429 and bad answers are failed readings, the key never in the log);
 // aiCloud() says whether the endpoint is outside the owner's network; the queue
-// runs one job at a time and survives a failing one.
+// runs one job at a time and survives a failing one; POST /api/inbox answers a
+// body that explains itself (and never echoes the text), and its refusals say
+// what to do.
 //
 // The global fetch is wrapped so that a request anywhere but this machine
 // fails the test instead of leaving it.
@@ -425,6 +427,59 @@ const main = async () => {
       `${JSON.stringify(same)} ${JSON.stringify(none)} inserted=${inserted}`);
     db.query = realQuery;
     transactionsController.insertTransaction = realInsert;
+  }
+
+  // --- what POST /api/inbox answers ------------------------------------------
+  // The controller with the database stubbed: the 201 body has to explain
+  // itself to an automation app that only saves the status and the body, keep
+  // { id } for older senders, and never echo the notification's text.
+  {
+    const db = require("../dbConn");
+    const inbox = require("../controllers/inbox_controller");
+    const realQuery = db.query;
+    db.query = async (text) => (/insert into inbox_items/.test(text) ? { rows: [{ id: 42 }], rowCount: 1 } : { rows: [], rowCount: 0 });
+    const fakeRes = () => ({ statusCode: 200, once() {}, status(code) { this.statusCode = code; return this; } });
+    const post = async (body) => {
+      const res = fakeRes();
+      try {
+        return { res, out: await inbox.createItem({ body, token: { walletId: 1, userId: 1 } }, res) };
+      } catch (error) {
+        return { res, error };
+      }
+    };
+
+    process.env.BUSSOLA_AI_URL = url;
+    process.env.BUSSOLA_AI_MODEL = "test-model";
+    const textOnly = await post({ source: "Revolut", text: `  ${TEXT}  ` });
+    const t = textOnly.out || {};
+    record("POST /api/inbox, text: 201 with id, status, what was received, that it is queued, the source and a message",
+      textOnly.res.statusCode === 201 && t.id === 42 && t.status === "pending" && t.reading === "queued"
+        && t.source === "Revolut" && t.received && t.received.kind === "text" && t.received.chars === TEXT.length
+        && typeof t.message === "string" && /42/.test(t.message) && /background/.test(t.message),
+      JSON.stringify(textOnly.out || textOnly.error));
+    record("POST /api/inbox, text: the answer never carries the notification's text",
+      !JSON.stringify(t).includes("SECRET-CARD-4242") && !JSON.stringify(t).includes("Marco Todaro"));
+
+    const drafted = await post({ draft: { amount: 12.4, description: "Esselunga" } });
+    const d = drafted.out || {};
+    record("POST /api/inbox, draft: 201, no reading needed, source defaults to api",
+      drafted.res.statusCode === 201 && d.id === 42 && d.reading === "not_needed" && d.received.kind === "draft"
+        && d.received.chars === 0 && d.source === "api" && /draft/.test(d.message),
+      JSON.stringify(drafted.out || drafted.error));
+
+    const empty = await post({ source: "x", text: "   " });
+    record("POST /api/inbox, nothing to read: 400 INBOX_EMPTY that says how to send it",
+      empty.error && empty.error.status === 400 && empty.error.code === "INBOX_EMPTY" && /text\/plain/.test(empty.error.message),
+      String(empty.error && empty.error.message));
+
+    delete process.env.BUSSOLA_AI_URL;
+    delete process.env.BUSSOLA_AI_MODEL;
+    const off = await post({ source: "x", text: TEXT });
+    record("POST /api/inbox, no model: 409 AI_DISABLED that says nothing was kept and why",
+      off.error && off.error.status === 409 && off.error.code === "AI_DISABLED" && /Not kept/.test(off.error.message)
+        && /BUSSOLA_AI_URL/.test(off.error.message),
+      String(off.error && off.error.message));
+    db.query = realQuery;
   }
 
   record("nothing left this machine", offMachine === 0, `${offMachine} requests`);

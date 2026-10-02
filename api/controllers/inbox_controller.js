@@ -193,12 +193,21 @@ exports.createItem = async (req, res) => {
   }
   const text = typeof body.text === "string" && body.text.trim() ? body.text.trim() : null;
   if (text && text.length > TEXT_MAX) {
-    throw invalid("INBOX_TEXT_TOO_LONG", `The text may be at most ${TEXT_MAX} characters`);
+    throw invalid("INBOX_TEXT_TOO_LONG", `The text has ${text.length} characters; at most ${TEXT_MAX} are accepted`);
   }
   const draft = body.draft && typeof body.draft === "object" && !Array.isArray(body.draft) ? body.draft : null;
-  if (!text && !draft) throw invalid("INBOX_EMPTY", "Send the notification's text or a draft");
+  if (!text && !draft) {
+    throw invalid(
+      "INBOX_EMPTY",
+      "Nothing to read: send the notification's text as a text/plain body (or JSON with \"text\"), or a draft",
+    );
+  }
   if (!draft && !aiEnabled()) {
-    throw new DataError(409, "AI_DISABLED", "No reading model is configured: a notification with only text is not kept. Send a draft, or turn a model on");
+    throw new DataError(
+      409,
+      "AI_DISABLED",
+      "Not kept: this Bussola has no reading model configured, so a notification with only text cannot be read. Send a draft, or ask the administrator to set BUSSOLA_AI_URL and BUSSOLA_AI_MODEL",
+    );
   }
 
   // What the sender said, validated; its ids kept only if they exist in this
@@ -259,8 +268,29 @@ exports.createItem = async (req, res) => {
   }
 
   res.status(201);
-  return { id };
+  return receipt({ id, source, text, draft: Boolean(draft) });
 };
+
+// What POST /api/inbox answers, readable on its own: an automation app on a
+// phone shows little more than the status code and the body it saved, so the
+// body says what was understood and what happens next. Only what the sender
+// already knows, and never the text itself: its length is enough to tell a
+// real notification from an empty or unreplaced one.
+const receipt = ({ id, source, text, draft }) => {
+  const chars = text ? text.length : 0;
+  return {
+    id,
+    status: "pending",
+    received: { kind: draft ? "draft" : "text", chars },
+    reading: draft ? "not_needed" : "queued",
+    source,
+    message: draft
+      ? `Received a draft from ${source} (item ${id}): it waits in the inbox to be confirmed`
+      : `Received ${chars} characters from ${source} (item ${id}): reading them in the background. ` +
+        "A movement will wait in the inbox to be confirmed; anything else is dropped",
+  };
+};
+exports.receipt = receipt;
 
 // ---------------------------------------------------------------------------
 // The reader: one notification at a time, in the background

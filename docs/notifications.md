@@ -99,7 +99,9 @@ tabs. On *Settings*:
   notification arrives, so on mobile data that means the public HTTPS address
   (or a VPN back home).
 - Leave *Block next actions*, *Allow any certificate* and *Basic
-  Authorization* off, and keep *Follow redirects* on.
+  Authorization* off, and keep *Follow redirects* on. (Turn *Block next
+  actions* on only if you add the log described in [See what was sent and what
+  came back](#see-what-was-sent-and-what-came-back).)
 
 <p align="center">
   <img src="screenshots/android-http-settings.png" width="240" alt="MacroDroid's HTTP request, Settings tab: method POST and the URL ending in /api/inbox">
@@ -158,6 +160,87 @@ A few things worth knowing in MacroDroid:
   *Enhanced notifications* in the phone's notification settings.
 - The free version of MacroDroid shows a full-screen ad after you save a macro:
   close it without tapping *Install*.
+
+### See what was sent and what came back
+
+MacroDroid's **System Log** only says that the request ran and its status code
+(`HTTP Request (POST)`, `HTTP response code: 201`). To keep a readable record of
+each notification, what Bussola answered and why, save the answer into two
+variables and write them to MacroDroid's **User Log**, which holds only what
+your macros write. Everything stays on the phone.
+
+1. **Two local variables.** In the macro editor, add two local variables:
+   `bussola_code` (integer) and `bussola_answer` (string).
+2. **Before the HTTP request**, add the action **Set Variable**: `bussola_code`,
+   *Value* `0`. A request that never reaches Bussola (no network, a timeout)
+   then leaves `0` behind instead of the previous notification's code.
+3. **In the HTTP request**, on the *Settings* tab: turn on *Block next action
+   until complete* (so the next actions wait for the answer), tick *Save HTTP
+   return code in integer variable* and pick `bussola_code`, and under
+   *Response* choose *Save the response into a string variable* and pick
+   `bussola_answer`.
+4. **After it**, add the action **Log Event**, with this *Enter log message*
+   (insert the tokens with the blue *…* button, or type them):
+
+   ```
+   Bussola ← [not_app_name]: [not_title] [notification] → [lv=bussola_code] [lv=bussola_answer]
+   ```
+
+   For *User Log Channel*, create one called `Bussola` with the **+** button,
+   so these lines are not mixed with anything else.
+5. **Optionally, a notification when it fails.** Add an **If clause** with two
+   *MacroDroid Variable* conditions on `bussola_code`, *less than* `200` and
+   *greater than* `299`, joined with **OR**; inside it, **Display
+   Notification** with the title `Bussola did not take a notification` and the
+   text `[lv=bussola_code] [lv=bussola_answer]`. *End If* is added for you.
+
+Open the log from the **User Log** tile on MacroDroid's home screen and pick
+the `Bussola` channel. A notification that arrived looks like this (Bussola's
+answer never repeats the text, only how long it was):
+
+```
+Bussola ← Revolut: Payment Paid €3.34 at ecu → 201 {"id":42,"status":"pending","received":{"kind":"text","chars":25},"reading":"queued","source":"Revolut","message":"Received 25 characters from Revolut (item 42): reading them in the background. A movement will wait in the inbox to be confirmed; anything else is dropped"}
+```
+
+What the code says:
+
+| Code | What happened | What to do |
+| --- | --- | --- |
+| `201` | Bussola has it. A movement appears in the inbox in a few seconds; an offer or a code is dropped. | Nothing. |
+| `0` | The request never got an answer: see [the timeout below](#when-the-request-times-out). | |
+| `400 INBOX_EMPTY` | The body was empty: the notification had no text, or *Content type* is not `text/plain`. | Check the *Content Body* tab. |
+| `401 TOKEN_INVALID` | The token is missing, mistyped or revoked. | Check the *Authorization* header: `Bearer`, a space, the whole token. |
+| `403 TOKEN_FORBIDDEN` | The token's owner can no longer write to its wallet. | Create a new token from an account that can. |
+| `409 AI_DISABLED` | This Bussola has no reading model, so text alone is not kept. | Ask whoever runs it to [set one up](#choosing-where-the-model-runs). |
+| `429 TOO_MANY_ATTEMPTS` | Too many invalid tokens from your address. | Fix the token and wait a quarter of an hour. |
+
+The log keeps the notification's text on the phone (it is the point of it).
+Clear the channel from the User Log's menu (*Clear log*) when you no longer
+need it, or leave `[not_title] [notification]` out of the log message.
+
+### When the request times out
+
+A System Log line such as `HTTP Request failed: … SocketTimeoutException:
+failed to connect to bussola.example.com/192.168.1.20 … after 30000ms` means
+the phone could not open a connection at all: Bussola never saw the request.
+Look at the address after the slash. When it is a private one (`192.168.…`,
+`10.…`, `172.16.…` to `172.31.…`), your domain resolves to an address that only
+exists on your home network. It works on your Wi-Fi and fails on mobile data,
+where that address leads nowhere. Any one of these fixes it:
+
+- **A public address.** Point the domain at your public IP (or a tunnel) and
+  serve Bussola through a [reverse proxy with HTTPS](install.md#behind-https--a-reverse-proxy),
+  so the phone reaches it from anywhere.
+- **A VPN back home** such as Tailscale or WireGuard, *connected* on the phone
+  whenever it is away from home (an always-on VPN, in Android's VPN settings).
+  A VPN that is installed but switched off is the usual reason this keeps
+  happening.
+- **Split DNS.** Have the domain resolve to the private address at home and to
+  the public one everywhere else, so the same URL works on both.
+
+If the address is public and it still times out, the server or the router's
+port forwarding is not answering: try the same URL in the phone's browser on
+mobile data.
 
 ## iPhone [NOT TESTED YET]
 
@@ -220,7 +303,8 @@ curl -X POST https://your-bussola.example.com/api/inbox \
 
 This needs a reading model: without one the answer is `409 AI_DISABLED` and
 nothing is kept (send a `draft` instead, see [The API](#the-api)). The answer is
-`201` with the new item's id: `{"id": 42}`, at once. Open the
+`201`, at once, with the new item's id and what Bussola made of the request
+(see [The API](#the-api)). Open the
 Transactions page and the inbox button is there; with the model on, the item
 says *Reading…* for a few seconds and then shows what it read.
 
@@ -512,8 +596,25 @@ must be a bank account and `to_id` a category of the right kind (or another
 account, for a transfer) *in the token's wallet*: an id that is not is
 dropped, not refused. A draft is taken as it is, and the model is not asked;
 with both `text` and `draft`, the text is only kept to be shown next to it.
-The text may be up to 2,000 characters. The answer is `201 {"id": …}`, at once:
-the model, when there is one, reads the text afterwards.
+The text may be up to 2,000 characters. The answer is `201`, at once: the model,
+when there is one, reads the text afterwards. Its body explains itself, for an
+automation app that can only save it ([see it in MacroDroid](#see-what-was-sent-and-what-came-back)):
+
+```json
+{
+  "id": 42,
+  "status": "pending",
+  "received": { "kind": "text", "chars": 37 },
+  "reading": "queued",
+  "source": "iPhone",
+  "message": "Received 37 characters from iPhone (item 42): reading them in the background. A movement will wait in the inbox to be confirmed; anything else is dropped"
+}
+```
+
+`received.kind` is `text` or `draft`, `chars` the length of the text kept (`0`
+for a draft without one), `reading` is `queued` (the model will read it) or
+`not_needed` (a draft), and `source` the name it was filed under (`api` when
+none was given). The text itself is never sent back.
 
 **`GET /api/inbox/context`** answers what an app needs to make its own
 proposals: the wallet's currency, its bank accounts and its expense and income
@@ -524,8 +625,11 @@ Errors: `401 TOKEN_INVALID` (a token that is missing, unknown, malformed or
 revoked: the same answer for all of them), `403 TOKEN_FORBIDDEN` (the token's
 owner can no longer write to its wallet), `409 AI_DISABLED` (only text was sent
 and no reading model is configured; nothing was kept), `400` with a code for a body that is
-not valid, `429 TOO_MANY_ATTEMPTS` after too many invalid tokens from one
-address.
+not valid (`INBOX_EMPTY` when there is neither text nor a draft, often a
+*Content type* other than `text/plain`; `INBOX_TEXT_TOO_LONG`; `INVALID_REQUEST`
+for JSON that does not parse), `429 TOO_MANY_ATTEMPTS` after too many invalid
+tokens from one address. Every error body is `{ "code": …, "error": … }`, the
+second a plain English explanation.
 
 ### Web Push endpoints
 
