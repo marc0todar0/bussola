@@ -1,0 +1,71 @@
+#!/bin/sh
+# Assembles the Content-Security-Policy and exports it as BUSSOLA_CSP.
+#
+# An .envsh file is *sourced* by the nginx image's entrypoint rather than run,
+# so what it exports is still there when 20-envsubst-on-templates.sh renders
+# bussola-security-headers.inc.template a moment later. Hence the number: it
+# has to come before 20.
+#
+# The directives:
+#
+#   default-src 'self'      anything not listed below: this origin only.
+#   script-src 'self' <h>   the bundle, plus the one inline script in
+#                           index.html (light or dark before the first paint),
+#                           allowed by its sha256 and by nothing else. The hash
+#                           is computed when the image is built, from the very
+#                           index.html the image serves (scripts/csp-hashes.mjs,
+#                           Dockerfile): edit the script and the next build
+#                           allows the new one, so the two cannot drift apart.
+#                           No 'unsafe-inline': an injected <script> or an
+#                           onerror= attribute does not run.
+#   style-src 'self' 'unsafe-inline'
+#                           ApexCharts writes style attributes on everything it
+#                           draws and injects its stylesheet as a <style>
+#                           element; react-hot-toast, the date picker and
+#                           motion do the same. None of them can be given a
+#                           nonce. Inline *styles* cannot run code, so this
+#                           costs far less than it would for scripts.
+#   img-src 'self' data: blob:
+#                           icons shipped with the app, and the data: URIs some
+#                           components draw with.
+#   font-src 'self' data:   fonts are bundled.
+#   connect-src 'self' <iconify> [<api>]
+#                           /config.json and /api on this origin; the icon
+#                           service @iconify/react loads icons from (with its
+#                           two fallbacks); and the API's own origin when
+#                           BUSSOLA_API_URL points somewhere else.
+#   worker-src 'self'       the service worker (/sw.js, Web Push) from this
+#                           origin and nowhere else. default-src would cover it
+#                           through script-src; said outright so that it stays
+#                           true if script-src ever changes.
+#   manifest-src 'self'     the web app manifest, likewise.
+#   object-src 'none'; base-uri 'self'; form-action 'self'
+#   frame-ancestors 'none'  nobody frames this application (clickjacking).
+#
+# WebAuthn needs nothing here: no CSP directive governs it, and its only
+# network traffic is the application's own /api calls.
+
+HASH_FILE=/etc/bussola/csp-script-hashes
+
+SCRIPT_HASHES=""
+if [ -r "$HASH_FILE" ]; then
+    SCRIPT_HASHES="$(cat "$HASH_FILE")"
+else
+    # Refuse inline scripts altogether rather than allowing them all: the
+    # theme flashes on load, which is the lesser evil.
+    echo "bussola: $HASH_FILE is missing: inline scripts will be refused." >&2
+fi
+
+CONNECT="'self' https://api.iconify.design https://api.simplesvg.com https://api.unisvg.com"
+case "${BUSSOLA_API_URL:-}" in
+    http://*|https://*)
+        # scheme://host[:port] of an API that is not on this origin.
+        API_ORIGIN="$(printf '%s' "$BUSSOLA_API_URL" | sed -E 's#^(https?://[^/]+).*#\1#')"
+        CONNECT="$CONNECT $API_ORIGIN"
+        ;;
+esac
+
+BUSSOLA_CSP="default-src 'self'; script-src 'self' ${SCRIPT_HASHES}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src ${CONNECT}; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+export BUSSOLA_CSP
+
+echo "bussola: Content-Security-Policy ready (inline script hashes: ${SCRIPT_HASHES:-none})."

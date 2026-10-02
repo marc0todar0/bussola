@@ -1,0 +1,10 @@
+/* body is a flex container, so #root is a flex item: without a width it
+   shrinks to its content instead of filling the window. The tab bar used to
+   hide this by being 100vw wide, which is also why it overflowed sideways
+   when the scrollbar took its share. The width belongs here. */
+#root {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  text-align: center;
+}

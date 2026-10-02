@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- The SVG is the real icon; the PNG is the fallback for browsers that
+         will not take one (Safari, and every version of it on iOS). Order
+         matters: browsers that understand both pick the last one they can
+         use, so the SVG goes second. -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#1E90FF" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bussola</title>
+    <!-- Light or dark, decided before the first paint. The bundle is a module
+         and runs after the document has been parsed -- and after /config.json
+         has been fetched -- so if the theme waited for it, a dark screen would
+         open white and then flip. This runs in the head, blocking, in a few
+         microseconds. It is a copy of resolve() + apply() in
+         src/utils/theme.js: same key, same attribute, same colours for the
+         browser chrome.
+
+         nginx sends a Content-Security-Policy that refuses inline scripts
+         except this one, allowed by its sha256. The hash has to change
+         whenever a single byte between the two script tags does -- and it
+         does by itself: the Dockerfile computes it from the built index.html
+         (scripts/csp-hashes.mjs) and the container's CSP uses that. Keep it
+         the only inline script, and never add an on...= attribute: the build
+         refuses those. Under `yarn dev` there is no CSP at all. -->
+
+    <script>
+      (function () {
+        var choice = "system";
+        try {
+          var stored = localStorage.getItem("bussola.theme");
+          if (stored === "light" || stored === "dark") choice = stored;
+        } catch (e) {
+          /* private mode, blocked storage: follow the system */
+        }
+        var dark =
+          choice === "dark" ||
+          (choice === "system" &&
+            !!window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", dark ? "#181c22" : "#1E90FF");
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

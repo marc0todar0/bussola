@@ -1,0 +1,185 @@
+.manage {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0.5rem 0.75rem 5rem;
+}
+
+.manage-back {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  background: var(--surface);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.manage-section {
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  background: var(--surface);
+}
+
+.manage-section h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+}
+
+.manage-hint {
+  margin: 0 0 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.manage-list {
+  list-style: none;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.manage-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.5rem;
+}
+
+.manage-name {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.manage-meta {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.manage-tag {
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background: var(--chip-bg);
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  flex: none;
+}
+
+.manage-tag-off {
+  background: var(--danger-soft);
+  color: var(--danger-text);
+}
+
+.manage-icon-button {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  background: var(--surface);
+  color: var(--danger-text);
+}
+
+/* One column on a phone: three inputs and a button in a row would each be a
+   few characters wide. */
+.manage-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.manage-form input {
+  flex: 1 1 9rem;
+  min-width: 0;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--input-border);
+  border-radius: 0.4rem;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.manage-form select,
+.manage-row select {
+  padding: 0.45rem 0.5rem;
+  border: 1px solid var(--input-border);
+  border-radius: 0.4rem;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.85rem;
+}
+
+.manage-form button,
+.manage-row button {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--input-border);
+  border-radius: 0.4rem;
+  background: var(--surface-2);
+  /* A token, like the rest: the button follows the theme, never the UA. */
+  color: var(--text);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.manage-form button:disabled,
+.manage-row button:disabled {
+  opacity: 0.55;
+}
+
+@media (max-width: 520px) {
+  .manage-form input {
+    flex-basis: 100%;
+  }
+}
+
+/* Deleting an account or a wallet: the row turns into the question, the
+   name to type back, and the two answers. */
+.manage-confirm {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.manage-confirm-ask {
+  flex: 1 1 100%;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.manage-confirm input {
+  flex: 1 1 9rem;
+  min-width: 0;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--input-border);
+  border-radius: 0.4rem;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.manage-destructive {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--danger-text);
+}

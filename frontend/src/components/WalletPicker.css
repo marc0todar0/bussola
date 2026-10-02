@@ -1,0 +1,88 @@
+/* The picker sits inside .login-box (Login.css): same card, same width, so
+   the way in and the choice of what to open read as one screen. */
+
+.wallet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 45vh;
+  overflow-y: auto;
+}
+
+.wallet-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background-color: var(--surface);
+  /* Spelled out, like every colour here, as a token: this used to be a
+     literal because the UA's button colour turned white on a dark system and
+     vanished against the white card. index.css now gives buttons the text
+     colour, but the item says its own so it cannot drift from the card. */
+  color: var(--text);
+  font-size: 1rem;
+  text-align: left;
+}
+
+.wallet-item:hover:not(:disabled) {
+  border-color: var(--accent);
+  background-color: var(--surface-2);
+}
+
+.wallet-item:disabled {
+  opacity: 0.6;
+}
+
+/* The one already open is marked rather than hidden: it is still a valid
+   answer, and removing it would make the list jump around. */
+.wallet-item-current {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.wallet-item-name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wallet-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.wallet-badge {
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background-color: var(--chip-bg);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.wallet-members {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.wallet-empty {
+  margin: 0;
+  padding: 0.75rem 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.wallet-create {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}

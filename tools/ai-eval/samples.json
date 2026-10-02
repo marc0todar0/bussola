@@ -1,0 +1,369 @@
+[
+ {
+  "app": "Revolut",
+  "text": "💳 Paid €12.40 at Esselunga",
+  "type": "expense",
+  "category": "Spesa",
+  "account": "Revolut",
+  "amount": 12.4,
+  "merchant": "Esselunga"
+ },
+ {
+  "app": "Revolut",
+  "text": "Paid €4.50 at Starbucks",
+  "type": "expense",
+  "category": "Ristoranti e bar",
+  "account": "Revolut",
+  "amount": 4.5,
+  "merchant": "Starbucks"
+ },
+ {
+  "app": "Revolut",
+  "text": "🍕 €32.00 at Rossopomodoro",
+  "type": "expense",
+  "category": "Ristoranti e bar",
+  "account": "Revolut",
+  "amount": 32.0,
+  "merchant": "Rossopomodoro"
+ },
+ {
+  "app": "Revolut",
+  "text": "Paid €13.99 at Netflix.com",
+  "type": "expense",
+  "category": "Abbonamenti",
+  "account": "Revolut",
+  "amount": 13.99,
+  "merchant": "Netflix"
+ },
+ {
+  "app": "Revolut",
+  "text": "Paid €2.20 at ATM Milano",
+  "type": "expense",
+  "category": "Trasporti",
+  "account": "Revolut",
+  "amount": 2.2,
+  "merchant": "ATM"
+ },
+ {
+  "app": "Revolut",
+  "text": "You received €45.00 from Luca Bianchi",
+  "type": "income",
+  "category": "Rimborsi",
+  "account": "Revolut",
+  "amount": 45.0,
+  "merchant": "Luca Bianchi"
+ },
+ {
+  "app": "Revolut",
+  "text": "💸 €200.00 added to your EUR account from Fineco",
+  "type": "transfer",
+  "counter": "Fineco",
+  "account": "Revolut",
+  "amount": 200.0,
+  "merchant": null,
+  "direction": "in"
+ },
+ {
+  "app": "Revolut",
+  "text": "Sent €500.00 to Marco Todaro (Fineco)",
+  "type": "transfer",
+  "counter": "Fineco",
+  "account": "Revolut",
+  "amount": 500.0,
+  "merchant": null,
+  "direction": "out"
+ },
+ {
+  "app": "Revolut",
+  "text": "Hai pagato 18,90 € da Amazon",
+  "type": "expense",
+  "category": "Shopping",
+  "account": "Revolut",
+  "amount": 18.9,
+  "merchant": "Amazon"
+ },
+ {
+  "app": "Revolut",
+  "text": "Hai ricevuto 20,00 € da Giulia Verdi",
+  "type": "income",
+  "category": "Rimborsi",
+  "account": "Revolut",
+  "amount": 20.0,
+  "merchant": "Giulia Verdi"
+ },
+ {
+  "app": "Fineco",
+  "text": "SMS Gratuito: Autorizzato Utilizzo Carta di Credito xxx - Importo 1,98 EUR per: ITUNES MUSIC",
+  "type": "expense",
+  "category": "Abbonamenti",
+  "account": "Fineco",
+  "amount": 1.98,
+  "merchant": "ITUNES"
+ },
+ {
+  "app": "Fineco",
+  "text": "Autorizzato utilizzo carta di debito ****1234 - Importo 64,30 EUR per: ESSELUNGA MILANO",
+  "type": "expense",
+  "category": "Spesa",
+  "account": "Fineco",
+  "amount": 64.3,
+  "merchant": "ESSELUNGA"
+ },
+ {
+  "app": "Fineco",
+  "text": "Autorizzato utilizzo carta di debito ****1234 - Importo 55,00 EUR per: ENI STATION 4821",
+  "type": "expense",
+  "category": "Trasporti",
+  "account": "Fineco",
+  "amount": 55.0,
+  "merchant": "ENI"
+ },
+ {
+  "app": "Fineco",
+  "text": "Accredito stipendio di 2.450,00 EUR da ACME SRL",
+  "type": "income",
+  "category": "Stipendio",
+  "account": "Fineco",
+  "amount": 2450.0,
+  "merchant": "ACME"
+ },
+ {
+  "app": "Fineco",
+  "text": "Bonifico in entrata di 150,00 EUR da ROSSI MARIO causale: cena",
+  "type": "income",
+  "category": "Rimborsi",
+  "account": "Fineco",
+  "amount": 150.0,
+  "merchant": "ROSSI MARIO"
+ },
+ {
+  "app": "Fineco",
+  "text": "Bonifico disposto di 300,00 EUR a favore di TODARO MARCO (Revolut)",
+  "type": "transfer",
+  "counter": "Revolut",
+  "account": "Fineco",
+  "amount": 300.0,
+  "merchant": null,
+  "direction": "out"
+ },
+ {
+  "app": "Fineco",
+  "text": "Addebito SDD di 89,90 EUR a favore di ENEL ENERGIA",
+  "type": "expense",
+  "category": "Casa",
+  "account": "Fineco",
+  "amount": 89.9,
+  "merchant": "ENEL"
+ },
+ {
+  "app": "Fineco",
+  "text": "Prelievo Bancomat di 100,00 EUR presso ATM UNICREDIT",
+  "type": "expense",
+  "category": "Varie",
+  "account": "Fineco",
+  "amount": 100.0,
+  "merchant": "UNICREDIT"
+ },
+ {
+  "app": "Fineco",
+  "text": "Addebito SDD di 750,00 EUR a favore di IMMOBILIARE CASA BELLA affitto ottobre",
+  "type": "expense",
+  "category": "Casa",
+  "account": "Fineco",
+  "amount": 750.0,
+  "merchant": "CASA BELLA"
+ },
+ {
+  "app": "Fineco",
+  "text": "Accredito interessi 3,12 EUR conto deposito",
+  "type": "income",
+  "category": "Interessi",
+  "account": "Fineco",
+  "amount": 3.12,
+  "merchant": null
+ },
+ {
+  "app": "N26",
+  "text": "Du hast 23,40 € bei REWE bezahlt",
+  "type": "expense",
+  "category": "Spesa",
+  "account": "N26",
+  "amount": 23.4,
+  "merchant": "REWE"
+ },
+ {
+  "app": "N26",
+  "text": "You spent €9.80 at Uber",
+  "type": "expense",
+  "category": "Trasporti",
+  "account": "N26",
+  "amount": 9.8,
+  "merchant": "Uber"
+ },
+ {
+  "app": "N26",
+  "text": "−€45,00 · Zalando",
+  "type": "expense",
+  "category": "Shopping",
+  "account": "N26",
+  "amount": 45.0,
+  "merchant": "Zalando"
+ },
+ {
+  "app": "N26",
+  "text": "Hai speso 7,50 € da Farmacia Centrale",
+  "type": "expense",
+  "category": "Salute",
+  "account": "N26",
+  "amount": 7.5,
+  "merchant": "Farmacia Centrale"
+ },
+ {
+  "app": "N26",
+  "text": "Incoming transfer: +€120.00 from Paolo Neri",
+  "type": "income",
+  "category": "Rimborsi",
+  "account": "N26",
+  "amount": 120.0,
+  "merchant": "Paolo Neri"
+ },
+ {
+  "app": "N26",
+  "text": "Accredito di 250,00 € da Marco Todaro (Revolut)",
+  "type": "transfer",
+  "counter": "Revolut",
+  "account": "N26",
+  "amount": 250.0,
+  "merchant": null,
+  "direction": "in"
+ },
+ {
+  "app": "N26",
+  "text": "You spent €38.00 at Trenitalia",
+  "type": "expense",
+  "category": "Viaggi",
+  "account": "N26",
+  "amount": 38.0,
+  "merchant": "Trenitalia"
+ },
+ {
+  "app": "N26",
+  "text": "Hai speso 11,99 € da Spotify",
+  "type": "expense",
+  "category": "Abbonamenti",
+  "account": "N26",
+  "amount": 11.99,
+  "merchant": "Spotify"
+ },
+ {
+  "app": "Nexo",
+  "text": "Your Nexo Card payment of €27.60 at LIDL ITALIA was approved",
+  "type": "expense",
+  "category": "Spesa",
+  "account": "Nexo",
+  "amount": 27.6,
+  "merchant": "LIDL"
+ },
+ {
+  "app": "Nexo",
+  "text": "Card payment €15.00 at Cinema Anteo approved. 2% cashback in NEXO",
+  "type": "expense",
+  "category": "Svago",
+  "account": "Nexo",
+  "amount": 15.0,
+  "merchant": "Cinema Anteo"
+ },
+ {
+  "app": "Nexo",
+  "text": "You earned 4.21 USDC in daily interest",
+  "type": "income",
+  "category": "Interessi",
+  "account": "Nexo",
+  "amount": 4.21,
+  "merchant": null
+ },
+ {
+  "app": "Nexo",
+  "text": "Your EUR top-up of €1,000.00 from Fineco has arrived",
+  "type": "transfer",
+  "counter": "Fineco",
+  "account": "Nexo",
+  "amount": 1000.0,
+  "merchant": null,
+  "direction": "in"
+ },
+ {
+  "app": "Nexo",
+  "text": "Card payment €120.00 at RYANAIR approved",
+  "type": "expense",
+  "category": "Viaggi",
+  "account": "Nexo",
+  "amount": 120.0,
+  "merchant": "RYANAIR"
+ },
+ {
+  "app": "OKX",
+  "text": "Deposit successful: 500.00 EUR has been credited to your account via SEPA from Revolut",
+  "type": "transfer",
+  "counter": "Revolut",
+  "account": "OKX",
+  "amount": 500.0,
+  "merchant": null,
+  "direction": "in"
+ },
+ {
+  "app": "OKX",
+  "text": "OKX Card: you spent €8.50 at McDonald's",
+  "type": "expense",
+  "category": "Ristoranti e bar",
+  "account": "OKX",
+  "amount": 8.5,
+  "merchant": "McDonald"
+ },
+ {
+  "app": "OKX",
+  "text": "Withdrawal completed: 300.00 EUR sent to your bank account (Fineco)",
+  "type": "transfer",
+  "counter": "Fineco",
+  "account": "OKX",
+  "amount": 300.0,
+  "merchant": null,
+  "direction": "out"
+ },
+ {
+  "app": "OKX",
+  "text": "You received 0.0021 BTC in Earn rewards",
+  "type": "income",
+  "category": "Interessi",
+  "account": "OKX",
+  "amount": 0.0021,
+  "merchant": null
+ },
+ {
+  "app": "OKX",
+  "text": "OKX Card: €64.00 at Decathlon",
+  "type": "expense",
+  "category": "Shopping",
+  "account": "OKX",
+  "amount": 64.0,
+  "merchant": "Decathlon"
+ },
+ {
+  "app": "Revolut",
+  "text": "Paid €58.00 at Studio Dentistico Galli",
+  "type": "expense",
+  "category": "Salute",
+  "account": "Revolut",
+  "amount": 58.0,
+  "merchant": "Studio Dentistico Galli"
+ },
+ {
+  "app": "Revolut",
+  "text": "🎬 €12.00 at The Space Cinema",
+  "type": "expense",
+  "category": "Svago",
+  "account": "Revolut",
+  "amount": 12.0,
+  "merchant": "Space Cinema"
+ }
+]

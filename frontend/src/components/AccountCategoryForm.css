@@ -1,0 +1,104 @@
+/* Layout of the account/category form.
+   The rules that depend on the width live here and not in the component's
+   inline styles: a media query cannot be expressed in a style attribute, and
+   the holding row is exactly what has to change shape on a phone. */
+
+/* ---- Holding row ----
+   Desktop: everything on one line. Mobile: the name takes the full width,
+   then the metrics and the amount, then the buttons on a row of their own,
+   wide enough to touch. */
+.holding-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+.holding-name {
+  flex: 2 1 140px;
+  min-width: 0;
+}
+
+.holding-metrics {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+
+.holding-amount {
+  flex: 1 1 110px;
+  min-width: 0;
+}
+
+.holding-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  flex: none;
+}
+
+@media (max-width: 767px) {
+  .holding-row {
+    flex-wrap: wrap;
+  }
+
+  .holding-name {
+    flex: 1 1 100%;
+  }
+
+  .holding-metrics {
+    flex: 1 1 auto;
+    justify-content: flex-start;
+  }
+
+  .holding-amount {
+    flex: 0 1 45%;
+  }
+
+  /* The buttons take the whole row and share the space: no horizontal
+     overflow, and every target stays wide enough for a finger. */
+  .holding-actions {
+    flex: 1 1 100%;
+  }
+
+  .holding-actions > button {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* A row with changes that have not been saved yet */
+.holding-block {
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 6px;
+  margin-bottom: 8px;
+}
+
+.holding-block.is-dirty {
+  border-color: var(--warning);
+  background-color: var(--warning-soft);
+}
+
+/* ---- Holding detail grid ----
+   On a phone auto-fit: 1 column on the narrow screens, 2 on the normal ones,
+   with no hand-written threshold. On desktop 3 fixed columns: with the card
+   this wide auto-fit would make six or seven of them, and the fields would
+   turn into an unreadable strip. */
+.holding-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+@media (min-width: 768px) {
+  .holding-detail-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.holding-detail-grid > label {
+  min-width: 0;
+}

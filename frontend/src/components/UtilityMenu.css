@@ -1,0 +1,346 @@
+/* The last cell of the tab bar, and the panel that drops out of it. The cell
+   itself is styled by nav.css -- it wears .tab-link like its four neighbours --
+   so what is left here is where the panel goes and what is inside it. */
+.utility-menu {
+  /* The panel is measured from this cell, not from the page. */
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* index.css gives every button a padding, a background and a border, all of
+   which would make this cell a raised box among four flat links. */
+.utility-tab {
+  padding: 6px 4px;
+  border: none;
+  background: none;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.utility-panel {
+  /* Anchored to the bar so it cannot drift. The bar is at the top on every
+     screen, so the panel always opens below it, towards the page. */
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 1100;
+  min-width: 12rem;
+  padding: 0.35rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.utility-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border: none;
+  border-radius: 0.4rem;
+  background: none;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.utility-item:hover {
+  background: var(--surface-hover);
+}
+
+.utility-item.selected {
+  font-weight: 600;
+}
+
+/* A fixed-width slot so the labels line up whether or not the row has an
+   icon -- the language rows only show one when they are the active choice. */
+.utility-item-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  color: var(--text-muted);
+}
+
+/* The language row is a label wrapping the picker, so tapping anywhere on it
+   opens the select -- the flag alone is a small target on a phone. */
+.utility-language {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.utility-language:hover {
+  background: var(--surface-hover);
+}
+
+/* The theme row: a label and a segmented control of three icons. Not a
+   .utility-item, because it is not itself a button -- the three inside are. */
+.utility-theme {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* Right-aligned like the flag above it, so the two controls form a column. */
+.utility-theme-choices {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  background: var(--surface-2);
+}
+
+/* index.css gives every button a padding, a border and a hover border; a
+   segment needs none of them. */
+.utility-theme-choice {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.6rem;
+  padding: 0;
+  border: none;
+  border-radius: 0.3rem;
+  background: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.utility-theme-choice:hover {
+  color: var(--text);
+}
+
+/* The chosen segment is raised out of the track rather than filled with the
+   accent: it is a state, the same kind of thing as the on/off word below it,
+   and blue would make it read as a button waiting to be pressed. */
+.utility-theme-choice.selected {
+  background: var(--surface);
+  color: var(--accent);
+  box-shadow: var(--shadow-sm);
+}
+
+/* On a dark track the surface is barely lighter than the track itself. */
+[data-theme="dark"] .utility-theme-choice.selected {
+  background: var(--chip-bg);
+}
+
+.utility-theme-choice:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* Pushes the picker to the far edge, so the flags line up down the panel. */
+.utility-language .language-picker {
+  margin-left: auto;
+}
+
+.utility-divider {
+  height: 1px;
+  margin: 0.35rem 0.3rem;
+  background: var(--border);
+}
+
+.utility-signout {
+  color: var(--danger-text);
+}
+
+.utility-signout .utility-item-icon {
+  color: var(--danger-text);
+}
+
+.utility-username {
+  padding: 0.3rem 0.6rem 0.35rem;
+  font-size: 0.72rem;
+  color: var(--text-subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 14rem;
+}
+
+/* The shortcut list is useless without a physical keyboard. */
+@media (max-width: 768px) {
+  .utility-shortcuts {
+    display: none;
+  }
+}
+
+/* Same breakpoint as nav.css, and it has to stay the same: below it the cell
+   takes its equal fifth of the width, like the four links beside it. The bar
+   is at the top on every screen, so the panel opens downwards here too. */
+@media (max-width: 767px) {
+  .utility-menu {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .utility-tab {
+    width: 100%;
+  }
+
+  .utility-panel {
+    right: 4px;
+    /* A menu that runs off the top of a short screen is worse than one that
+       scrolls: the sign-out is the last item and has to be reachable. */
+    max-height: calc(100vh - var(--tab-bar-height, 56px) - 2rem);
+    overflow-y: auto;
+  }
+}
+
+/* The wallet's name can be long and the panel cannot grow: the badge and the
+   icon keep their size, the name gives way. */
+.utility-wallet-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.utility-wallet-badge {
+  margin-left: auto;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background: var(--chip-bg);
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  flex: none;
+}
+
+/* Whether bank mode is on, at the right-hand end of its row. The eye icon
+   already says it, but an icon alone is a guess until you have pressed it
+   once: the word removes the guess. Same shape as the read-only badge beside
+   the wallet name, because it is the same kind of thing -- a state, not an
+   action. */
+.utility-state {
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  flex: none;
+}
+
+/* ---- "Support Bussola": a short dialog with two links ---- */
+.support-dialog {
+  padding: 8px 24px 24px;
+  text-align: center;
+}
+
+.support-title {
+  margin: 8px 0 12px;
+  font-size: 1.25rem;
+  color: var(--text);
+}
+
+.support-text {
+  margin: 0 0 20px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.support-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.support-link {
+  display: inline-block;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--bg-muted);
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.support-link:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+/* The colour is spelled out rather than left to whatever a button inherits:
+   in dark mode an unstyled one has been white on white before. */
+.support-close {
+  padding: 0.45rem 1rem;
+  border: none;
+  border-radius: 0.4rem;
+  background: none;
+  font: inherit;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.support-close:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+/* ---- "About": credits for every data source and service ---- */
+.about-dialog {
+  padding: 8px 24px 24px;
+  text-align: left;
+  max-width: 560px;
+}
+
+.about-heading {
+  margin: 16px 0 6px;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.about-text {
+  margin: 0 0 8px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.about-list {
+  margin: 0 0 10px;
+  padding-left: 1.2rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.about-link {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+.about-badge {
+  margin-left: 8px;
+  padding: 1px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.about-badge.on {
+  color: var(--text);
+  font-weight: 600;
+}

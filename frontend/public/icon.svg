@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Bussola">
+  <title>Bussola</title>
+  <!-- A four-point compass rose, because "bussola" is a compass.
+
+       Two shapes and no hairlines: the file has to hold at 16px in a browser
+       tab as well as at 56px on the sign-in card, and anything finer than the
+       arms below turns to mush at the small end.
+
+       Deliberately a rose and not a needle. A single white needle tilted 45
+       degrees on a blue disc is Safari's icon, near enough that a tab carrying
+       it would be read as a browser window rather than as this application.
+       The rose keeps the compass and drops the resemblance: the silhouette is
+       a star, not a slash.
+
+       The points run to the rim on purpose. Reaching the edge is what makes
+       the star legible once the disc is 16 pixels across; pulled inside, the
+       arms lose their tips to antialiasing and the mark reads as a blob.
+
+       (No double hyphens in here: XML forbids them inside a comment, which is
+       why this file does not punctuate the way the rest of the codebase does.) -->
+  <circle cx="16" cy="16" r="16" fill="#1E90FF"/>
+  <path d="M16 1 19.5 12.5 31 16 19.5 19.5 16 31 12.5 19.5 1 16 12.5 12.5Z" fill="#fff"/>
+</svg>

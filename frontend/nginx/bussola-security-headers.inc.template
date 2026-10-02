@@ -1,0 +1,30 @@
+# Security headers, included by default.conf in the server block and in every
+# location that has an add_header of its own (see the comment there). Rendered
+# by the nginx image's envsubst like default.conf.template; the ".inc" suffix
+# keeps nginx.conf's `include conf.d/*.conf` from loading it a second time at
+# the http level.
+#
+# ${BUSSOLA_CSP} is assembled at container start by 18-bussola-csp.envsh, which
+# explains every directive. `always` so that error responses carry them too.
+
+add_header Content-Security-Policy "${BUSSOLA_CSP}" always;
+
+# A response is what its Content-Type says, never what the browser guesses.
+add_header X-Content-Type-Options "nosniff" always;
+
+# Addresses inside the application (a snapshot's year and month, a wallet id)
+# stay inside it: the icon search on api.iconify.design gets no Referer.
+add_header Referrer-Policy "same-origin" always;
+
+# Not framed by anyone: the delete-wallet and administration screens must not
+# be clickable through somebody else's invisible iframe. frame-ancestors in the
+# CSP says the same to current browsers; this is for older ones.
+add_header X-Frame-Options "DENY" always;
+
+# Device features the application never uses, switched off. WebAuthn is not
+# named: publickey-credentials-get/-create default to this origin, which is
+# exactly what passkeys need.
+add_header Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()" always;
+
+# A window this application opens, or that opens it, gets no handle on it.
+add_header Cross-Origin-Opener-Policy "same-origin" always;

@@ -1,0 +1,72 @@
+name: Release
+
+# On a version tag (v0.2.0 …): the three images (api, frontend and the
+# optional quotes service), ready to pull, on the GitHub
+# Container Registry, for amd64 and arm64 (a Raspberry Pi); then the release
+# page, with docker-compose.yml (images pinned to that version) and
+# example.env attached, so Bussola installs without cloning the repository
+# (README, "Getting started"). Run by hand from main, it publishes the images
+# as `:main`, to try them before tagging, and no release.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  images:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image: [api, frontend, quotes]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      # v0.2.0 -> :0.2.0 and :latest; a run from main -> :main.
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/bussola-${{ matrix.image }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=ref,event=branch
+          flavor: |
+            latest=auto
+      - uses: docker/build-push-action@v6
+        with:
+          context: ./${{ matrix.image }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ matrix.image }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.image }}
+
+  # After the images, so a release never points at an image not there yet.
+  release-files:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: tools/release-files.sh "${TAG#v}" release-files
+      # The release may already exist (written by hand, with its notes):
+      # then only the files are added or replaced.
+      - run: |
+          gh release view "$TAG" >/dev/null 2>&1 \
+            || gh release create "$TAG" --verify-tag --title "Bussola ${TAG#v}" --generate-notes
+          gh release upload "$TAG" release-files/docker-compose.yml release-files/example.env --clobber

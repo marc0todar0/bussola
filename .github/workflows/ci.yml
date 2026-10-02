@@ -1,0 +1,118 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+          cache-dependency-path: |
+            api/yarn.lock
+            frontend/yarn.lock
+
+      - name: API — install
+        working-directory: api
+        run: yarn install --frozen-lockfile
+      - name: API — lint
+        working-directory: api
+        run: yarn lint
+      # No stack and no network: a local server plays the quote service.
+      - name: API — quote providers
+        working-directory: api
+        run: yarn test:quotes
+      # The bank-notification reader, against a fake OpenAI-style endpoint: no stack and no
+      # model either.
+      - name: API — notification reader
+        working-directory: api
+        run: yarn test:ai
+      # Web Push (subscription checks, the sender against a fake push
+      # service, collapsing, localisation): no stack. Needs openssl.
+      - name: API — Web Push notifications
+        working-directory: api
+        run: yarn test:notify
+      # The optional quotes service, against fake upstreams: no dependencies,
+      # no network.
+      - name: Quotes service — tests
+        run: cd quotes && node test/service.js
+
+      - name: Frontend — install
+        working-directory: frontend
+        run: yarn install --frozen-lockfile
+      - name: Frontend — lint
+        working-directory: frontend
+        run: yarn lint
+      - name: Frontend — build
+        working-directory: frontend
+        run: yarn build
+      # What Netlify builds for the public demo (frontend/netlify.toml).
+      - name: Frontend — demo build
+        working-directory: frontend
+        run: yarn build:demo
+      # And for the landing page (landing/netlify.toml): fails if a
+      # screenshot or the icon it copies has moved.
+      - name: Landing — build
+        run: landing/build.sh
+
+      # What a release attaches: the compose file must still install with no
+      # repository around it.
+      - name: Release files
+        run: |
+          tools/release-files.sh 0.0.0 "$RUNNER_TEMP/release"
+          cd "$RUNNER_TEMP/release" && cp example.env .env && docker compose config -q
+
+  # The two gates of CONTRIBUTING.md, against a throwaway stack built from this
+  # commit (docker-compose.test.yml).
+  isolation-and-security:
+    runs-on: ubuntu-latest
+    env:
+      COMPOSE: docker compose -p bussola-test -f docker-compose.yml -f docker-compose.test.yml
+      BASE_URL: http://localhost:3100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+          cache-dependency-path: api/yarn.lock
+
+      # isolation.js reads the wallet export with the API's own fflate.
+      - name: API — install
+        working-directory: api
+        run: yarn install --frozen-lockfile
+
+      - name: Start the test stack
+        run: $COMPOSE up -d --build --wait --wait-timeout 180
+
+      # First, while the administrator's wallet is still the instance's first:
+      # seed-demo.sql fills that one. The demo (frontend/src/demo/) must answer
+      # every question and every write exactly as the API does.
+      - name: Demo answers like the API
+        env:
+          ADMIN_USER: bussola
+          ADMIN_PASS: test-admin-pass
+        run: node frontend/scripts/demo-check.mjs compare
+
+      - name: Isolation test
+        run: node api/test/isolation.js
+
+      - name: Security test
+        env:
+          ADMIN_USER: bussola
+          ADMIN_PASS: test-admin-pass
+        run: node api/test/security.js
+
+      - name: Stack logs
+        if: failure()
+        run: $COMPOSE logs --no-color
+
+      - name: Tear down
+        if: always()
+        run: $COMPOSE down -v

@@ -1,0 +1,21 @@
+# The public demo (demo-bussola.marcotodaro.dev): the frontend on its own,
+# answered by an in-browser copy of the API (frontend/src/demo/). Nothing a
+# visitor does leaves their tab, and a reload starts again from the invented
+# dataset. The real application is the Docker stack; this file builds nothing
+# of it.
+#
+# On Netlify this is its own site, with "frontend" as the base directory; the
+# landing page (landing/) is another site from the same repository.
+[build]
+  command = "yarn build:demo"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# A single-page application: every path is index.html, except the files that
+# exist (Netlify serves those first).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

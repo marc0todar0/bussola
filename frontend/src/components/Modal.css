@@ -1,0 +1,141 @@
+/* Modal built on the native <dialog>.
+   Why: showModal() promotes the element to the browser's top layer, above any
+   z-index and outside the flow, so no ancestor's overflow:hidden can clip it
+   and the sticky nav cannot cover it. The position comes from CSS, not from an
+   animated transform: with system animations turned off the modal is still
+   where it belongs. */
+
+.modal {
+  padding: 0;
+  border: none;
+  background: var(--surface);
+  /* inherit from the page, not from the UA's dialog colour (CanvasText),
+     which is black whatever the theme */
+  color: var(--text);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* display goes on the open state ONLY: a display rule on the base selector
+   would override the browser's own `dialog:not([open]) { display: none }`,
+   leaving the closed modal visible on screen. */
+.modal[open] {
+  /* the inner layout scrolls, not the modal itself */
+  display: flex;
+  flex-direction: column;
+}
+
+/* The backdrop is spelled out per theme rather than read from --backdrop:
+   ::backdrop only started inheriting custom properties from its element in
+   2023-24 browsers, and on anything older var() would resolve to nothing and
+   the page behind would show through undimmed. */
+.modal::backdrop {
+  background-color: rgba(17, 24, 39, 0.45);
+}
+
+/* Darker in the dark: at 45% a near-black page barely changes, and the modal
+   would not look any more "in front" than the cards behind it. */
+[data-theme="dark"] .modal::backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* A dark card on a dark page has no shadow to speak of, so it gets an edge. */
+[data-theme="dark"] .modal {
+  border: 1px solid var(--border);
+}
+
+/* Scrollable content: the forms are taller than a phone screen */
+.modal-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Decorative grip: says "panel sliding up from the bottom" on mobile */
+.modal-grip {
+  flex: none;
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 4px;
+}
+
+.modal-grip::before {
+  content: "";
+  width: 40px;
+  height: 4px;
+  border-radius: 99px;
+  background-color: var(--border-strong);
+}
+
+/* ---- Mobile: panel anchored to the bottom ---- */
+@media (max-width: 767px) {
+  .modal {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto 0 auto;
+    /* auto on top + 0 at the bottom = stuck to the bottom, no position:fixed */
+    margin-top: auto;
+    /* fit-content, the browser's own value for a dialog, and not auto: the
+       dialog is position:fixed with inset 0, and there height:auto means
+       "stretch between the two", so every form was 92dvh tall whatever it
+       held and the short ones sat on a band of empty panel. */
+    height: fit-content;
+    max-height: 92dvh;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -2px 24px rgba(0, 0, 0, 0.28);
+  }
+}
+
+/* ---- Desktop: centred card ---- */
+@media (min-width: 768px) {
+  .modal {
+    width: min(640px, calc(100vw - 48px));
+    max-height: min(90dvh, 900px);
+    margin: auto;
+    border-radius: 16px;
+    box-shadow: var(--shadow-modal);
+  }
+
+  .modal--wide {
+    width: min(1100px, calc(100vw - 48px));
+    max-height: min(92dvh, 1000px);
+  }
+
+  .modal-grip {
+    display: none;
+  }
+}
+
+/* The animation is a bonus, never a precondition for seeing the modal.
+   @keyframes rather than transition + @starting-style: an animation that for
+   any reason does not start leaves the element at its static style, that is,
+   already in place and opaque. A transition instead pins the element to its
+   starting value (off screen), which is exactly the flaw of the library this
+   replaces. fill-mode stays 'none' on purpose. */
+@keyframes modal-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes modal-in-mobile {
+  from {
+    opacity: 0;
+    translate: 0 100%;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .modal[open],
+  .modal[open]::backdrop {
+    animation: modal-in 0.2s ease-out;
+  }
+
+  @media (max-width: 767px) {
+    .modal[open] {
+      animation: modal-in-mobile 0.22s ease-out;
+    }
+  }
+}

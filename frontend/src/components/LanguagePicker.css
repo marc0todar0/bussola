@@ -1,0 +1,62 @@
+/* The flag is painted underneath and the <select> sits on top of it,
+   transparent: that keeps the native picker -- and the phone's wheel -- while
+   showing a flag instead of the browser's default text-and-arrow. */
+.language-picker {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.2rem;
+  height: 1.9rem;
+}
+
+.language-picker-flag {
+  font-size: 1.15rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.language-picker-select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: transparent;
+  font: inherit;
+  opacity: 0;
+  cursor: pointer;
+  appearance: none;
+}
+
+/* The options are drawn by the operating system, which does not inherit the
+   page's colours: they have to be legible on their own. */
+.language-picker-select option {
+  color: var(--text);
+  background: var(--surface);
+}
+
+.language-picker-select:focus-visible + .language-picker-flag,
+.language-picker:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 0.3rem;
+}
+
+/* On the login screen the choice is the only thing on its row, so it can
+   afford to show the name next to the flag. */
+.language-picker-name {
+  margin-left: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.language-picker:has(.language-picker-name) {
+  min-width: 7rem;
+  justify-content: flex-start;
+  padding: 0 0.4rem;
+}

@@ -1,0 +1,3 @@
+{
+  "apiUrl": "${BUSSOLA_API_URL}"
+}

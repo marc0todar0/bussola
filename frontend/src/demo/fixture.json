@@ -1,0 +1,3992 @@
+{
+ "format": 1,
+ "generatedOn": "2026-09-14",
+ "user": {
+  "id": 1,
+  "username": "demo"
+ },
+ "users": {
+  "1": "demo"
+ },
+ "wallet": {
+  "id": 1,
+  "name": "Demo",
+  "currency": "EUR"
+ },
+ "accountTypes": {
+  "1": {
+   "code": "EXPENSE",
+   "name": "Expenses"
+  },
+  "2": {
+   "code": "INCOME",
+   "name": "Income"
+  },
+  "3": {
+   "code": "STANDARD_ACCOUNT",
+   "name": "Standard account"
+  }
+ },
+ "transactionTypes": [
+  {
+   "id": 1,
+   "code": "EXPENSE",
+   "name": "Expense"
+  },
+  {
+   "id": 2,
+   "code": "INCOME",
+   "name": "Income"
+  },
+  {
+   "id": 3,
+   "code": "TRANSFER",
+   "name": "Transfer"
+  }
+ ],
+ "pillars": [
+  {
+   "id": 1,
+   "code": "CASH",
+   "name": "Cash",
+   "color": "#42a5f5"
+  },
+  {
+   "id": 2,
+   "code": "EMERGENCY_FUND",
+   "name": "Emergency fund",
+   "color": "#66bb6a"
+  },
+  {
+   "id": 3,
+   "code": "PLANNED_EXPENSES",
+   "name": "Planned expenses",
+   "color": "#ffa726"
+  },
+  {
+   "id": 4,
+   "code": "LONG_TERM",
+   "name": "Long term",
+   "color": "#ef5350"
+  }
+ ],
+ "holdingTypes": [
+  {
+   "id": 5,
+   "code": "BOND",
+   "name": "Bond",
+   "color": "#ffa726",
+   "custom": false
+  },
+  {
+   "id": 11,
+   "code": "BOT",
+   "name": "BOT",
+   "color": "#ffcc80",
+   "custom": false
+  },
+  {
+   "id": 6,
+   "code": "BTP",
+   "name": "BTP",
+   "color": "#ffb74d",
+   "custom": false
+  },
+  {
+   "id": 10,
+   "code": "CASH",
+   "name": "Cash",
+   "color": "#90a4ae",
+   "custom": false
+  },
+  {
+   "id": 7,
+   "code": "CRYPTO",
+   "name": "Crypto",
+   "color": "#ffca28",
+   "custom": false
+  },
+  {
+   "id": 8,
+   "code": "DEPOSIT_ACCOUNT",
+   "name": "Deposit account",
+   "color": "#66bb6a",
+   "custom": false
+  },
+  {
+   "id": 14,
+   "code": "ETC",
+   "name": "ETC",
+   "color": "#c9a227",
+   "custom": false
+  },
+  {
+   "id": 1,
+   "code": "ETF",
+   "name": "ETF",
+   "color": "#26a69a",
+   "custom": false
+  },
+  {
+   "id": 2,
+   "code": "ETN",
+   "name": "ETN",
+   "color": "#5c6bc0",
+   "custom": false
+  },
+  {
+   "id": 3,
+   "code": "ETP",
+   "name": "ETP",
+   "color": "#7e57c2",
+   "custom": false
+  },
+  {
+   "id": 9,
+   "code": "FUND",
+   "name": "Fund",
+   "color": "#42a5f5",
+   "custom": false
+  },
+  {
+   "id": 12,
+   "code": "INTEREST_ACCOUNT",
+   "name": "Interest-bearing account",
+   "color": "#81c784",
+   "custom": false
+  },
+  {
+   "id": 13,
+   "code": "MONEY_MARKET_ETF",
+   "name": "Money market ETF",
+   "color": "#4db6ac",
+   "custom": false
+  },
+  {
+   "id": 4,
+   "code": "STOCK",
+   "name": "Stock",
+   "color": "#ef5350",
+   "custom": false
+  }
+ ],
+ "accounts": [
+  {
+   "id": 258,
+   "name": "Cartesio Bank",
+   "color": "crimson",
+   "icon": "cc-mastercard",
+   "icon_family": "FontAwesome",
+   "amount": 4500,
+   "type_id": 3,
+   "description": "Main current account",
+   "is_account": true,
+   "actual_amount": 4500,
+   "archived": false,
+   "is_current": true,
+   "is_investment": false,
+   "created_by": 1,
+   "wallet_id": 1
+  },
+  {
+   "id": 259,
+   "name": "NeoCard",
+   "color": "dodgerblue",
+   "icon": "credit-card-refund",
+   "icon_family": "MaterialCommunityIcons",
+   "amount": 1200,
+   "type_id": 3,
+   "description": "Travel card",
+   "is_account": true,
+   "actual_amount": 1200,
+   "archived": false,
+   "is_current": true,
+   "is_investment": false,
+   "created_by": 1,
+   "wallet_id": 1
+  },
+  {
+   "id": 260,
+   "name": "Savings Plus",
+   "color": "seagreen",
+   "icon": "finance",
+   "icon_family": "MaterialCommunityIcons",
+   "amount": 8500,
+   "type_id": 3,
+   "description": "Savings account",
+   "is_account": true,
+   "actual_amount": 9000,
+   "archived": false,
+   "is_current": true,
+   "is_investment": false,
+   "created_by": 1,
+   "wallet_id": 1
+  },
+  {
+   "id": 261,
+   "name": "ETF Plan",
+   "color": "darkorange",
+   "icon": "bitcoin",
+   "icon_family": "FontAwesome",
+   "amount": 5000,
+   "type_id": 3,
+   "description": "ETF accumulation plan",
+   "is_account": true,
+   "actual_amount": 4600,
+   "archived": false,
+   "is_current": true,
+   "is_investment": false,
+   "created_by": 1,
+   "wallet_id": 1
+  },
+  {
+   "id": 262,
+   "name": "Cash",
+   "color": "dimgray",
+   "icon": "dollar",
+   "icon_family": "FontAwesome",
+   "amount": 350,
+   "type_id": 3,
+   "description": "Wallet",
+   "is_account": true,
+   "actual_amount": 350,
+   "archived": false,
+   "is_current": true,
+   "is_investment": false,
+   "created_by": 1,
+   "wallet_id": 1
+  },
+  {
+   "id": 263,
+   "name": "Online Wallet",
+   "color": "mediumblue",
+   "icon": "paypal",
+   "icon_family": "FontAwesome",
+   "amount": 280,
+   "type_id": 3,
+   "description": "Online purchases",
+   "is_account": true,
+   "actual_amount": 280,
+   "archived": false,
+   "is_current": true,
+   "is_investment": false,
+   "created_by": 1,
+   "wallet_id": 1
+  },
+  {
+   "id": 264,
+   "name": "Groceries",
+   "color": "olivedrab",
+   "icon": "shopping-cart",
+   "icon_family": "AntDesign",
+   "description": "Food shopping",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 265,
+   "name": "Restaurant",
+   "color": "tomato",
+   "icon": "restaurant",
+   "icon_family": "Ionicons",
+   "description": "Eating out",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 266,
+   "name": "Coffee shops",
+   "color": "sienna",
+   "icon": "fast-food",
+   "icon_family": "Ionicons",
+   "description": "Breakfast and coffee",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 267,
+   "name": "Fuel",
+   "color": "darkorange",
+   "icon": "gas-station",
+   "icon_family": "MaterialCommunityIcons",
+   "description": "Petrol for the car",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 268,
+   "name": "Transport",
+   "color": "steelblue",
+   "icon": "card-travel",
+   "icon_family": "MaterialIcons",
+   "description": "Bus, train, taxi",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 269,
+   "name": "Utilities",
+   "color": "goldenrod",
+   "icon": "finance",
+   "icon_family": "MaterialCommunityIcons",
+   "description": "Electricity, gas, water",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 270,
+   "name": "Rent",
+   "color": "rebeccapurple",
+   "icon": "form",
+   "icon_family": "AntDesign",
+   "description": "Monthly rent",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 271,
+   "name": "Phone & internet",
+   "color": "dodgerblue",
+   "icon": "sim-card",
+   "icon_family": "MaterialIcons",
+   "description": "Phone and broadband",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 272,
+   "name": "Subscriptions",
+   "color": "crimson",
+   "icon": "spotify",
+   "icon_family": "Entypo",
+   "description": "Netflix, Spotify, etc.",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 273,
+   "name": "Health",
+   "color": "firebrick",
+   "icon": "dots-three-horizontal",
+   "icon_family": "Entypo",
+   "description": "Pharmacy and doctors",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 274,
+   "name": "Clothing",
+   "color": "hotpink",
+   "icon": "shopping-cart",
+   "icon_family": "AntDesign",
+   "description": "Clothes and shoes",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 275,
+   "name": "Leisure",
+   "color": "mediumpurple",
+   "icon": "beer",
+   "icon_family": "FontAwesome",
+   "description": "Cinema, drinks, events",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 276,
+   "name": "Online shopping",
+   "color": "teal",
+   "icon": "shopping-cart",
+   "icon_family": "AntDesign",
+   "description": "Amazon and the like",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 277,
+   "name": "Travel",
+   "color": "darkturquoise",
+   "icon": "card-travel",
+   "icon_family": "MaterialIcons",
+   "description": "Hotels, flights, weekends",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 278,
+   "name": "Sport",
+   "color": "seagreen",
+   "icon": "people",
+   "icon_family": "Ionicons",
+   "description": "Gym and gear",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 279,
+   "name": "Other expenses",
+   "color": "dimgray",
+   "icon": "dots-three-horizontal",
+   "icon_family": "Entypo",
+   "description": "Odds and ends",
+   "archived": false,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 280,
+   "name": "Salary",
+   "color": "forestgreen",
+   "icon": "dollar",
+   "icon_family": "FontAwesome",
+   "description": "Monthly salary",
+   "archived": false,
+   "amount": null,
+   "type_id": 2,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 281,
+   "name": "Reimbursements",
+   "color": "darkorange",
+   "icon": "credit-card-refund",
+   "icon_family": "MaterialCommunityIcons",
+   "description": "Work expense refunds",
+   "archived": false,
+   "amount": null,
+   "type_id": 2,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 282,
+   "name": "Investments",
+   "color": "gold",
+   "icon": "finance",
+   "icon_family": "MaterialCommunityIcons",
+   "description": "Dividends and coupons",
+   "archived": false,
+   "amount": null,
+   "type_id": 2,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 283,
+   "name": "Gifts received",
+   "color": "hotpink",
+   "icon": "euro",
+   "icon_family": "FontAwesome",
+   "description": "Gifts and bonuses",
+   "archived": false,
+   "amount": null,
+   "type_id": 2,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 284,
+   "name": "Other income",
+   "color": "slategray",
+   "icon": "coins",
+   "icon_family": "FontAwesome5",
+   "description": "Second-hand sales, etc.",
+   "archived": false,
+   "amount": null,
+   "type_id": 2,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 285,
+   "name": "Demo Broker",
+   "color": "darkorange",
+   "icon": "bitcoin",
+   "icon_family": "FontAwesome",
+   "amount": 12000,
+   "type_id": 3,
+   "description": "Stock and ETF broker",
+   "is_account": true,
+   "actual_amount": 13750,
+   "archived": false,
+   "is_current": false,
+   "is_investment": true,
+   "created_by": 1,
+   "wallet_id": 1
+  },
+  {
+   "id": 286,
+   "name": "Safe Deposit",
+   "color": "seagreen",
+   "icon": "finance",
+   "icon_family": "MaterialCommunityIcons",
+   "amount": 6800,
+   "type_id": 3,
+   "description": "Locked interest-bearing cash",
+   "is_account": true,
+   "actual_amount": 7000,
+   "archived": false,
+   "is_current": false,
+   "is_investment": true,
+   "created_by": 1,
+   "wallet_id": 1
+  },
+  {
+   "id": 287,
+   "name": "Closed Account",
+   "color": "dimgray",
+   "icon": "cc-mastercard",
+   "icon_family": "FontAwesome",
+   "amount": 0,
+   "type_id": 3,
+   "description": "Old closed account",
+   "is_account": true,
+   "actual_amount": 0,
+   "archived": true,
+   "is_current": true,
+   "is_investment": false,
+   "created_by": 1,
+   "wallet_id": 1
+  },
+  {
+   "id": 288,
+   "name": "Cigarettes",
+   "color": "dimgray",
+   "icon": "dots-three-horizontal",
+   "icon_family": "Entypo",
+   "description": "Discontinued category",
+   "archived": true,
+   "amount": null,
+   "type_id": 1,
+   "is_account": false,
+   "actual_amount": null
+  },
+  {
+   "id": 289,
+   "name": "Cashback",
+   "color": "slategray",
+   "icon": "credit-card-refund",
+   "icon_family": "MaterialCommunityIcons",
+   "description": "Old card cashback",
+   "archived": true,
+   "amount": null,
+   "type_id": 2,
+   "is_account": false,
+   "actual_amount": null
+  }
+ ],
+ "transactions": [
+  {
+   "id": 502,
+   "type_id": 3,
+   "amount": 500,
+   "tx_date": "20260608",
+   "description": "Monthly saving",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 260,
+   "tx_time": "11:00:00.000000"
+  },
+  {
+   "id": 503,
+   "type_id": 3,
+   "amount": 500,
+   "tx_date": "20260708",
+   "description": "Monthly saving",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 260,
+   "tx_time": "11:00:00.000000"
+  },
+  {
+   "id": 504,
+   "type_id": 3,
+   "amount": 500,
+   "tx_date": "20260811",
+   "description": "Monthly saving",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 260,
+   "tx_time": "11:00:00.000000"
+  },
+  {
+   "id": 505,
+   "type_id": 3,
+   "amount": 500,
+   "tx_date": "20260908",
+   "description": "Monthly saving",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 260,
+   "tx_time": "11:00:00.000000"
+  },
+  {
+   "id": 506,
+   "type_id": 1,
+   "amount": 54.3,
+   "tx_date": "20260604",
+   "description": "Weekly shop",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 264,
+   "tx_time": "18:30:00.000000"
+  },
+  {
+   "id": 507,
+   "type_id": 1,
+   "amount": 63.2,
+   "tx_date": "20260610",
+   "description": "Weekly shop",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 264,
+   "tx_time": "18:00:00.000000"
+  },
+  {
+   "id": 508,
+   "type_id": 1,
+   "amount": 47.1,
+   "tx_date": "20260625",
+   "description": "Weekly shop",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 264,
+   "tx_time": "18:00:00.000000"
+  },
+  {
+   "id": 509,
+   "type_id": 1,
+   "amount": 58.4,
+   "tx_date": "20260704",
+   "description": "Weekly shop",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 264,
+   "tx_time": "18:00:00.000000"
+  },
+  {
+   "id": 510,
+   "type_id": 1,
+   "amount": 71.8,
+   "tx_date": "20260718",
+   "description": "Weekly shop",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 264,
+   "tx_time": "18:30:00.000000"
+  },
+  {
+   "id": 511,
+   "type_id": 1,
+   "amount": 49.3,
+   "tx_date": "20260728",
+   "description": "Weekly shop",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 264,
+   "tx_time": "18:00:00.000000"
+  },
+  {
+   "id": 512,
+   "type_id": 1,
+   "amount": 55,
+   "tx_date": "20260804",
+   "description": "Weekly shop",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 264,
+   "tx_time": "18:00:00.000000"
+  },
+  {
+   "id": 513,
+   "type_id": 1,
+   "amount": 68.3,
+   "tx_date": "20260809",
+   "description": "Weekly shop",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 264,
+   "tx_time": "18:30:00.000000"
+  },
+  {
+   "id": 514,
+   "type_id": 1,
+   "amount": 52,
+   "tx_date": "20260817",
+   "description": "Weekly shop",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 264,
+   "tx_time": "18:00:00.000000"
+  },
+  {
+   "id": 515,
+   "type_id": 1,
+   "amount": 45,
+   "tx_date": "20260828",
+   "description": "Weekly shop",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 264,
+   "tx_time": "18:00:00.000000"
+  },
+  {
+   "id": 516,
+   "type_id": 1,
+   "amount": 62.4,
+   "tx_date": "20260904",
+   "description": "Weekly shop",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 264,
+   "tx_time": "18:30:00.000000"
+  },
+  {
+   "id": 517,
+   "type_id": 1,
+   "amount": 38.5,
+   "tx_date": "20260910",
+   "description": "Quick shop",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 264,
+   "tx_time": "18:00:00.000000"
+  },
+  {
+   "id": 518,
+   "type_id": 1,
+   "amount": 47.8,
+   "tx_date": "20260914",
+   "description": "Evening shop",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 264,
+   "tx_time": "18:30:00.000000"
+  },
+  {
+   "id": 519,
+   "type_id": 1,
+   "amount": 28.5,
+   "tx_date": "20260913",
+   "description": "Sushi dinner",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 263,
+   "to_id": 265,
+   "tx_time": "21:00:00.000000"
+  },
+  {
+   "id": 520,
+   "type_id": 1,
+   "amount": 10,
+   "tx_date": "20260705",
+   "description": "Work lunch",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 262,
+   "to_id": 265,
+   "tx_time": "13:00:00.000000"
+  },
+  {
+   "id": 521,
+   "type_id": 1,
+   "amount": 8.5,
+   "tx_date": "20260810",
+   "description": "Quick lunch",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 262,
+   "to_id": 265,
+   "tx_time": "13:00:00.000000"
+  },
+  {
+   "id": 522,
+   "type_id": 1,
+   "amount": 12,
+   "tx_date": "20260911",
+   "description": "Quick lunch",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 262,
+   "to_id": 265,
+   "tx_time": "13:30:00.000000"
+  },
+  {
+   "id": 523,
+   "type_id": 1,
+   "amount": 42,
+   "tx_date": "20260720",
+   "description": "Dinner out",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 259,
+   "to_id": 265,
+   "tx_time": "20:30:00.000000"
+  },
+  {
+   "id": 524,
+   "type_id": 1,
+   "amount": 38,
+   "tx_date": "20260805",
+   "description": "Sunday lunch",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 259,
+   "to_id": 265,
+   "tx_time": "13:30:00.000000"
+  },
+  {
+   "id": 525,
+   "type_id": 1,
+   "amount": 22,
+   "tx_date": "20260905",
+   "description": "Lunch out",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 259,
+   "to_id": 265,
+   "tx_time": "13:00:00.000000"
+  },
+  {
+   "id": 526,
+   "type_id": 1,
+   "amount": 30,
+   "tx_date": "20260606",
+   "description": "Dinner with friends",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 265,
+   "tx_time": "21:00:00.000000"
+  },
+  {
+   "id": 527,
+   "type_id": 1,
+   "amount": 55,
+   "tx_date": "20260614",
+   "description": "Dinner out",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 265,
+   "tx_time": "20:30:00.000000"
+  },
+  {
+   "id": 528,
+   "type_id": 1,
+   "amount": 12,
+   "tx_date": "20260627",
+   "description": "Work lunch",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 265,
+   "tx_time": "13:00:00.000000"
+  },
+  {
+   "id": 529,
+   "type_id": 1,
+   "amount": 35,
+   "tx_date": "20260818",
+   "description": "Dinner out",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 265,
+   "tx_time": "20:30:00.000000"
+  },
+  {
+   "id": 530,
+   "type_id": 1,
+   "amount": 45,
+   "tx_date": "20260906",
+   "description": "Dinner with friends",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 265,
+   "tx_time": "21:00:00.000000"
+  },
+  {
+   "id": 531,
+   "type_id": 1,
+   "amount": 12.5,
+   "tx_date": "20260914",
+   "description": "Lunch at the bar",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 265,
+   "tx_time": "13:00:00.000000"
+  },
+  {
+   "id": 532,
+   "type_id": 1,
+   "amount": 2.5,
+   "tx_date": "20260618",
+   "description": "Coffee and pastry",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 262,
+   "to_id": 266,
+   "tx_time": "08:15:00.000000"
+  },
+  {
+   "id": 533,
+   "type_id": 1,
+   "amount": 2.5,
+   "tx_date": "20260912",
+   "description": "Coffee",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 262,
+   "to_id": 266,
+   "tx_time": "08:30:00.000000"
+  },
+  {
+   "id": 534,
+   "type_id": 1,
+   "amount": 2.2,
+   "tx_date": "20260827",
+   "description": "Coffee",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 266,
+   "tx_time": "08:30:00.000000"
+  },
+  {
+   "id": 535,
+   "type_id": 1,
+   "amount": 2.2,
+   "tx_date": "20260906",
+   "description": "Coffee on the run",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 266,
+   "tx_time": "08:15:00.000000"
+  },
+  {
+   "id": 536,
+   "type_id": 1,
+   "amount": 2.2,
+   "tx_date": "20260913",
+   "description": "Coffee",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 266,
+   "tx_time": "08:30:00.000000"
+  },
+  {
+   "id": 537,
+   "type_id": 1,
+   "amount": 3.5,
+   "tx_date": "20260914",
+   "description": "Coffee and croissant",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 266,
+   "tx_time": "08:30:00.000000"
+  },
+  {
+   "id": 538,
+   "type_id": 1,
+   "amount": 58,
+   "tx_date": "20260620",
+   "description": "Full tank",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 267,
+   "tx_time": "14:00:00.000000"
+  },
+  {
+   "id": 539,
+   "type_id": 1,
+   "amount": 60,
+   "tx_date": "20260710",
+   "description": "Full tank",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 267,
+   "tx_time": "15:00:00.000000"
+  },
+  {
+   "id": 540,
+   "type_id": 1,
+   "amount": 52,
+   "tx_date": "20260806",
+   "description": "Petrol",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 267,
+   "tx_time": "13:00:00.000000"
+  },
+  {
+   "id": 541,
+   "type_id": 1,
+   "amount": 55,
+   "tx_date": "20260907",
+   "description": "Full tank",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 267,
+   "tx_time": "12:00:00.000000"
+  },
+  {
+   "id": 542,
+   "type_id": 1,
+   "amount": 38,
+   "tx_date": "20260814",
+   "description": "Bus pass",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 268,
+   "tx_time": "09:00:00.000000"
+  },
+  {
+   "id": 543,
+   "type_id": 1,
+   "amount": 88,
+   "tx_date": "20260602",
+   "description": "Electricity bill",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 269,
+   "tx_time": "11:00:00.000000"
+  },
+  {
+   "id": 544,
+   "type_id": 1,
+   "amount": 132,
+   "tx_date": "20260603",
+   "description": "Gas bill",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 269,
+   "tx_time": "11:00:00.000000"
+  },
+  {
+   "id": 545,
+   "type_id": 1,
+   "amount": 92,
+   "tx_date": "20260702",
+   "description": "Electricity bill",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 269,
+   "tx_time": "11:00:00.000000"
+  },
+  {
+   "id": 546,
+   "type_id": 1,
+   "amount": 125,
+   "tx_date": "20260703",
+   "description": "Gas bill",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 269,
+   "tx_time": "11:00:00.000000"
+  },
+  {
+   "id": 547,
+   "type_id": 1,
+   "amount": 78,
+   "tx_date": "20260802",
+   "description": "Electricity bill",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 269,
+   "tx_time": "11:00:00.000000"
+  },
+  {
+   "id": 548,
+   "type_id": 1,
+   "amount": 110,
+   "tx_date": "20260803",
+   "description": "Gas bill",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 269,
+   "tx_time": "11:00:00.000000"
+  },
+  {
+   "id": 549,
+   "type_id": 1,
+   "amount": 85,
+   "tx_date": "20260902",
+   "description": "Electricity bill",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 269,
+   "tx_time": "11:00:00.000000"
+  },
+  {
+   "id": 550,
+   "type_id": 1,
+   "amount": 650,
+   "tx_date": "20260601",
+   "description": "Rent",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 270,
+   "tx_time": "10:00:00.000000"
+  },
+  {
+   "id": 551,
+   "type_id": 1,
+   "amount": 650,
+   "tx_date": "20260701",
+   "description": "Rent",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 270,
+   "tx_time": "10:00:00.000000"
+  },
+  {
+   "id": 552,
+   "type_id": 1,
+   "amount": 650,
+   "tx_date": "20260801",
+   "description": "Rent",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 270,
+   "tx_time": "10:00:00.000000"
+  },
+  {
+   "id": 553,
+   "type_id": 1,
+   "amount": 650,
+   "tx_date": "20260901",
+   "description": "Rent",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 270,
+   "tx_time": "10:00:00.000000"
+  },
+  {
+   "id": 554,
+   "type_id": 1,
+   "amount": 12.99,
+   "tx_date": "20260615",
+   "description": "Phone plan",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 271,
+   "tx_time": "09:00:00.000000"
+  },
+  {
+   "id": 555,
+   "type_id": 1,
+   "amount": 12.99,
+   "tx_date": "20260715",
+   "description": "Phone plan",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 271,
+   "tx_time": "09:00:00.000000"
+  },
+  {
+   "id": 556,
+   "type_id": 1,
+   "amount": 12.99,
+   "tx_date": "20260808",
+   "description": "Phone plan",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 271,
+   "tx_time": "09:00:00.000000"
+  },
+  {
+   "id": 557,
+   "type_id": 1,
+   "amount": 10.99,
+   "tx_date": "20260909",
+   "description": "Spotify",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 263,
+   "to_id": 272,
+   "tx_time": "13:00:00.000000"
+  },
+  {
+   "id": 558,
+   "type_id": 1,
+   "amount": 15.99,
+   "tx_date": "20260628",
+   "description": "Netflix",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 272,
+   "tx_time": "12:00:00.000000"
+  },
+  {
+   "id": 559,
+   "type_id": 1,
+   "amount": 15.99,
+   "tx_date": "20260729",
+   "description": "Netflix",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 272,
+   "tx_time": "12:00:00.000000"
+  },
+  {
+   "id": 560,
+   "type_id": 1,
+   "amount": 15.99,
+   "tx_date": "20260829",
+   "description": "Netflix",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 272,
+   "tx_time": "12:00:00.000000"
+  },
+  {
+   "id": 561,
+   "type_id": 1,
+   "amount": 15.99,
+   "tx_date": "20260907",
+   "description": "Netflix",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 272,
+   "tx_time": "19:00:00.000000"
+  },
+  {
+   "id": 562,
+   "type_id": 1,
+   "amount": 80,
+   "tx_date": "20260712",
+   "description": "Doctor visit",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 273,
+   "tx_time": "10:00:00.000000"
+  },
+  {
+   "id": 563,
+   "type_id": 1,
+   "amount": 24,
+   "tx_date": "20260815",
+   "description": "Pharmacy",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 273,
+   "tx_time": "10:00:00.000000"
+  },
+  {
+   "id": 564,
+   "type_id": 1,
+   "amount": 89,
+   "tx_date": "20260812",
+   "description": "Jumper and shirt",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 263,
+   "to_id": 274,
+   "tx_time": "15:00:00.000000"
+  },
+  {
+   "id": 565,
+   "type_id": 1,
+   "amount": 32,
+   "tx_date": "20260826",
+   "description": "Swimsuit",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 263,
+   "to_id": 274,
+   "tx_time": "16:00:00.000000"
+  },
+  {
+   "id": 566,
+   "type_id": 1,
+   "amount": 29.9,
+   "tx_date": "20260912",
+   "description": "T-shirt",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 263,
+   "to_id": 274,
+   "tx_time": "19:00:00.000000"
+  },
+  {
+   "id": 567,
+   "type_id": 1,
+   "amount": 45,
+   "tx_date": "20260612",
+   "description": "Present",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 274,
+   "tx_time": "15:00:00.000000"
+  },
+  {
+   "id": 568,
+   "type_id": 1,
+   "amount": 16,
+   "tx_date": "20260706",
+   "description": "Cinema",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 275,
+   "tx_time": "21:00:00.000000"
+  },
+  {
+   "id": 569,
+   "type_id": 1,
+   "amount": 22,
+   "tx_date": "20260807",
+   "description": "Cinema with friends",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 275,
+   "tx_time": "21:00:00.000000"
+  },
+  {
+   "id": 570,
+   "type_id": 1,
+   "amount": 18,
+   "tx_date": "20260819",
+   "description": "Drinks",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 275,
+   "tx_time": "19:00:00.000000"
+  },
+  {
+   "id": 571,
+   "type_id": 1,
+   "amount": 18,
+   "tx_date": "20260909",
+   "description": "Cinema",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 275,
+   "tx_time": "21:00:00.000000"
+  },
+  {
+   "id": 572,
+   "type_id": 1,
+   "amount": 67,
+   "tx_date": "20260723",
+   "description": "Amazon order",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 263,
+   "to_id": 276,
+   "tx_time": "14:00:00.000000"
+  },
+  {
+   "id": 573,
+   "type_id": 1,
+   "amount": 180,
+   "tx_date": "20260825",
+   "description": "Weekend at the sea",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 277,
+   "tx_time": "12:00:00.000000"
+  },
+  {
+   "id": 574,
+   "type_id": 1,
+   "amount": 45,
+   "tx_date": "20260622",
+   "description": "Gym membership",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 278,
+   "tx_time": "09:00:00.000000"
+  },
+  {
+   "id": 575,
+   "type_id": 1,
+   "amount": 45,
+   "tx_date": "20260722",
+   "description": "Gym membership",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 278,
+   "tx_time": "09:00:00.000000"
+  },
+  {
+   "id": 576,
+   "type_id": 1,
+   "amount": 45,
+   "tx_date": "20260822",
+   "description": "Gym membership",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 278,
+   "tx_time": "09:00:00.000000"
+  },
+  {
+   "id": 577,
+   "type_id": 1,
+   "amount": 45,
+   "tx_date": "20260911",
+   "description": "Gym membership",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 278,
+   "tx_time": "09:00:00.000000"
+  },
+  {
+   "id": 578,
+   "type_id": 2,
+   "amount": 2200,
+   "tx_date": "20260601",
+   "description": "Salary",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 280,
+   "tx_time": "09:00:00.000000"
+  },
+  {
+   "id": 579,
+   "type_id": 2,
+   "amount": 2200,
+   "tx_date": "20260701",
+   "description": "Salary",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 280,
+   "tx_time": "09:00:00.000000"
+  },
+  {
+   "id": 580,
+   "type_id": 2,
+   "amount": 2200,
+   "tx_date": "20260801",
+   "description": "Salary",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 280,
+   "tx_time": "09:00:00.000000"
+  },
+  {
+   "id": 581,
+   "type_id": 2,
+   "amount": 2200,
+   "tx_date": "20260901",
+   "description": "Salary",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 280,
+   "tx_time": "09:00:00.000000"
+  },
+  {
+   "id": 582,
+   "type_id": 2,
+   "amount": 95,
+   "tx_date": "20260628",
+   "description": "Mileage refund",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 281,
+   "tx_time": "11:00:00.000000"
+  },
+  {
+   "id": 583,
+   "type_id": 2,
+   "amount": 110,
+   "tx_date": "20260725",
+   "description": "Mileage refund",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 281,
+   "tx_time": "11:00:00.000000"
+  },
+  {
+   "id": 584,
+   "type_id": 2,
+   "amount": 135,
+   "tx_date": "20260820",
+   "description": "Mileage refund",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 281,
+   "tx_time": "11:00:00.000000"
+  },
+  {
+   "id": 585,
+   "type_id": 2,
+   "amount": 120,
+   "tx_date": "20260910",
+   "description": "Mileage refund",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 258,
+   "to_id": 281,
+   "tx_time": "11:00:00.000000"
+  },
+  {
+   "id": 586,
+   "type_id": 2,
+   "amount": 45,
+   "tx_date": "20260830",
+   "description": "ETF dividends Q1",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 261,
+   "to_id": 282,
+   "tx_time": "16:00:00.000000"
+  },
+  {
+   "id": 587,
+   "type_id": 2,
+   "amount": 85,
+   "tx_date": "20260730",
+   "description": "Sold used books",
+   "updated_at": "2026-09-14T15:23:15.492Z",
+   "created_by": 1,
+   "updated_by": null,
+   "from_id": 263,
+   "to_id": 284,
+   "tx_time": "11:00:00.000000"
+  }
+ ],
+ "holdings": [
+  {
+   "id": 54,
+   "account_id": 285,
+   "name": "USDC",
+   "pillar_id": 4,
+   "amount": 100,
+   "description": "Stablecoin",
+   "type_id": 7,
+   "issuer": null,
+   "country": "Global",
+   "currency": "USD",
+   "isin": null,
+   "quantity": 100,
+   "purchase_price": 1,
+   "purchase_date": "2025-05-01",
+   "current_price": 1,
+   "price_updated_at": null,
+   "auto_update": false
+  },
+  {
+   "id": 55,
+   "account_id": 285,
+   "name": "Ethereum",
+   "pillar_id": 4,
+   "amount": 250,
+   "description": "Cryptocurrency",
+   "type_id": 7,
+   "issuer": null,
+   "country": "Global",
+   "currency": "USD",
+   "isin": "ETH-EUR",
+   "quantity": 0.1,
+   "purchase_price": 2175,
+   "purchase_date": "2024-02-20",
+   "current_price": 2500,
+   "price_updated_at": null,
+   "auto_update": false
+  },
+  {
+   "id": 56,
+   "account_id": 285,
+   "name": "Bitcoin",
+   "pillar_id": 4,
+   "amount": 600,
+   "description": "Cryptocurrency",
+   "type_id": 7,
+   "issuer": null,
+   "country": "Global",
+   "currency": "USD",
+   "isin": "BTC-EUR",
+   "quantity": 0.01,
+   "purchase_price": 49000,
+   "purchase_date": "2021-11-05",
+   "current_price": 60000,
+   "price_updated_at": null,
+   "auto_update": false
+  },
+  {
+   "id": 57,
+   "account_id": 285,
+   "name": "Government Bond 2028",
+   "pillar_id": 3,
+   "amount": 2500,
+   "description": "Government bond",
+   "type_id": 6,
+   "issuer": "National Treasury",
+   "country": "Italy",
+   "currency": "EUR",
+   "isin": "XX0000000004",
+   "quantity": 25,
+   "purchase_price": 98.5,
+   "purchase_date": "2024-09-01",
+   "current_price": 100,
+   "price_updated_at": null,
+   "auto_update": false
+  },
+  {
+   "id": 58,
+   "account_id": 285,
+   "name": "Japan Equity",
+   "pillar_id": 4,
+   "amount": 700,
+   "description": "Japan equity ETF",
+   "type_id": 1,
+   "issuer": "Pacific Funds",
+   "country": "Japan",
+   "currency": "JPY",
+   "isin": "XX0000000003",
+   "quantity": 35,
+   "purchase_price": 19.2,
+   "purchase_date": "2025-01-15",
+   "current_price": 20,
+   "price_updated_at": null,
+   "auto_update": false
+  },
+  {
+   "id": 59,
+   "account_id": 285,
+   "name": "US Equity",
+   "pillar_id": 4,
+   "amount": 3100,
+   "description": "US equity ETF",
+   "type_id": 1,
+   "issuer": "Core Funds",
+   "country": "US",
+   "currency": "USD",
+   "isin": "XX0000000002",
+   "quantity": 6.2,
+   "purchase_price": 445,
+   "purchase_date": "2022-06-20",
+   "current_price": 500,
+   "price_updated_at": null,
+   "auto_update": false
+  },
+  {
+   "id": 60,
+   "account_id": 285,
+   "name": "Global Equity",
+   "pillar_id": 4,
+   "amount": 6500,
+   "description": "Global equity ETF",
+   "type_id": 1,
+   "issuer": "Global Index",
+   "country": "Global",
+   "currency": "USD",
+   "isin": "XX0000000001",
+   "quantity": 50,
+   "purchase_price": 120,
+   "purchase_date": "2023-03-10",
+   "current_price": 130,
+   "price_updated_at": null,
+   "auto_update": false
+  },
+  {
+   "id": 61,
+   "account_id": 286,
+   "name": "24-month deposit",
+   "pillar_id": 3,
+   "amount": 2000,
+   "description": "Long-term locked cash",
+   "type_id": 8,
+   "issuer": "Safe Deposit",
+   "country": "Italy",
+   "currency": "EUR",
+   "isin": null,
+   "quantity": null,
+   "purchase_price": null,
+   "purchase_date": null,
+   "current_price": null,
+   "price_updated_at": null,
+   "auto_update": false
+  },
+  {
+   "id": 62,
+   "account_id": 286,
+   "name": "12-month deposit",
+   "pillar_id": 2,
+   "amount": 5000,
+   "description": "Interest-bearing emergency fund",
+   "type_id": 8,
+   "issuer": "Safe Deposit",
+   "country": "Italy",
+   "currency": "EUR",
+   "isin": null,
+   "quantity": null,
+   "purchase_price": null,
+   "purchase_date": null,
+   "current_price": null,
+   "price_updated_at": null,
+   "auto_update": false
+  }
+ ],
+ "snapshots": [
+  {
+   "year": 2026,
+   "month": 4,
+   "total": 34000,
+   "value_p1": 18000,
+   "value_p2": 4000,
+   "value_p3": 3500,
+   "value_p4": 8500,
+   "detail": {
+    "diversification": {
+     "type": {
+      "data": [
+       {
+        "code": "CASH",
+        "name": "Cash",
+        "color": "#90a4ae",
+        "value": 18000
+       },
+       {
+        "code": "ETF",
+        "name": "ETF",
+        "color": "#26a69a",
+        "value": 7786
+       },
+       {
+        "code": "DEPOSIT_ACCOUNT",
+        "name": "Deposit account",
+        "color": "#66bb6a",
+        "value": 5554
+       },
+       {
+        "code": "BTP",
+        "name": "BTP",
+        "color": "#ffb74d",
+        "value": 1946
+       },
+       {
+        "code": "CRYPTO",
+        "name": "Crypto",
+        "color": "#ffca28",
+        "value": 714
+       }
+      ],
+      "total": 34000
+     },
+     "broker": {
+      "data": [
+       {
+        "code": null,
+        "name": "Demo Broker",
+        "color": "darkorange",
+        "value": 10446
+       },
+       {
+        "code": null,
+        "name": "Safe Deposit",
+        "color": "seagreen",
+        "value": 5554
+       }
+      ],
+      "total": 16000
+     },
+     "crypto": {
+      "data": [
+       {
+        "code": null,
+        "name": "Bitcoin",
+        "color": null,
+        "value": 450.5
+       },
+       {
+        "code": null,
+        "name": "Ethereum",
+        "color": null,
+        "value": 187
+       },
+       {
+        "code": null,
+        "name": "USDC",
+        "color": null,
+        "value": 76.5
+       }
+      ],
+      "total": 714
+     },
+     "issuer_etf": {
+      "data": [
+       {
+        "code": null,
+        "name": "Global Index",
+        "color": null,
+        "value": 4913
+       },
+       {
+        "code": null,
+        "name": "Core Funds",
+        "color": null,
+        "value": 2346
+       },
+       {
+        "code": null,
+        "name": "Pacific Funds",
+        "color": null,
+        "value": 527
+       }
+      ],
+      "total": 7786
+     },
+     "bond_issuer": {
+      "data": [
+       {
+        "code": null,
+        "name": "National Treasury",
+        "color": null,
+        "value": 1946
+       },
+       {
+        "code": null,
+        "name": "Safe Deposit",
+        "color": null,
+        "value": 1554
+       }
+      ],
+      "total": 3500
+     },
+     "bond_country": {
+      "data": [
+       {
+        "code": null,
+        "name": "Italy",
+        "color": null,
+        "value": 3500
+       }
+      ],
+      "total": 3500
+     },
+     "equity_issuer": {
+      "data": [
+       {
+        "code": null,
+        "name": "Global Index",
+        "color": null,
+        "value": 4913
+       },
+       {
+        "code": null,
+        "name": "Core Funds",
+        "color": null,
+        "value": 2346
+       },
+       {
+        "code": null,
+        "name": "Pacific Funds",
+        "color": null,
+        "value": 527
+       },
+       {
+        "code": null,
+        "name": null,
+        "color": null,
+        "value": 714
+       }
+      ],
+      "total": 8500
+     },
+     "equity_country": {
+      "data": [
+       {
+        "code": null,
+        "name": "Global",
+        "color": null,
+        "value": 5627
+       },
+       {
+        "code": null,
+        "name": "US",
+        "color": null,
+        "value": 2346
+       },
+       {
+        "code": null,
+        "name": "Japan",
+        "color": null,
+        "value": 527
+       }
+      ],
+      "total": 8500
+     },
+     "equity_currency": {
+      "data": [
+       {
+        "code": null,
+        "name": "USD",
+        "color": null,
+        "value": 7973
+       },
+       {
+        "code": null,
+        "name": "JPY",
+        "color": null,
+        "value": 527
+       }
+      ],
+      "total": 8500
+     }
+    },
+    "accounts": [
+     {
+      "id": 260,
+      "icon": "finance",
+      "name": "Savings Plus",
+      "color": "seagreen",
+      "amount": 8100,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "MaterialCommunityIcons",
+      "actual_amount": 8100,
+      "is_investment": false
+     },
+     {
+      "id": 258,
+      "icon": "cc-mastercard",
+      "name": "Cartesio Bank",
+      "color": "crimson",
+      "amount": 4140,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 4140,
+      "is_investment": false
+     },
+     {
+      "id": 261,
+      "icon": "bitcoin",
+      "name": "ETF Plan",
+      "color": "darkorange",
+      "amount": 4140,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 4140,
+      "is_investment": false
+     },
+     {
+      "id": 259,
+      "icon": "credit-card-refund",
+      "name": "NeoCard",
+      "color": "dodgerblue",
+      "amount": 1080,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "MaterialCommunityIcons",
+      "actual_amount": 1080,
+      "is_investment": false
+     },
+     {
+      "id": 262,
+      "icon": "dollar",
+      "name": "Cash",
+      "color": "dimgray",
+      "amount": 360,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 360,
+      "is_investment": false
+     },
+     {
+      "id": 263,
+      "icon": "paypal",
+      "name": "Online Wallet",
+      "color": "mediumblue",
+      "amount": 180,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 180,
+      "is_investment": false
+     },
+     {
+      "id": 285,
+      "icon": "bitcoin",
+      "name": "Demo Broker",
+      "color": "darkorange",
+      "amount": 9652.85,
+      "holdings": [
+       {
+        "id": 60,
+        "cost": 4535.08,
+        "name": "Global Equity",
+        "amount": 4913,
+        "type_code": "ETF",
+        "type_name": "ETF",
+        "total_return": 8.33,
+        "purchase_date": "2023-03-10"
+       },
+       {
+        "id": 59,
+        "cost": 2087.94,
+        "name": "US Equity",
+        "amount": 2346,
+        "type_code": "ETF",
+        "type_name": "ETF",
+        "total_return": 12.36,
+        "purchase_date": "2022-06-20"
+       },
+       {
+        "id": 57,
+        "cost": 1916.81,
+        "name": "Government Bond 2028",
+        "amount": 1946,
+        "type_code": "BTP",
+        "type_name": "BTP",
+        "total_return": 1.52,
+        "purchase_date": "2024-09-01"
+       },
+       {
+        "id": 58,
+        "cost": 505.92,
+        "name": "Japan Equity",
+        "amount": 527,
+        "type_code": "ETF",
+        "type_name": "ETF",
+        "total_return": 4.17,
+        "purchase_date": "2025-01-15"
+       },
+       {
+        "id": 56,
+        "cost": 367.91,
+        "name": "Bitcoin",
+        "amount": 450.5,
+        "type_code": "CRYPTO",
+        "type_name": "Crypto",
+        "total_return": 22.45,
+        "purchase_date": "2021-11-05"
+       },
+       {
+        "id": 55,
+        "cost": 162.69,
+        "name": "Ethereum",
+        "amount": 187,
+        "type_code": "CRYPTO",
+        "type_name": "Crypto",
+        "total_return": 14.94,
+        "purchase_date": "2024-02-20"
+       },
+       {
+        "id": 54,
+        "cost": 76.5,
+        "name": "USDC",
+        "amount": 76.5,
+        "type_code": "CRYPTO",
+        "type_name": "Crypto",
+        "total_return": 0,
+        "purchase_date": "2025-05-01"
+       }
+      ],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": false,
+      "icon_family": "FontAwesome",
+      "actual_amount": 10446,
+      "is_investment": true
+     },
+     {
+      "id": 286,
+      "icon": "finance",
+      "name": "Safe Deposit",
+      "color": "seagreen",
+      "amount": 5554,
+      "holdings": [
+       {
+        "id": 62,
+        "cost": 4000,
+        "name": "12-month deposit",
+        "amount": 4000,
+        "type_code": "DEPOSIT_ACCOUNT",
+        "type_name": "Deposit account",
+        "total_return": null,
+        "purchase_date": null
+       },
+       {
+        "id": 61,
+        "cost": 1554,
+        "name": "24-month deposit",
+        "amount": 1554,
+        "type_code": "DEPOSIT_ACCOUNT",
+        "type_name": "Deposit account",
+        "total_return": null,
+        "purchase_date": null
+       }
+      ],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": false,
+      "icon_family": "MaterialCommunityIcons",
+      "actual_amount": 5554,
+      "is_investment": true
+     }
+    ]
+   }
+  },
+  {
+   "year": 2026,
+   "month": 5,
+   "total": 35700,
+   "value_p1": 18500,
+   "value_p2": 4200,
+   "value_p3": 3800,
+   "value_p4": 9200,
+   "detail": {
+    "diversification": {
+     "type": {
+      "data": [
+       {
+        "code": "CASH",
+        "name": "Cash",
+        "color": "#90a4ae",
+        "value": 18500
+       },
+       {
+        "code": "ETF",
+        "name": "ETF",
+        "color": "#26a69a",
+        "value": 8427.2
+       },
+       {
+        "code": "DEPOSIT_ACCOUNT",
+        "name": "Deposit account",
+        "color": "#66bb6a",
+        "value": 5887.2
+       },
+       {
+        "code": "BTP",
+        "name": "BTP",
+        "color": "#ffb74d",
+        "value": 2112.8
+       },
+       {
+        "code": "CRYPTO",
+        "name": "Crypto",
+        "color": "#ffca28",
+        "value": 772.8
+       }
+      ],
+      "total": 35700
+     },
+     "broker": {
+      "data": [
+       {
+        "code": null,
+        "name": "Demo Broker",
+        "color": "darkorange",
+        "value": 11312.8
+       },
+       {
+        "code": null,
+        "name": "Safe Deposit",
+        "color": "seagreen",
+        "value": 5887.2
+       }
+      ],
+      "total": 17200
+     },
+     "crypto": {
+      "data": [
+       {
+        "code": null,
+        "name": "Bitcoin",
+        "color": null,
+        "value": 487.6
+       },
+       {
+        "code": null,
+        "name": "Ethereum",
+        "color": null,
+        "value": 202.4
+       },
+       {
+        "code": null,
+        "name": "USDC",
+        "color": null,
+        "value": 82.8
+       }
+      ],
+      "total": 772.8
+     },
+     "issuer_etf": {
+      "data": [
+       {
+        "code": null,
+        "name": "Global Index",
+        "color": null,
+        "value": 5317.6
+       },
+       {
+        "code": null,
+        "name": "Core Funds",
+        "color": null,
+        "value": 2539.2
+       },
+       {
+        "code": null,
+        "name": "Pacific Funds",
+        "color": null,
+        "value": 570.4
+       }
+      ],
+      "total": 8427.2
+     },
+     "bond_issuer": {
+      "data": [
+       {
+        "code": null,
+        "name": "National Treasury",
+        "color": null,
+        "value": 2112.8
+       },
+       {
+        "code": null,
+        "name": "Safe Deposit",
+        "color": null,
+        "value": 1687.2
+       }
+      ],
+      "total": 3800
+     },
+     "bond_country": {
+      "data": [
+       {
+        "code": null,
+        "name": "Italy",
+        "color": null,
+        "value": 3800
+       }
+      ],
+      "total": 3800
+     },
+     "equity_issuer": {
+      "data": [
+       {
+        "code": null,
+        "name": "Global Index",
+        "color": null,
+        "value": 5317.6
+       },
+       {
+        "code": null,
+        "name": "Core Funds",
+        "color": null,
+        "value": 2539.2
+       },
+       {
+        "code": null,
+        "name": "Pacific Funds",
+        "color": null,
+        "value": 570.4
+       },
+       {
+        "code": null,
+        "name": null,
+        "color": null,
+        "value": 772.8
+       }
+      ],
+      "total": 9200
+     },
+     "equity_country": {
+      "data": [
+       {
+        "code": null,
+        "name": "Global",
+        "color": null,
+        "value": 6090.4
+       },
+       {
+        "code": null,
+        "name": "US",
+        "color": null,
+        "value": 2539.2
+       },
+       {
+        "code": null,
+        "name": "Japan",
+        "color": null,
+        "value": 570.4
+       }
+      ],
+      "total": 9200
+     },
+     "equity_currency": {
+      "data": [
+       {
+        "code": null,
+        "name": "USD",
+        "color": null,
+        "value": 8629.6
+       },
+       {
+        "code": null,
+        "name": "JPY",
+        "color": null,
+        "value": 570.4
+       }
+      ],
+      "total": 9200
+     }
+    },
+    "accounts": [
+     {
+      "id": 260,
+      "icon": "finance",
+      "name": "Savings Plus",
+      "color": "seagreen",
+      "amount": 8325,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "MaterialCommunityIcons",
+      "actual_amount": 8325,
+      "is_investment": false
+     },
+     {
+      "id": 258,
+      "icon": "cc-mastercard",
+      "name": "Cartesio Bank",
+      "color": "crimson",
+      "amount": 4255,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 4255,
+      "is_investment": false
+     },
+     {
+      "id": 261,
+      "icon": "bitcoin",
+      "name": "ETF Plan",
+      "color": "darkorange",
+      "amount": 4255,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 4255,
+      "is_investment": false
+     },
+     {
+      "id": 259,
+      "icon": "credit-card-refund",
+      "name": "NeoCard",
+      "color": "dodgerblue",
+      "amount": 1110,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "MaterialCommunityIcons",
+      "actual_amount": 1110,
+      "is_investment": false
+     },
+     {
+      "id": 262,
+      "icon": "dollar",
+      "name": "Cash",
+      "color": "dimgray",
+      "amount": 370,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 370,
+      "is_investment": false
+     },
+     {
+      "id": 263,
+      "icon": "paypal",
+      "name": "Online Wallet",
+      "color": "mediumblue",
+      "amount": 185,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 185,
+      "is_investment": false
+     },
+     {
+      "id": 285,
+      "icon": "bitcoin",
+      "name": "Demo Broker",
+      "color": "darkorange",
+      "amount": 10454.23,
+      "holdings": [
+       {
+        "id": 60,
+        "cost": 4908.55,
+        "name": "Global Equity",
+        "amount": 5317.6,
+        "type_code": "ETF",
+        "type_name": "ETF",
+        "total_return": 8.33,
+        "purchase_date": "2023-03-10"
+       },
+       {
+        "id": 59,
+        "cost": 2259.89,
+        "name": "US Equity",
+        "amount": 2539.2,
+        "type_code": "ETF",
+        "type_name": "ETF",
+        "total_return": 12.36,
+        "purchase_date": "2022-06-20"
+       },
+       {
+        "id": 57,
+        "cost": 2081.11,
+        "name": "Government Bond 2028",
+        "amount": 2112.8,
+        "type_code": "BTP",
+        "type_name": "BTP",
+        "total_return": 1.52,
+        "purchase_date": "2024-09-01"
+       },
+       {
+        "id": 58,
+        "cost": 547.58,
+        "name": "Japan Equity",
+        "amount": 570.4,
+        "type_code": "ETF",
+        "type_name": "ETF",
+        "total_return": 4.17,
+        "purchase_date": "2025-01-15"
+       },
+       {
+        "id": 56,
+        "cost": 398.21,
+        "name": "Bitcoin",
+        "amount": 487.6,
+        "type_code": "CRYPTO",
+        "type_name": "Crypto",
+        "total_return": 22.45,
+        "purchase_date": "2021-11-05"
+       },
+       {
+        "id": 55,
+        "cost": 176.09,
+        "name": "Ethereum",
+        "amount": 202.4,
+        "type_code": "CRYPTO",
+        "type_name": "Crypto",
+        "total_return": 14.94,
+        "purchase_date": "2024-02-20"
+       },
+       {
+        "id": 54,
+        "cost": 82.8,
+        "name": "USDC",
+        "amount": 82.8,
+        "type_code": "CRYPTO",
+        "type_name": "Crypto",
+        "total_return": 0,
+        "purchase_date": "2025-05-01"
+       }
+      ],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": false,
+      "icon_family": "FontAwesome",
+      "actual_amount": 11312.8,
+      "is_investment": true
+     },
+     {
+      "id": 286,
+      "icon": "finance",
+      "name": "Safe Deposit",
+      "color": "seagreen",
+      "amount": 5887.2,
+      "holdings": [
+       {
+        "id": 62,
+        "cost": 4200,
+        "name": "12-month deposit",
+        "amount": 4200,
+        "type_code": "DEPOSIT_ACCOUNT",
+        "type_name": "Deposit account",
+        "total_return": null,
+        "purchase_date": null
+       },
+       {
+        "id": 61,
+        "cost": 1687.2,
+        "name": "24-month deposit",
+        "amount": 1687.2,
+        "type_code": "DEPOSIT_ACCOUNT",
+        "type_name": "Deposit account",
+        "total_return": null,
+        "purchase_date": null
+       }
+      ],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": false,
+      "icon_family": "MaterialCommunityIcons",
+      "actual_amount": 5887.2,
+      "is_investment": true
+     }
+    ]
+   }
+  },
+  {
+   "year": 2026,
+   "month": 6,
+   "total": 37300,
+   "value_p1": 19000,
+   "value_p2": 4500,
+   "value_p3": 4000,
+   "value_p4": 9800,
+   "detail": {
+    "diversification": {
+     "type": {
+      "data": [
+       {
+        "code": "CASH",
+        "name": "Cash",
+        "color": "#90a4ae",
+        "value": 19000
+       },
+       {
+        "code": "ETF",
+        "name": "ETF",
+        "color": "#26a69a",
+        "value": 8976.8
+       },
+       {
+        "code": "DEPOSIT_ACCOUNT",
+        "name": "Deposit account",
+        "color": "#66bb6a",
+        "value": 6276
+       },
+       {
+        "code": "BTP",
+        "name": "BTP",
+        "color": "#ffb74d",
+        "value": 2224
+       },
+       {
+        "code": "CRYPTO",
+        "name": "Crypto",
+        "color": "#ffca28",
+        "value": 823.2
+       }
+      ],
+      "total": 37300
+     },
+     "broker": {
+      "data": [
+       {
+        "code": null,
+        "name": "Demo Broker",
+        "color": "darkorange",
+        "value": 12024
+       },
+       {
+        "code": null,
+        "name": "Safe Deposit",
+        "color": "seagreen",
+        "value": 6276
+       }
+      ],
+      "total": 18300
+     },
+     "crypto": {
+      "data": [
+       {
+        "code": null,
+        "name": "Bitcoin",
+        "color": null,
+        "value": 519.4
+       },
+       {
+        "code": null,
+        "name": "Ethereum",
+        "color": null,
+        "value": 215.6
+       },
+       {
+        "code": null,
+        "name": "USDC",
+        "color": null,
+        "value": 88.2
+       }
+      ],
+      "total": 823.2
+     },
+     "issuer_etf": {
+      "data": [
+       {
+        "code": null,
+        "name": "Global Index",
+        "color": null,
+        "value": 5664.4
+       },
+       {
+        "code": null,
+        "name": "Core Funds",
+        "color": null,
+        "value": 2704.8
+       },
+       {
+        "code": null,
+        "name": "Pacific Funds",
+        "color": null,
+        "value": 607.6
+       }
+      ],
+      "total": 8976.8
+     },
+     "bond_issuer": {
+      "data": [
+       {
+        "code": null,
+        "name": "National Treasury",
+        "color": null,
+        "value": 2224
+       },
+       {
+        "code": null,
+        "name": "Safe Deposit",
+        "color": null,
+        "value": 1776
+       }
+      ],
+      "total": 4000
+     },
+     "bond_country": {
+      "data": [
+       {
+        "code": null,
+        "name": "Italy",
+        "color": null,
+        "value": 4000
+       }
+      ],
+      "total": 4000
+     },
+     "equity_issuer": {
+      "data": [
+       {
+        "code": null,
+        "name": "Global Index",
+        "color": null,
+        "value": 5664.4
+       },
+       {
+        "code": null,
+        "name": "Core Funds",
+        "color": null,
+        "value": 2704.8
+       },
+       {
+        "code": null,
+        "name": "Pacific Funds",
+        "color": null,
+        "value": 607.6
+       },
+       {
+        "code": null,
+        "name": null,
+        "color": null,
+        "value": 823.2
+       }
+      ],
+      "total": 9800
+     },
+     "equity_country": {
+      "data": [
+       {
+        "code": null,
+        "name": "Global",
+        "color": null,
+        "value": 6487.6
+       },
+       {
+        "code": null,
+        "name": "US",
+        "color": null,
+        "value": 2704.8
+       },
+       {
+        "code": null,
+        "name": "Japan",
+        "color": null,
+        "value": 607.6
+       }
+      ],
+      "total": 9800
+     },
+     "equity_currency": {
+      "data": [
+       {
+        "code": null,
+        "name": "USD",
+        "color": null,
+        "value": 9192.4
+       },
+       {
+        "code": null,
+        "name": "JPY",
+        "color": null,
+        "value": 607.6
+       }
+      ],
+      "total": 9800
+     }
+    },
+    "accounts": [
+     {
+      "id": 260,
+      "icon": "finance",
+      "name": "Savings Plus",
+      "color": "seagreen",
+      "amount": 8550,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "MaterialCommunityIcons",
+      "actual_amount": 8550,
+      "is_investment": false
+     },
+     {
+      "id": 258,
+      "icon": "cc-mastercard",
+      "name": "Cartesio Bank",
+      "color": "crimson",
+      "amount": 4370,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 4370,
+      "is_investment": false
+     },
+     {
+      "id": 261,
+      "icon": "bitcoin",
+      "name": "ETF Plan",
+      "color": "darkorange",
+      "amount": 4370,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 4370,
+      "is_investment": false
+     },
+     {
+      "id": 259,
+      "icon": "credit-card-refund",
+      "name": "NeoCard",
+      "color": "dodgerblue",
+      "amount": 1140,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "MaterialCommunityIcons",
+      "actual_amount": 1140,
+      "is_investment": false
+     },
+     {
+      "id": 262,
+      "icon": "dollar",
+      "name": "Cash",
+      "color": "dimgray",
+      "amount": 380,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 380,
+      "is_investment": false
+     },
+     {
+      "id": 263,
+      "icon": "paypal",
+      "name": "Online Wallet",
+      "color": "mediumblue",
+      "amount": 190,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 190,
+      "is_investment": false
+     },
+     {
+      "id": 285,
+      "icon": "bitcoin",
+      "name": "Demo Broker",
+      "color": "darkorange",
+      "amount": 11109.83,
+      "holdings": [
+       {
+        "id": 60,
+        "cost": 5228.68,
+        "name": "Global Equity",
+        "amount": 5664.4,
+        "type_code": "ETF",
+        "type_name": "ETF",
+        "total_return": 8.33,
+        "purchase_date": "2023-03-10"
+       },
+       {
+        "id": 59,
+        "cost": 2407.27,
+        "name": "US Equity",
+        "amount": 2704.8,
+        "type_code": "ETF",
+        "type_name": "ETF",
+        "total_return": 12.36,
+        "purchase_date": "2022-06-20"
+       },
+       {
+        "id": 57,
+        "cost": 2190.64,
+        "name": "Government Bond 2028",
+        "amount": 2224,
+        "type_code": "BTP",
+        "type_name": "BTP",
+        "total_return": 1.52,
+        "purchase_date": "2024-09-01"
+       },
+       {
+        "id": 58,
+        "cost": 583.3,
+        "name": "Japan Equity",
+        "amount": 607.6,
+        "type_code": "ETF",
+        "type_name": "ETF",
+        "total_return": 4.17,
+        "purchase_date": "2025-01-15"
+       },
+       {
+        "id": 56,
+        "cost": 424.18,
+        "name": "Bitcoin",
+        "amount": 519.4,
+        "type_code": "CRYPTO",
+        "type_name": "Crypto",
+        "total_return": 22.45,
+        "purchase_date": "2021-11-05"
+       },
+       {
+        "id": 55,
+        "cost": 187.57,
+        "name": "Ethereum",
+        "amount": 215.6,
+        "type_code": "CRYPTO",
+        "type_name": "Crypto",
+        "total_return": 14.94,
+        "purchase_date": "2024-02-20"
+       },
+       {
+        "id": 54,
+        "cost": 88.2,
+        "name": "USDC",
+        "amount": 88.2,
+        "type_code": "CRYPTO",
+        "type_name": "Crypto",
+        "total_return": 0,
+        "purchase_date": "2025-05-01"
+       }
+      ],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": false,
+      "icon_family": "FontAwesome",
+      "actual_amount": 12024,
+      "is_investment": true
+     },
+     {
+      "id": 286,
+      "icon": "finance",
+      "name": "Safe Deposit",
+      "color": "seagreen",
+      "amount": 6276,
+      "holdings": [
+       {
+        "id": 62,
+        "cost": 4500,
+        "name": "12-month deposit",
+        "amount": 4500,
+        "type_code": "DEPOSIT_ACCOUNT",
+        "type_name": "Deposit account",
+        "total_return": null,
+        "purchase_date": null
+       },
+       {
+        "id": 61,
+        "cost": 1776,
+        "name": "24-month deposit",
+        "amount": 1776,
+        "type_code": "DEPOSIT_ACCOUNT",
+        "type_name": "Deposit account",
+        "total_return": null,
+        "purchase_date": null
+       }
+      ],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": false,
+      "icon_family": "MaterialCommunityIcons",
+      "actual_amount": 6276,
+      "is_investment": true
+     }
+    ]
+   }
+  },
+  {
+   "year": 2026,
+   "month": 7,
+   "total": 38700,
+   "value_p1": 19300,
+   "value_p2": 4800,
+   "value_p3": 4200,
+   "value_p4": 10400,
+   "detail": {
+    "diversification": {
+     "type": {
+      "data": [
+       {
+        "code": "CASH",
+        "name": "Cash",
+        "color": "#90a4ae",
+        "value": 19300
+       },
+       {
+        "code": "ETF",
+        "name": "ETF",
+        "color": "#26a69a",
+        "value": 9526.4
+       },
+       {
+        "code": "DEPOSIT_ACCOUNT",
+        "name": "Deposit account",
+        "color": "#66bb6a",
+        "value": 6664.8
+       },
+       {
+        "code": "BTP",
+        "name": "BTP",
+        "color": "#ffb74d",
+        "value": 2335.2
+       },
+       {
+        "code": "CRYPTO",
+        "name": "Crypto",
+        "color": "#ffca28",
+        "value": 873.6
+       }
+      ],
+      "total": 38700
+     },
+     "broker": {
+      "data": [
+       {
+        "code": null,
+        "name": "Demo Broker",
+        "color": "darkorange",
+        "value": 12735.2
+       },
+       {
+        "code": null,
+        "name": "Safe Deposit",
+        "color": "seagreen",
+        "value": 6664.8
+       }
+      ],
+      "total": 19400
+     },
+     "crypto": {
+      "data": [
+       {
+        "code": null,
+        "name": "Bitcoin",
+        "color": null,
+        "value": 551.2
+       },
+       {
+        "code": null,
+        "name": "Ethereum",
+        "color": null,
+        "value": 228.8
+       },
+       {
+        "code": null,
+        "name": "USDC",
+        "color": null,
+        "value": 93.6
+       }
+      ],
+      "total": 873.6
+     },
+     "issuer_etf": {
+      "data": [
+       {
+        "code": null,
+        "name": "Global Index",
+        "color": null,
+        "value": 6011.2
+       },
+       {
+        "code": null,
+        "name": "Core Funds",
+        "color": null,
+        "value": 2870.4
+       },
+       {
+        "code": null,
+        "name": "Pacific Funds",
+        "color": null,
+        "value": 644.8
+       }
+      ],
+      "total": 9526.4
+     },
+     "bond_issuer": {
+      "data": [
+       {
+        "code": null,
+        "name": "National Treasury",
+        "color": null,
+        "value": 2335.2
+       },
+       {
+        "code": null,
+        "name": "Safe Deposit",
+        "color": null,
+        "value": 1864.8
+       }
+      ],
+      "total": 4200
+     },
+     "bond_country": {
+      "data": [
+       {
+        "code": null,
+        "name": "Italy",
+        "color": null,
+        "value": 4200
+       }
+      ],
+      "total": 4200
+     },
+     "equity_issuer": {
+      "data": [
+       {
+        "code": null,
+        "name": "Global Index",
+        "color": null,
+        "value": 6011.2
+       },
+       {
+        "code": null,
+        "name": "Core Funds",
+        "color": null,
+        "value": 2870.4
+       },
+       {
+        "code": null,
+        "name": "Pacific Funds",
+        "color": null,
+        "value": 644.8
+       },
+       {
+        "code": null,
+        "name": null,
+        "color": null,
+        "value": 873.6
+       }
+      ],
+      "total": 10400
+     },
+     "equity_country": {
+      "data": [
+       {
+        "code": null,
+        "name": "Global",
+        "color": null,
+        "value": 6884.8
+       },
+       {
+        "code": null,
+        "name": "US",
+        "color": null,
+        "value": 2870.4
+       },
+       {
+        "code": null,
+        "name": "Japan",
+        "color": null,
+        "value": 644.8
+       }
+      ],
+      "total": 10400
+     },
+     "equity_currency": {
+      "data": [
+       {
+        "code": null,
+        "name": "USD",
+        "color": null,
+        "value": 9755.2
+       },
+       {
+        "code": null,
+        "name": "JPY",
+        "color": null,
+        "value": 644.8
+       }
+      ],
+      "total": 10400
+     }
+    },
+    "accounts": [
+     {
+      "id": 260,
+      "icon": "finance",
+      "name": "Savings Plus",
+      "color": "seagreen",
+      "amount": 8685,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "MaterialCommunityIcons",
+      "actual_amount": 8685,
+      "is_investment": false
+     },
+     {
+      "id": 258,
+      "icon": "cc-mastercard",
+      "name": "Cartesio Bank",
+      "color": "crimson",
+      "amount": 4439,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 4439,
+      "is_investment": false
+     },
+     {
+      "id": 261,
+      "icon": "bitcoin",
+      "name": "ETF Plan",
+      "color": "darkorange",
+      "amount": 4439,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 4439,
+      "is_investment": false
+     },
+     {
+      "id": 259,
+      "icon": "credit-card-refund",
+      "name": "NeoCard",
+      "color": "dodgerblue",
+      "amount": 1158,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "MaterialCommunityIcons",
+      "actual_amount": 1158,
+      "is_investment": false
+     },
+     {
+      "id": 262,
+      "icon": "dollar",
+      "name": "Cash",
+      "color": "dimgray",
+      "amount": 386,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 386,
+      "is_investment": false
+     },
+     {
+      "id": 263,
+      "icon": "paypal",
+      "name": "Online Wallet",
+      "color": "mediumblue",
+      "amount": 193,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 193,
+      "is_investment": false
+     },
+     {
+      "id": 285,
+      "icon": "bitcoin",
+      "name": "Demo Broker",
+      "color": "darkorange",
+      "amount": 11765.44,
+      "holdings": [
+       {
+        "id": 60,
+        "cost": 5548.8,
+        "name": "Global Equity",
+        "amount": 6011.2,
+        "type_code": "ETF",
+        "type_name": "ETF",
+        "total_return": 8.33,
+        "purchase_date": "2023-03-10"
+       },
+       {
+        "id": 59,
+        "cost": 2554.66,
+        "name": "US Equity",
+        "amount": 2870.4,
+        "type_code": "ETF",
+        "type_name": "ETF",
+        "total_return": 12.36,
+        "purchase_date": "2022-06-20"
+       },
+       {
+        "id": 57,
+        "cost": 2300.17,
+        "name": "Government Bond 2028",
+        "amount": 2335.2,
+        "type_code": "BTP",
+        "type_name": "BTP",
+        "total_return": 1.52,
+        "purchase_date": "2024-09-01"
+       },
+       {
+        "id": 58,
+        "cost": 619.01,
+        "name": "Japan Equity",
+        "amount": 644.8,
+        "type_code": "ETF",
+        "type_name": "ETF",
+        "total_return": 4.17,
+        "purchase_date": "2025-01-15"
+       },
+       {
+        "id": 56,
+        "cost": 450.15,
+        "name": "Bitcoin",
+        "amount": 551.2,
+        "type_code": "CRYPTO",
+        "type_name": "Crypto",
+        "total_return": 22.45,
+        "purchase_date": "2021-11-05"
+       },
+       {
+        "id": 55,
+        "cost": 199.06,
+        "name": "Ethereum",
+        "amount": 228.8,
+        "type_code": "CRYPTO",
+        "type_name": "Crypto",
+        "total_return": 14.94,
+        "purchase_date": "2024-02-20"
+       },
+       {
+        "id": 54,
+        "cost": 93.6,
+        "name": "USDC",
+        "amount": 93.6,
+        "type_code": "CRYPTO",
+        "type_name": "Crypto",
+        "total_return": 0,
+        "purchase_date": "2025-05-01"
+       }
+      ],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": false,
+      "icon_family": "FontAwesome",
+      "actual_amount": 12735.2,
+      "is_investment": true
+     },
+     {
+      "id": 286,
+      "icon": "finance",
+      "name": "Safe Deposit",
+      "color": "seagreen",
+      "amount": 6664.8,
+      "holdings": [
+       {
+        "id": 62,
+        "cost": 4800,
+        "name": "12-month deposit",
+        "amount": 4800,
+        "type_code": "DEPOSIT_ACCOUNT",
+        "type_name": "Deposit account",
+        "total_return": null,
+        "purchase_date": null
+       },
+       {
+        "id": 61,
+        "cost": 1864.8,
+        "name": "24-month deposit",
+        "amount": 1864.8,
+        "type_code": "DEPOSIT_ACCOUNT",
+        "type_name": "Deposit account",
+        "total_return": null,
+        "purchase_date": null
+       }
+      ],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": false,
+      "icon_family": "MaterialCommunityIcons",
+      "actual_amount": 6664.8,
+      "is_investment": true
+     }
+    ]
+   }
+  },
+  {
+   "year": 2026,
+   "month": 8,
+   "total": 40000,
+   "value_p1": 19700,
+   "value_p2": 5000,
+   "value_p3": 4400,
+   "value_p4": 10900,
+   "detail": {
+    "diversification": {
+     "type": {
+      "data": [
+       {
+        "code": "CASH",
+        "name": "Cash",
+        "color": "#90a4ae",
+        "value": 19700
+       },
+       {
+        "code": "ETF",
+        "name": "ETF",
+        "color": "#26a69a",
+        "value": 9984.4
+       },
+       {
+        "code": "DEPOSIT_ACCOUNT",
+        "name": "Deposit account",
+        "color": "#66bb6a",
+        "value": 6953.6
+       },
+       {
+        "code": "BTP",
+        "name": "BTP",
+        "color": "#ffb74d",
+        "value": 2446.4
+       },
+       {
+        "code": "CRYPTO",
+        "name": "Crypto",
+        "color": "#ffca28",
+        "value": 915.6
+       }
+      ],
+      "total": 40000
+     },
+     "broker": {
+      "data": [
+       {
+        "code": null,
+        "name": "Demo Broker",
+        "color": "darkorange",
+        "value": 13346.4
+       },
+       {
+        "code": null,
+        "name": "Safe Deposit",
+        "color": "seagreen",
+        "value": 6953.6
+       }
+      ],
+      "total": 20300
+     },
+     "crypto": {
+      "data": [
+       {
+        "code": null,
+        "name": "Bitcoin",
+        "color": null,
+        "value": 577.7
+       },
+       {
+        "code": null,
+        "name": "Ethereum",
+        "color": null,
+        "value": 239.8
+       },
+       {
+        "code": null,
+        "name": "USDC",
+        "color": null,
+        "value": 98.1
+       }
+      ],
+      "total": 915.6
+     },
+     "issuer_etf": {
+      "data": [
+       {
+        "code": null,
+        "name": "Global Index",
+        "color": null,
+        "value": 6300.2
+       },
+       {
+        "code": null,
+        "name": "Core Funds",
+        "color": null,
+        "value": 3008.4
+       },
+       {
+        "code": null,
+        "name": "Pacific Funds",
+        "color": null,
+        "value": 675.8
+       }
+      ],
+      "total": 9984.4
+     },
+     "bond_issuer": {
+      "data": [
+       {
+        "code": null,
+        "name": "National Treasury",
+        "color": null,
+        "value": 2446.4
+       },
+       {
+        "code": null,
+        "name": "Safe Deposit",
+        "color": null,
+        "value": 1953.6
+       }
+      ],
+      "total": 4400
+     },
+     "bond_country": {
+      "data": [
+       {
+        "code": null,
+        "name": "Italy",
+        "color": null,
+        "value": 4400
+       }
+      ],
+      "total": 4400
+     },
+     "equity_issuer": {
+      "data": [
+       {
+        "code": null,
+        "name": "Global Index",
+        "color": null,
+        "value": 6300.2
+       },
+       {
+        "code": null,
+        "name": "Core Funds",
+        "color": null,
+        "value": 3008.4
+       },
+       {
+        "code": null,
+        "name": "Pacific Funds",
+        "color": null,
+        "value": 675.8
+       },
+       {
+        "code": null,
+        "name": null,
+        "color": null,
+        "value": 915.6
+       }
+      ],
+      "total": 10900
+     },
+     "equity_country": {
+      "data": [
+       {
+        "code": null,
+        "name": "Global",
+        "color": null,
+        "value": 7215.8
+       },
+       {
+        "code": null,
+        "name": "US",
+        "color": null,
+        "value": 3008.4
+       },
+       {
+        "code": null,
+        "name": "Japan",
+        "color": null,
+        "value": 675.8
+       }
+      ],
+      "total": 10900
+     },
+     "equity_currency": {
+      "data": [
+       {
+        "code": null,
+        "name": "USD",
+        "color": null,
+        "value": 10224.2
+       },
+       {
+        "code": null,
+        "name": "JPY",
+        "color": null,
+        "value": 675.8
+       }
+      ],
+      "total": 10900
+     }
+    },
+    "accounts": [
+     {
+      "id": 260,
+      "icon": "finance",
+      "name": "Savings Plus",
+      "color": "seagreen",
+      "amount": 8865,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "MaterialCommunityIcons",
+      "actual_amount": 8865,
+      "is_investment": false
+     },
+     {
+      "id": 258,
+      "icon": "cc-mastercard",
+      "name": "Cartesio Bank",
+      "color": "crimson",
+      "amount": 4531,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 4531,
+      "is_investment": false
+     },
+     {
+      "id": 261,
+      "icon": "bitcoin",
+      "name": "ETF Plan",
+      "color": "darkorange",
+      "amount": 4531,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 4531,
+      "is_investment": false
+     },
+     {
+      "id": 259,
+      "icon": "credit-card-refund",
+      "name": "NeoCard",
+      "color": "dodgerblue",
+      "amount": 1182,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "MaterialCommunityIcons",
+      "actual_amount": 1182,
+      "is_investment": false
+     },
+     {
+      "id": 262,
+      "icon": "dollar",
+      "name": "Cash",
+      "color": "dimgray",
+      "amount": 394,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 394,
+      "is_investment": false
+     },
+     {
+      "id": 263,
+      "icon": "paypal",
+      "name": "Online Wallet",
+      "color": "mediumblue",
+      "amount": 197,
+      "holdings": [],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": true,
+      "icon_family": "FontAwesome",
+      "actual_amount": 197,
+      "is_investment": false
+     },
+     {
+      "id": 285,
+      "icon": "bitcoin",
+      "name": "Demo Broker",
+      "color": "darkorange",
+      "amount": 12330.03,
+      "holdings": [
+       {
+        "id": 60,
+        "cost": 5815.57,
+        "name": "Global Equity",
+        "amount": 6300.2,
+        "type_code": "ETF",
+        "type_name": "ETF",
+        "total_return": 8.33,
+        "purchase_date": "2023-03-10"
+       },
+       {
+        "id": 59,
+        "cost": 2677.48,
+        "name": "US Equity",
+        "amount": 3008.4,
+        "type_code": "ETF",
+        "type_name": "ETF",
+        "total_return": 12.36,
+        "purchase_date": "2022-06-20"
+       },
+       {
+        "id": 57,
+        "cost": 2409.7,
+        "name": "Government Bond 2028",
+        "amount": 2446.4,
+        "type_code": "BTP",
+        "type_name": "BTP",
+        "total_return": 1.52,
+        "purchase_date": "2024-09-01"
+       },
+       {
+        "id": 58,
+        "cost": 648.77,
+        "name": "Japan Equity",
+        "amount": 675.8,
+        "type_code": "ETF",
+        "type_name": "ETF",
+        "total_return": 4.17,
+        "purchase_date": "2025-01-15"
+       },
+       {
+        "id": 56,
+        "cost": 471.79,
+        "name": "Bitcoin",
+        "amount": 577.7,
+        "type_code": "CRYPTO",
+        "type_name": "Crypto",
+        "total_return": 22.45,
+        "purchase_date": "2021-11-05"
+       },
+       {
+        "id": 55,
+        "cost": 208.63,
+        "name": "Ethereum",
+        "amount": 239.8,
+        "type_code": "CRYPTO",
+        "type_name": "Crypto",
+        "total_return": 14.94,
+        "purchase_date": "2024-02-20"
+       },
+       {
+        "id": 54,
+        "cost": 98.1,
+        "name": "USDC",
+        "amount": 98.1,
+        "type_code": "CRYPTO",
+        "type_name": "Crypto",
+        "total_return": 0,
+        "purchase_date": "2025-05-01"
+       }
+      ],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": false,
+      "icon_family": "FontAwesome",
+      "actual_amount": 13346.4,
+      "is_investment": true
+     },
+     {
+      "id": 286,
+      "icon": "finance",
+      "name": "Safe Deposit",
+      "color": "seagreen",
+      "amount": 6953.6,
+      "holdings": [
+       {
+        "id": 62,
+        "cost": 5000,
+        "name": "12-month deposit",
+        "amount": 5000,
+        "type_code": "DEPOSIT_ACCOUNT",
+        "type_name": "Deposit account",
+        "total_return": null,
+        "purchase_date": null
+       },
+       {
+        "id": 61,
+        "cost": 1953.6,
+        "name": "24-month deposit",
+        "amount": 1953.6,
+        "type_code": "DEPOSIT_ACCOUNT",
+        "type_name": "Deposit account",
+        "total_return": null,
+        "purchase_date": null
+       }
+      ],
+      "type_code": "STANDARD_ACCOUNT",
+      "type_name": "Standard account",
+      "is_current": false,
+      "icon_family": "MaterialCommunityIcons",
+      "actual_amount": 6953.6,
+      "is_investment": true
+     }
+    ]
+   }
+  }
+ ]
+}

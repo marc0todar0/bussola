@@ -1,0 +1,12 @@
+# Publishes Postgres on the server's loopback, for a database client (DBeaver,
+# psql, pgAdmin on your own machine) reaching it through an SSH tunnel.
+# Off unless .env says so:
+#
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.db.yml
+#
+# 127.0.0.1 only, never the LAN: the client signs in as PGUSER, which owns the
+# tables and bypasses Row Level Security -- it sees every wallet.
+services:
+  postgres:
+    ports:
+      - "127.0.0.1:${BUSSOLA_DB_PORT:-5432}:5432"

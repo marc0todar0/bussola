@@ -1,0 +1,113 @@
+# A template processed by envsubst when the container starts (nginx's
+# entrypoint). Only variables present in the environment are substituted:
+# nginx's own variables ($uri, $host, ...) are left untouched.
+
+server {
+    listen 80;
+    server_name _;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # No nginx version in the Server header or on error pages.
+    server_tokens off;
+
+    # The security headers (Content-Security-Policy and the rest), in a file
+    # of their own because nginx forgets them in any location that says
+    # add_header for itself: add_header is inherited only by a block that has
+    # none. So the file is included here *and* in every location below with an
+    # add_header of its own. A new location that adds a header must include it
+    # too.
+    include /etc/nginx/conf.d/bussola-security-headers.inc;
+
+    # The import sends the file inside a JSON body, base64-encoded: a 5 MB
+    # file (the API's own limit) is about 6.7 MB on the wire. The API answers
+    # anything bigger with a coded error; this only has to let it get there.
+    client_max_body_size 8m;
+
+    gzip on;
+    gzip_types text/plain text/css application/javascript application/json image/svg+xml;
+    gzip_min_length 1024;
+
+    # Generated at boot from the environment: it must not be cached, or a
+    # configuration change would never reach the browser.
+    location = /config.json {
+        include /etc/nginx/conf.d/bussola-security-headers.inc;
+        add_header Cache-Control "no-store" always;
+        try_files $uri =404;
+    }
+
+    # The service worker (Web Push, nothing else: it has no fetch handler and
+    # caches nothing). The browser checks this file for a new version itself;
+    # `no-cache` makes it ask the server every time, so an update reaches people
+    # at once instead of after the HTTP cache expires. Served as JavaScript
+    # from the root, which is what gives it the scope "/".
+    location = /sw.js {
+        include /etc/nginx/conf.d/bussola-security-headers.inc;
+        add_header Cache-Control "no-cache" always;
+        default_type application/javascript;
+        types { }
+        try_files $uri =404;
+    }
+
+    # The web app manifest, with its own media type whatever this nginx's
+    # mime.types says.
+    location = /manifest.webmanifest {
+        include /etc/nginx/conf.d/bussola-security-headers.inc;
+        add_header Cache-Control "no-cache" always;
+        default_type application/manifest+json;
+        types { }
+        try_files $uri =404;
+    }
+
+    # Vite's bundles carry their hash in the filename: immutable. One
+    # Cache-Control header with everything in it (`expires` would add a second).
+    location /assets/ {
+        include /etc/nginx/conf.d/bussola-security-headers.inc;
+        add_header Cache-Control "public, max-age=31536000, immutable" always;
+        try_files $uri =404;
+    }
+
+    # The API is reachable only from here: the browser only ever talks to this
+    # one origin, so there is no CORS and no exposed port 3001.
+    location /api/ {
+        # resolver + variable: nginx resolves the upstream on every request
+        # rather than at startup, so this container comes up even when the API
+        # is not there yet.
+        resolver ${BUSSOLA_DNS_RESOLVER} ipv6=off valid=30s;
+        set $bussola_api "${BUSSOLA_API_UPSTREAM}";
+        proxy_pass $bussola_api$request_uri;
+
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        # Host as the browser sent it, port included ($host drops the port).
+        # The API compares it with the Origin of every POST: a page on another
+        # port of this same machine must not pass for this one.
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        # Appended, not replaced: nginx adds the address it saw at the right-
+        # hand end, and the API trusts exactly BUSSOLA_TRUSTED_PROXIES entries
+        # counted from that end (one: this nginx). Whatever a client wrote
+        # further left is never read. Appending rather than setting is what
+        # keeps an outer HTTPS proxy workable: it appends the real client
+        # address, and BUSSOLA_TRUSTED_PROXIES=2 reads it.
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+    }
+
+    # The SPA's entry point: every route falls back to it, and `/` reaches it
+    # through `index`, both as internal redirects that land here. It names the
+    # hashed bundles of the current version, so a browser must ask for it again
+    # every time (`no-cache` revalidates, it does not forbid storing): a stale
+    # copy kept after an upgrade points at bundles that no longer exist.
+    location = /index.html {
+        include /etc/nginx/conf.d/bussola-security-headers.inc;
+        add_header Cache-Control "no-cache" always;
+        try_files $uri =404;
+    }
+
+    location / {
+        try_files $uri /index.html;
+    }
+}

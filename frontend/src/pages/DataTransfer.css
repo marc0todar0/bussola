@@ -1,0 +1,392 @@
+/* The data page. The same frame as Profile and Manage -- a column of
+   sections on the page's surface -- but wider, because the preview is a
+   table of nine columns and a phone scrolls it sideways inside its own box
+   rather than pushing the page. Every colour is a token from index.css, so
+   the page follows the theme without a line of its own for it. */
+
+.data-transfer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0.5rem 0.75rem 5rem;
+}
+
+.data-back {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.data-section {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  background: var(--surface);
+}
+
+.data-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+}
+
+.data-step {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+.data-step h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.data-step h4 {
+  margin: 1rem 0 0.4rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.data-hint {
+  margin: 0 0 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.data-small {
+  font-size: 0.78rem;
+}
+
+.data-inline {
+  margin: 0;
+}
+
+.data-muted {
+  color: var(--text-muted);
+}
+
+.data-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.data-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: 0.6rem 0.8rem;
+  margin-bottom: 0.75rem;
+}
+
+.data-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.data-field > span {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.data-field input,
+.data-field select,
+.data-table select {
+  min-width: 0;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--input-border);
+  border-radius: 0.4rem;
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 0.88rem;
+}
+
+.data-table select {
+  padding: 0.25rem 0.4rem;
+  font-size: 0.82rem;
+}
+
+.data-check {
+  display: flex;
+  align-items: center;
+  align-self: end;
+  gap: 0.45rem;
+  padding-bottom: 0.45rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.data-fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.data-fieldset legend {
+  margin-bottom: 0.2rem;
+  padding: 0;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.data-fieldset label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.86rem;
+}
+
+.data-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.data-button:hover:not(:disabled) {
+  background: var(--surface-hover);
+}
+
+.data-button:disabled,
+.data-disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.data-primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-color);
+}
+
+.data-primary:hover:not(:disabled) {
+  background: var(--accent);
+  filter: brightness(1.08);
+}
+
+/* The native file input is invisible and stretched over a button that looks
+   like the others: its own look differs in every browser and every theme. */
+.data-file {
+  position: relative;
+  overflow: hidden;
+}
+
+.data-file input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.data-file-name {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  overflow-wrap: anywhere;
+}
+
+.data-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.data-warning {
+  margin: 0.5rem 0;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.45rem;
+  background: var(--warning-soft);
+  color: var(--warning-text);
+  font-size: 0.85rem;
+}
+
+.data-block {
+  margin: 0.75rem 0;
+}
+
+.data-list {
+  max-height: 12rem;
+  margin: 0.25rem 0 0.5rem;
+  padding-left: 1.1rem;
+  overflow: auto;
+  font-size: 0.86rem;
+}
+
+/* ---- Tables ---- */
+
+.data-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.4rem 0.55rem;
+  border-bottom: 1px solid var(--border-soft);
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.data-table th {
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.data-table .data-num {
+  text-align: right;
+}
+
+.data-table .data-note {
+  min-width: 12rem;
+  max-width: 24rem;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.data-table tr.data-unselected td {
+  opacity: 0.6;
+}
+
+.data-table tr.data-invalid td {
+  background: var(--danger-surface);
+}
+
+.data-sample td {
+  max-width: 16rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.data-sample .data-mapped {
+  background: var(--accent-soft);
+}
+
+.data-sample th small {
+  display: block;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.data-empty {
+  padding: 1rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.data-badge {
+  display: inline-block;
+  margin-left: 0.35rem;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.data-new {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+.data-error {
+  margin-left: 0;
+  background: var(--danger-soft);
+  color: var(--danger-text);
+  white-space: normal;
+}
+
+.data-warn {
+  background: var(--warning-soft);
+  color: var(--warning-text);
+}
+
+/* ---- Filters and paging ---- */
+
+.data-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.75rem 0 0.5rem;
+}
+
+.data-chip {
+  padding: 0.3rem 0.7rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--chip-bg);
+  color: var(--text);
+  font-size: 0.82rem;
+}
+
+.data-chip.active {
+  background: var(--accent);
+  color: var(--on-color);
+}
+
+.data-count {
+  margin-left: 0.2rem;
+  opacity: 0.75;
+}
+
+.data-spacer {
+  flex: 1;
+}
+
+.data-link {
+  padding: 0.3rem 0.4rem;
+  border: none;
+  background: none;
+  color: var(--link);
+  font-size: 0.82rem;
+}
+
+.data-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.data-pager button {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.82rem;
+}

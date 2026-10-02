@@ -1,0 +1,6 @@
+# The landing page (bussola.marcotodaro.dev): one static page, no framework.
+# On Netlify this is its own site, with "landing" as the base directory; the
+# demo is another site from the same repository, based on "frontend".
+[build]
+  command = "./build.sh"
+  publish = "dist"

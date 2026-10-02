@@ -1,0 +1,115 @@
+services:
+  api:
+    # A released image (docker compose pull), or built here (up -d --build).
+    # BUSSOLA_VERSION pins a release, e.g. 0.2.0; unset, the latest.
+    image: ghcr.io/marc0todar0/bussola-api:${BUSSOLA_VERSION:-latest}
+    build:
+      context: ./api
+    container_name: bussola-api
+    # So a model running on the host itself (Ollama) is reachable at
+    # http://host.docker.internal:11434/v1.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      PORT: 3001
+      PGHOST: postgres
+      PGPORT: 5432
+      PGUSER: ${PGUSER}
+      PGPASSWORD: ${PGPASSWORD}
+      PGDATABASE: ${PGDATABASE}
+      # First account's username and password, used only on the first boot.
+      BUSSOLA_AUTH_USER: ${BUSSOLA_AUTH_USER}
+      BUSSOLA_AUTH_PASS: ${BUSSOLA_AUTH_PASS}
+      # "open" lets anyone with the link sign up. See example.env.
+      BUSSOLA_SIGNUP: ${BUSSOLA_SIGNUP:-closed}
+      BUSSOLA_DEFAULT_LOCALE: ${BUSSOLA_DEFAULT_LOCALE:-en}
+      BUSSOLA_COOKIE_SECURE: ${BUSSOLA_COOKIE_SECURE:-}
+      # The public https address. Set, it enables passkeys; unset, they are off.
+      BUSSOLA_PUBLIC_URL: ${BUSSOLA_PUBLIC_URL:-}
+      BUSSOLA_SESSION_DAYS: ${BUSSOLA_SESSION_DAYS:-}
+      SNAPSHOT_CRON: ${SNAPSHOT_CRON:-}
+      # Price updates: the quotes service below, which is opt-in
+      # (COMPOSE_PROFILES=quotes in .env). The buttons come on by themselves
+      # when something answers at this address; "" turns them off for good, or
+      # put the address of a service of your own.
+      BUSSOLA_QUOTES_URL: ${BUSSOLA_QUOTES_URL-http://quotes:8080}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+      # 1 = our nginx only; 2 behind another HTTPS proxy. See example.env.
+      BUSSOLA_TRUSTED_PROXIES: ${BUSSOLA_TRUSTED_PROXIES:-1}
+      BUSSOLA_LOCKOUT_SECONDS: ${BUSSOLA_LOCKOUT_SECONDS:-}
+      # Reading bank notifications: any OpenAI-compatible endpoint, one you run
+      # (Ollama: http://host:11434/v1) or a hosted one. URL and model both;
+      # the key only if it wants one. Unset, notifications wait in the inbox
+      # as they came. See docs/notifications.md.
+      BUSSOLA_AI_URL: ${BUSSOLA_AI_URL:-}
+      BUSSOLA_AI_MODEL: ${BUSSOLA_AI_MODEL:-}
+      BUSSOLA_AI_API_KEY: ${BUSSOLA_AI_API_KEY:-}
+      # Web Push to the phone when an item reaches the inbox: on with
+      # BUSSOLA_PUBLIC_URL (above). DETAILS=on adds amount and merchant to the
+      # message; PUSH_ALLOWED_HOSTS adds a push service to the built-in list.
+      # See docs/notifications.md.
+      BUSSOLA_PUSH_ALLOWED_HOSTS: ${BUSSOLA_PUSH_ALLOWED_HOSTS:-}
+      BUSSOLA_NOTIFY_DETAILS: ${BUSSOLA_NOTIFY_DETAILS:-}
+    # No published port: the API is reachable only from the internal network,
+    # through nginx's /api proxy. To expose it in development:
+    #   ports: ["3001:3001"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    image: ghcr.io/marc0todar0/bussola-frontend:${BUSSOLA_VERSION:-latest}
+    build:
+      context: ./frontend
+    container_name: bussola-frontend
+    environment:
+      # The browser calls the same origin it downloaded the app from.
+      BUSSOLA_API_URL: /api
+      BUSSOLA_API_UPSTREAM: http://api:3001
+    ports:
+      - "${BUSSOLA_PORT:-3000}:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16
+    container_name: bussola-postgres
+    environment:
+      POSTGRES_DB: ${PGDATABASE}
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # No published port: to connect from outside use
+    #   docker exec -it bussola-postgres psql -U "$PGUSER" -d "$PGDATABASE"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Optional: current prices for holdings (crypto from CoinGecko, ETFs and
+  # stocks by ISIN from Eulerpool, Twelve Data, then EODHD, with your own free
+  # keys). Started only with COMPOSE_PROFILES=quotes in .env, and reached by the
+  # API on the internal network at http://quotes:8080. No published port. It
+  # asks the price providers only when you press "update prices".
+  quotes:
+    profiles: ["quotes"]
+    image: ghcr.io/marc0todar0/bussola-quotes:${BUSSOLA_VERSION:-latest}
+    build: ./quotes
+    container_name: bussola-quotes
+    environment:
+      QUOTES_STOCK_ORDER: ${QUOTES_STOCK_ORDER:-}
+      TWELVEDATA_API_KEY: ${TWELVEDATA_API_KEY:-}
+      EULERPOOL_API_KEY: ${EULERPOOL_API_KEY:-}
+      EODHD_API_KEY: ${EODHD_API_KEY:-}
+      OPENFIGI_API_KEY: ${OPENFIGI_API_KEY:-}
+      COINGECKO_API_KEY: ${COINGECKO_API_KEY:-}
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

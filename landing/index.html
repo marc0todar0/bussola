@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bussola — personal finance you run yourself</title>
+<meta name="description" content="Bussola keeps your spending and your investments in one app that runs on your own server. Free software, MIT licence.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:title" content="Bussola">
+<meta property="og:description" content="Your spending and your investments, in one app you run yourself.">
+<meta property="og:image" content="https://bussola.marcotodaro.dev/screenshots/summary.png">
+<meta property="og:url" content="https://bussola.marcotodaro.dev/">
+<link rel="preload" href="fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="/"><img src="icon.svg" alt="" width="28" height="28">Bussola</a>
+  <nav aria-label="Links">
+    <a href="https://demo-bussola.marcotodaro.dev">Demo</a>
+    <a href="https://github.com/marc0todar0/bussola">GitHub</a>
+  </nav>
+</header>
+
+<main>
+
+<section class="hero">
+  <div class="hero-text">
+    <h1>Your spending and your investments, in one app you run yourself.</h1>
+    <p class="lede">Bussola tracks bank accounts, expenses and income, and the
+    investments you hold, on a server of your own. It is for one person or a
+    household that wants the whole picture without handing it to a cloud
+    service.</p>
+    <div class="actions">
+      <a class="button primary" href="https://demo-bussola.marcotodaro.dev">Try the demo</a>
+      <a class="button" href="https://github.com/marc0todar0/bussola">Source on GitHub</a>
+    </div>
+    <p class="note">The demo runs in your browser on invented data. Nothing
+    you type leaves the tab, and a reload starts it over.</p>
+  </div>
+
+  <figure class="rose" aria-label="The Bussola compass rose. Its four points are the four pillars of the portfolio: cash, emergency fund, planned expenses and long term.">
+    <svg viewBox="-160 -160 320 320" aria-hidden="true">
+      <circle r="118" class="ring"/>
+      <circle r="92" class="disc"/>
+      <g class="needle">
+        <path class="minor" d="M0-60 9-9 60 0 9 9 0 60-9 9-60 0-9-9Z" transform="rotate(45)"/>
+        <path class="major" d="M0-118 16-16 118 0 16 16 0 118-16 16-118 0-16-16Z"/>
+        <circle r="6" class="pin"/>
+      </g>
+      <g class="ticks">
+        <circle cy="-118" r="7" class="t-cash"/>
+        <circle cx="118" r="7" class="t-emergency"/>
+        <circle cy="118" r="7" class="t-planned"/>
+        <circle cx="-118" r="7" class="t-longterm"/>
+      </g>
+    </svg>
+    <figcaption>
+      <span class="p n">Cash</span>
+      <span class="p e">Emergency fund</span>
+      <span class="p s">Planned expenses</span>
+      <span class="p w">Long term</span>
+    </figcaption>
+  </figure>
+</section>
+
+<figure class="shot wide">
+  <picture>
+    <source srcset="screenshots/summary-dark.png" media="(prefers-color-scheme: dark)">
+    <img src="screenshots/summary.png" width="2560" height="1600" alt="The yearly summary: net, income and expenses for 2026, and a chart of income and expenses by month">
+  </picture>
+  <figcaption>A year at a time, then month by month and category by category.</figcaption>
+</figure>
+
+<section class="halves" aria-label="What it keeps">
+  <article>
+    <h2>Day to day</h2>
+    <p>Accounts, categories and transactions: what you spend, what you earn
+    and what you move between accounts. The keypad does sums, so
+    <kbd>12.40+7.90</kbd> is one entry and not a trip to the calculator.
+    Search, filter, and page back through years of history.</p>
+    <figure class="shot">
+      <img src="screenshots/transaction-form.png" width="2560" height="1600" loading="lazy" alt="A new expense on the keypad: from Cartesio Bank to Groceries, 42.50">
+    </figure>
+  </article>
+  <article>
+    <h2>What you own</h2>
+    <p>ETFs, shares, bonds, funds, crypto and deposit accounts, split across
+    four pillars: cash, emergency fund, planned expenses and long term.
+    A snapshot at the end of every month keeps the history. Automatic ETF
+    and crypto prices come from an optional service that runs next to it.</p>
+    <figure class="shot">
+      <img src="screenshots/portfolio.png" width="2560" height="1600" loading="lazy" alt="The portfolio split across the four pillars, with its total, and its value over time">
+    </figure>
+  </article>
+</section>
+
+<section class="phones" aria-labelledby="phones-title">
+  <h2 id="phones-title">On a phone, the same app</h2>
+  <div class="phone-row">
+    <img src="screenshots/mobile-transactions.png" width="1170" height="2532" loading="lazy" alt="The transaction list on a phone">
+    <img src="screenshots/mobile-keypad.png" width="1170" height="2532" loading="lazy" alt="A new expense on the keypad, on a phone">
+    <img src="screenshots/mobile-summary.png" width="1170" height="2532" loading="lazy" alt="The yearly summary on a phone">
+    <img src="screenshots/mobile-portfolio.png" width="1170" height="2532" loading="lazy" alt="The portfolio's four pillars on a phone">
+  </div>
+</section>
+
+<section class="details" aria-labelledby="details-title">
+  <h2 id="details-title">Smaller things that matter</h2>
+  <dl>
+    <div><dt>Shared wallets</dt>
+      <dd>Share a wallet with your partner to read and write, or with your
+      accountant to read only. The database itself enforces who sees what.</dd></div>
+    <div><dt>Bank mode</dt>
+      <dd>Press <kbd>H</kbd> and every amount on screen blurs, for when
+      someone is looking over your shoulder.</dd></div>
+    <div><dt>Passkeys</dt>
+      <dd>Sign in with a fingerprint or your face. The password stays as a
+      fallback.</dd></div>
+    <div><dt>Your language, your currency</dt>
+      <dd>English, Italian, French, German, Spanish and Chinese, and a
+      currency for each wallet.</dd></div>
+    <div><dt>Your data comes and goes</dt>
+      <dd>Import any bank's CSV. Export a whole wallet as one file, and
+      import it into another installation.</dd></div>
+    <div><dt>Nothing phones home</dt>
+      <dd>No telemetry and no account with anyone. Prices for ETFs and crypto
+      are the only thing it asks the internet for.</dd></div>
+  </dl>
+</section>
+
+<section class="run" aria-labelledby="run-title">
+  <div>
+    <h2 id="run-title">Run it yourself</h2>
+    <p>Three containers and one port, on a Raspberry Pi, a NAS or any
+    machine with Docker. About five minutes.</p>
+<pre><code>mkdir bussola &amp;&amp; cd bussola
+curl -LO https://github.com/marc0todar0/bussola/releases/latest/download/docker-compose.yml
+curl -L -o .env https://github.com/marc0todar0/bussola/releases/latest/download/example.env
+# set your username and passwords in .env
+docker compose up -d</code></pre>
+    <p>Then open <code>http://localhost:3000</code>. The
+    <a href="https://github.com/marc0todar0/bussola#readme">README</a>
+    links the guides to HTTPS, passkeys and updates.</p>
+  </div>
+  <aside id="support" aria-labelledby="support-title">
+    <h2 id="support-title">Free, and it stays free</h2>
+    <p>Bussola is free software, and it runs on your own server. If it is
+    useful to you, you can support it with a donation. There are no paid
+    plans and nothing held back.</p>
+    <div class="support">
+      <a class="button tip kofi" href="https://ko-fi.com/marc0todar0" rel="noopener">Ko-fi</a>
+      <a class="button tip bmc" href="https://buymeacoffee.com/marc0todar0" rel="noopener">Buy Me a Coffee</a>
+    </div>
+  </aside>
+</section>
+
+</main>
+
+<footer>
+  <p>Bussola is free software under the
+  <a href="https://github.com/marc0todar0/bussola/blob/main/LICENSE">MIT licence</a>.
+  Made by <a href="https://marcotodaro.dev">Marco Todaro</a>.
+  <a href="#support">Support</a> it.</p>
+</footer>
+
+</body>
+</html>

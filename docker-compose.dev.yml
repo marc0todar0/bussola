@@ -1,0 +1,14 @@
+# Development override: publishes on the host the ports the standard deployment
+# keeps on the internal network, so the API and the frontend can run locally.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d postgres
+#
+# .env also needs PGHOST=localhost and PGPORT=5432 (see example.env).
+services:
+  postgres:
+    ports:
+      - "5432:5432"
+
+  api:
+    ports:
+      - "3001:3001"

@@ -1,0 +1,168 @@
+/* fixed e non un blocco normale: body è un flex container (index.css) e un
+   figlio in flusso resterebbe schiacciato sulla sinistra invece di occupare la
+   pagina. Fuori dal flusso, il centraggio non dipende dal layout di sopra. */
+.login-background {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow-y: auto;
+  background-color: var(--bg-muted);
+}
+
+.login-box {
+  width: 100%;
+  max-width: 22rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 2rem 1.75rem;
+  border-radius: 14px;
+  background-color: var(--surface);
+  box-shadow: var(--shadow-md);
+}
+
+/* The mark sits above the name, sized so the two read as one lockup rather
+   than as a splash screen: big enough to be the first thing you see, small
+   enough that the form is still the point of the page. */
+.login-mark {
+  width: 3.5rem;
+  height: 3.5rem;
+  display: block;
+  /* The box is a flex column with its own gap, so the only job left here is
+     centring: a bottom margin would be added to that gap, not replace it. */
+  margin: 0 auto;
+}
+
+.login-title {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.login-subtitle {
+  margin: 0 0 0.4rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.login-field input {
+  padding: 0.65rem 0.7rem;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.login-field input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.login-error {
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  background-color: var(--danger-soft);
+  color: var(--danger-text);
+  font-size: 0.85rem;
+}
+
+.login-submit {
+  margin-top: 0.3rem;
+  padding: 0.7rem;
+  border: none;
+  border-radius: 8px;
+  color: var(--on-color);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.login-submit:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+/* The passkey button. Outlined when it is the alternative (a mouse, a
+   keyboard), filled like the main button when it leads (a phone): the colour
+   comes inline from mainColor in that case, as it does for .login-submit. */
+.login-passkey {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.login-passkey.is-primary {
+  border: none;
+  color: var(--on-color);
+}
+
+.login-passkey:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+/* "or": a word between two hairlines, so the two ways in read as a choice
+   rather than as two steps of one form. */
+.login-or {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.login-or::before,
+.login-or::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--border);
+}
+
+.login-toggle {
+  background: none;
+  border: none;
+  padding: 0.2rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-decoration: underline;
+}
+
+/* Language choice on the way in: this screen is rendered before we know who is
+   reading it, so it cannot rely on the account's stored preference. */
+.login-languages {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+/* The picker draws itself; here it only needs somewhere to sit and a border
+   so that it reads as something you can press. */
+.login-languages .language-picker {
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  padding: 0.15rem 0.5rem;
+}
+
+.login-languages .language-picker:hover {
+  border-color: var(--border-strong);
+}

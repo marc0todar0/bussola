@@ -1,0 +1,40 @@
+{
+  "name": "bussola-api",
+  "version": "1.0.0",
+  "description": "Backend REST API di Bussola",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint": "eslint .",
+    "test:isolation": "node test/isolation.js",
+    "test:security": "node test/security.js",
+    "test:quotes": "node test/quotes.js",
+    "test:ai": "node test/inbox-ai.js",
+    "test:notify": "node test/notify.js"
+  },
+  "dependencies": {
+    "@simplewebauthn/server": "^14.0.1",
+    "cookie-parser": "1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "4.22.2",
+    "fflate": "^0.8.2",
+    "node-cron": "^3.0.3",
+    "pg": "8.23.0",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9",
+    "eslint": "^9",
+    "globals": "^16",
+    "nodemon": "^3"
+  },
+  "author": "Marco Todaro",
+  "license": "MIT",
+  "resolutions": {
+    "qs": "^6.16.0",
+    "braces": "^3.0.3",
+    "picomatch": "^2.3.2"
+  }
+}

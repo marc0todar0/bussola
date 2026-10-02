@@ -1,0 +1,15 @@
+{
+  "name": "bussola-quotes",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Optional price service for Bussola: crypto from CoinGecko, ETFs and stocks by ISIN from Twelve Data and Eulerpool",
+  "main": "server.js",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/service.js"
+  }
+}

@@ -1,0 +1,280 @@
+/* The sibling of Manage.css: same frame, same measurements, so the two pages
+   read as one place with two rooms. Only the last section departs from it, and
+   it does so on purpose. */
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0.5rem 0.75rem 5rem;
+}
+
+.profile-back {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  background: var(--surface);
+  font-size: 0.85rem;
+  /* Every button here says its own colour, as a token: they were literals
+     back when the UA's button colour turned white on a dark system, and they
+     are tokens now so that the dark theme is a choice rather than an
+     accident. */
+  color: var(--text-secondary);
+}
+
+.profile-section {
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  background: var(--surface);
+}
+
+.profile-section h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+}
+
+.profile-hint {
+  margin: 0 0 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.profile-rule {
+  margin: 1.1rem 0;
+  border: none;
+  border-top: 1px solid var(--border-soft);
+}
+
+/* A credential form is a column: the labels have to sit above the fields for
+   the password manager and for anybody reading it on a phone. */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.profile-field span {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.profile-field input {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--input-border);
+  border-radius: 0.4rem;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.profile-button {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--input-border);
+  border-radius: 0.4rem;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.profile-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.profile-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.5rem;
+}
+
+.profile-name {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-meta {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.profile-tag {
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background: var(--chip-bg);
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  flex: none;
+}
+
+.profile-icon-button {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  background: var(--surface);
+  color: var(--text-secondary);
+}
+
+/* Rename and delete both happen inside the row they are about, so the name on
+   screen is the name being changed. */
+.profile-inline {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.profile-inline input {
+  flex: 1 1 9rem;
+  min-width: 0;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--input-border);
+  border-radius: 0.4rem;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.profile-inline button,
+.profile-row button {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--input-border);
+  border-radius: 0.4rem;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.profile-button:disabled,
+.profile-inline button:disabled,
+.profile-row button:disabled {
+  opacity: 0.55;
+}
+
+.profile-confirm-ask {
+  flex: 1 1 100%;
+  color: var(--danger-text);
+  font-size: 0.82rem;
+}
+
+/* The one section where something is lost for good. It is bordered in red and
+   sits last, so nobody arrives here by scrolling past a form. */
+.profile-danger {
+  border-color: var(--danger-border);
+  background: var(--danger-surface);
+}
+
+.profile-danger h2 {
+  color: var(--danger-text);
+}
+
+/* Buttons side by side, wrapping on a narrow phone. */
+.profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.profile-actions .profile-button {
+  margin-top: 0;
+}
+
+.profile-protected {
+  margin: 0.6rem 0 0;
+}
+
+.profile-destructive,
+.profile-inline button.profile-destructive,
+.profile-row button.profile-destructive {
+  border-color: var(--danger-border);
+  background: var(--danger-soft);
+  color: var(--danger-text);
+}
+
+@media (max-width: 520px) {
+  .profile-inline input {
+    flex-basis: 100%;
+  }
+
+  .profile-meta {
+    flex: 1 1 100%;
+    text-align: left;
+  }
+}
+
+/* The wallet's currency, in the row beside its members count. Sized to the
+   three letters it holds so it does not stretch the row the way a default
+   select would. */
+.profile-currency {
+  padding: 0.15rem 0.3rem;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.profile-currency:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* A token just created, shown once: the field and its copy button on one
+   line, the field taking what is left of it. */
+.profile-token {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.profile-token input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--input-border);
+  border-radius: 0.4rem;
+  color: var(--text);
+  font-family: monospace;
+  font-size: 0.85rem;
+}

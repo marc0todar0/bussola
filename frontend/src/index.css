@@ -1,0 +1,327 @@
+/* ---------------------------------------------------------------------------
+   Design tokens
+   ---------------------------------------------------------------------------
+   Every colour the interface paints comes from here. The components ask for a
+   role -- "the surface of a card", "a muted caption" -- and the theme decides
+   what that role looks like, so dark mode is a second column of values rather
+   than a second copy of every stylesheet.
+
+   `data-theme` on <html> is set before the first paint by the inline script in
+   index.html, and afterwards by utils/theme.js. It always holds the *resolved*
+   theme (light or dark): "system" is a choice the reader makes, not a state the
+   page can be in, so no rule here ever has to know about it. Without the
+   attribute -- the script blocked, say -- the page is light, which is what it
+   was before any of this existed.
+
+   What does NOT come from here is the reader's own colours: an account's, a
+   category's, a pillar's. Those are data, they look the same in both themes,
+   and the text drawn on them stays white (--on-color) in both. */
+:root {
+  /* The page, and the slightly different ground behind the sign-in card */
+  --bg: #ffffff;
+  --bg-muted: #f4f6f8;
+  /* Cards, panels, modals -- anything that sits on the page */
+  --surface: #ffffff;
+  /* A tint of the surface: hover, subtle fills, secondary buttons */
+  --surface-2: #f7fafd;
+  --surface-hover: #f1f5f9;
+  /* Unselected chips and toggles, which need to read as a shape */
+  --chip-bg: #eeeeee;
+  /* The transaction list's row ground: a hint of lilac, ghostwhite as before */
+  --row-bg: #f8f8ff;
+
+  --text: #213547;
+  --text-secondary: #4a5661;
+  --text-muted: #6b7785;
+  --text-subtle: #999999;
+  /* Text drawn on a solid colour -- the accent, a user's account colour */
+  --on-color: #ffffff;
+
+  --border-soft: #eef1f5;
+  --border: #e3e8ef;
+  --border-strong: #cccccc;
+  /* The outline around account and category cards: darker than the others,
+     because on the list pages it is the only thing separating one card from
+     the next. */
+  --border-card: #666666;
+
+  --input-bg: #ffffff;
+  --input-border: #d6dce2;
+
+  --accent: dodgerblue;
+  --accent-soft: rgba(30, 144, 255, 0.15);
+  --link: #646cff;
+  --link-hover: #747bff;
+
+  /* Money in and out. The text versions are what <Amount> prints; the fills
+     carry white text on top and can be the same in both themes. */
+  --positive: #008000;
+  --negative: #ff0000;
+  --positive-fill: #43a047;
+  --negative-fill: #e53935;
+  /* Transfers, and captions in the old "secondary" grey */
+  --neutral: #a9a9a9;
+
+  --warning: #fb8c00;
+  --warning-soft: #fff8ee;
+  --warning-text: #8a4b00;
+
+  --danger-text: #b3261e;
+  --danger-soft: #fdecea;
+  --danger-border: #e6b4ae;
+  --danger-surface: #fffaf9;
+
+  /* Small dark bubbles (the note on a transaction): dark in both themes, but
+     lifted off the page in the dark one, where "dark" is the page itself. */
+  --tooltip-bg: rgba(40, 40, 40, 0.95);
+  --tooltip-text: #ffffff;
+
+  --kbd-bg: #f6f6f6;
+  --kbd-border: #dddddd;
+
+  /* The keypad's Close key: solid slate, so it stands out among the digits
+     and still reads as secondary next to the blue GO. */
+  --key-muted-bg: #cbd5e1;
+  --key-muted-border: #94a3b8;
+  --key-muted-text: #1e293b;
+  --key-muted-bg-hover: #b6c2d1;
+  --key-muted-border-hover: #64748b;
+  --key-muted-text-hover: #0f172a;
+
+  /* The portfolio chart's total line: the strongest line on the chart, so it
+     is the text colour -- near-black on light, near-white on dark. */
+  --chart-total: #1f2937;
+
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 6px 28px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 26px rgba(16, 24, 40, 0.18);
+  --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.3);
+  --backdrop: rgba(17, 24, 39, 0.45);
+
+  /* Native controls, scrollbars and the date input's popup follow this. */
+  color-scheme: light;
+}
+
+/* Dark: not an inversion. The surfaces step *up* in lightness as they come
+   forward (page, card, fill, chip), the way light falls on stacked paper; text
+   is off-white rather than white, which glares on a dark ground; and green and
+   red move to lighter tints, because the pure ones are unreadable on it. */
+:root[data-theme="dark"] {
+  --bg: #0f1216;
+  --bg-muted: #0f1216;
+  --surface: #181c22;
+  --surface-2: #1f242b;
+  --surface-hover: #262c34;
+  --chip-bg: #2a3038;
+  --row-bg: #161a1f;
+
+  --text: #e6e9ee;
+  --text-secondary: #c2c8d0;
+  --text-muted: #9aa4b1;
+  --text-subtle: #7c8694;
+  --on-color: #ffffff;
+
+  --border-soft: #242a31;
+  --border: #2b3139;
+  --border-strong: #3a414b;
+  --border-card: #4a525d;
+
+  --input-bg: #1b2027;
+  --input-border: #3a414b;
+
+  --accent: dodgerblue;
+  --accent-soft: rgba(30, 144, 255, 0.25);
+  --link: #8b91ff;
+  --link-hover: #a3a8ff;
+
+  --positive: #4ade80;
+  --negative: #f87171;
+  --positive-fill: #2e7d32;
+  --negative-fill: #d32f2f;
+  --neutral: #7b8492;
+
+  --warning: #fb8c00;
+  --warning-soft: #2b2114;
+  --warning-text: #ffb74d;
+
+  --danger-text: #f28b82;
+  --danger-soft: #3a1d1b;
+  --danger-border: #6b2e29;
+  --danger-surface: #1f1717;
+
+  --tooltip-bg: rgba(58, 64, 73, 0.97);
+  --tooltip-text: #f1f3f5;
+
+  --kbd-bg: #262c34;
+  --kbd-border: #3a414b;
+
+  --key-muted-bg: #3a4250;
+  --key-muted-border: #566070;
+  --key-muted-text: #e6e9ee;
+  --key-muted-bg-hover: #465061;
+  --key-muted-border-hover: #6b7686;
+  --key-muted-text-hover: #ffffff;
+
+  --chart-total: #e6e9ee;
+
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 28px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 26px rgba(0, 0, 0, 0.55);
+  --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.6);
+  --backdrop: rgba(0, 0, 0, 0.6);
+
+  color-scheme: dark;
+}
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color: var(--text);
+  background-color: var(--bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input,
+select,
+textarea {
+  background-color: var(--input-bg);
+  color: var(--text);
+}
+
+/* Placeholders are drawn by the browser in a grey chosen for a white field. */
+::placeholder {
+  color: var(--text-subtle);
+  opacity: 1;
+}
+
+a {
+  font-weight: 500;
+  color: var(--link);
+  text-decoration: inherit;
+}
+a:hover {
+  color: var(--link-hover);
+}
+
+body {
+  margin: 0;
+  display: flex;
+  /* place-items: center; */
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+/* The colour is spelled out because the UA's own ButtonText follows
+   color-scheme, and several stylesheets carry a comment about white-on-white
+   buttons for exactly that reason. With the page's text colour here, a button
+   that says nothing about its colour is legible in both themes. */
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: var(--link);
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Rows walked with ↑ ↓ (utils/useRowNavigation.js). The margin keeps a row
+   scrolled into view clear of the sticky tab bar; the outline is drawn inside
+   the row, because the transaction list clips whatever sticks out sideways. */
+[data-nav-row] {
+  scroll-margin-top: calc(var(--tab-bar-height) + 24px);
+  scroll-margin-bottom: 16px;
+}
+[data-nav-active] {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+
+/* Key hints (S/E/T, D/A, G ←/→ O): without a physical keyboard they are noise,
+   and on narrow screens they steal space the labels need. */
+@media (max-width: 767px) {
+  .kbd-hint {
+    display: none !important;
+  }
+}
+
+/* ---- Third-party widgets in the dark ----
+   react-hot-toast takes its colours from App.jsx's toastOptions; react-select
+   from the styles object each Select is given. react-datepicker ships a
+   stylesheet of fixed light colours, loaded by Calculator, and has no theming
+   of its own, so its dark version is here: the same selectors, one level more
+   specific. */
+[data-theme="dark"] .react-datepicker {
+  background-color: var(--surface);
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+[data-theme="dark"] .react-datepicker__header {
+  background-color: var(--surface-2);
+  border-bottom-color: var(--border-strong);
+}
+[data-theme="dark"] .react-datepicker__current-month,
+[data-theme="dark"] .react-datepicker-time__header,
+[data-theme="dark"] .react-datepicker-year-header,
+[data-theme="dark"] .react-datepicker__day-name,
+[data-theme="dark"] .react-datepicker__day,
+[data-theme="dark"] .react-datepicker__time-name {
+  color: var(--text);
+}
+[data-theme="dark"] .react-datepicker__day:not([aria-disabled="true"]):hover,
+[data-theme="dark"] .react-datepicker__month-text:hover,
+[data-theme="dark"] .react-datepicker__quarter-text:hover,
+[data-theme="dark"] .react-datepicker__year-text:hover {
+  background-color: var(--surface-hover);
+}
+[data-theme="dark"] .react-datepicker__day--disabled,
+[data-theme="dark"] .react-datepicker__day--outside-month {
+  color: var(--text-subtle);
+}
+[data-theme="dark"] .react-datepicker__day--selected,
+[data-theme="dark"] .react-datepicker__day--keyboard-selected,
+[data-theme="dark"] .react-datepicker__day--in-range {
+  background-color: var(--accent);
+  color: var(--on-color);
+}
+[data-theme="dark"] .react-datepicker__navigation-icon::before {
+  border-color: var(--text-muted);
+}
+[data-theme="dark"] .react-datepicker__triangle,
+[data-theme="dark"] .react-datepicker-popper .react-datepicker__triangle {
+  fill: var(--surface-2);
+  color: var(--surface-2);
+  stroke: var(--border-strong);
+}
