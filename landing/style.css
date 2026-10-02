@@ -24,6 +24,10 @@
   --planned: #ffa726;
   --longterm: #ef5350;
   --code-bg: #13233a;
+  /* The comparison table: yes, partly, no. */
+  --yes: #1f8a46;
+  --part: #9a5b00;
+  --us-bg: #eaf3ff;
   --measure: 1120px;
   color-scheme: light;
 }
@@ -38,6 +42,9 @@
     --blue-ink: #6cb6ff;
     --rose-minor: #3c6fa8;
     --code-bg: #08111c;
+    --yes: #5fd38a;
+    --part: #ffb547;
+    --us-bg: #17304d;
     color-scheme: dark;
   }
 }
@@ -252,6 +259,111 @@ h1 {
 .details dt { font-weight: 700; font-size: 1.08rem; }
 .details dd { margin: 6px 0 0; color: var(--muted); }
 
+/* Read by screen readers, not drawn. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.section-lede { margin-top: 12px; max-width: 40em; color: var(--muted); }
+
+/* ----------------------------------------------------------------- reasons */
+
+/* The four reasons, right under the pitch: a numbered row, the numbers in
+   the pillars' colours. */
+.reasons { padding-block: 0 96px; }
+.reasons ol {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: reason;
+}
+.reasons li { counter-increment: reason; border-top: 3px solid var(--tone); padding-top: 16px; }
+.reasons li:nth-child(1) { --tone: var(--cash); }
+.reasons li:nth-child(2) { --tone: var(--emergency); }
+.reasons li:nth-child(3) { --tone: var(--planned); }
+.reasons li:nth-child(4) { --tone: var(--longterm); }
+.reasons li::before {
+  content: "0" counter(reason);
+  display: block;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.reasons h3 { margin: 6px 0 8px; font-size: 1.2rem; line-height: 1.2; letter-spacing: -0.01em; }
+.reasons p { color: var(--muted); font-size: 0.98rem; }
+
+/* ----------------------------------------------------------------- compare */
+
+.compare { padding-block: 112px 0; }
+.table-scroll {
+  margin-top: 32px;
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.table-scroll:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+.compare table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.93rem;
+  line-height: 1.35;
+}
+.compare th, .compare td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+}
+.compare tbody tr:last-child > * { border-bottom: 0; }
+.compare thead th { font-weight: 700; white-space: nowrap; }
+.compare tbody th { font-weight: 600; width: 26%; }
+/* The feature names stay in view while the columns scroll sideways. */
+.compare tr > :first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--surface);
+  border-right: 1px solid var(--rule);
+}
+.compare .us { background: var(--us-bg); }
+.compare thead .us { color: var(--blue-ink); }
+.compare td::before {
+  display: inline-block;
+  width: 1.3em;
+  font-weight: 700;
+}
+.compare td.y::before { content: "✓"; color: var(--yes); }
+.compare td.p::before { content: "~"; color: var(--part); }
+.compare td.n::before { content: "–"; color: var(--muted); }
+.compare td.n { color: var(--muted); }
+.footnote { margin-top: 14px; max-width: 48em; color: var(--muted); font-size: 0.88rem; }
+
+/* ----------------------------------------------------------------- not for */
+
+.notfor { padding-block: 112px 0; }
+.notfor ul {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 40px;
+  margin: 32px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.notfor li { padding: 18px 20px; border: 1px solid var(--rule); border-radius: 12px; color: var(--muted); }
+.notfor strong { display: block; margin-bottom: 4px; color: var(--ink); }
+
 /* --------------------------------------------------------------------- run */
 
 .run {
@@ -315,6 +427,8 @@ footer {
   .halves { grid-template-columns: 1fr; gap: 72px; padding-block: 80px 0; }
   .phone-row { grid-template-columns: repeat(2, 1fr); }
   .details dl { grid-template-columns: 1fr 1fr; }
+  .reasons ol { grid-template-columns: 1fr 1fr; }
+  .compare, .notfor { padding-block: 80px 0; }
   .run { grid-template-columns: minmax(0, 1fr); gap: 40px; padding: 32px 24px; }
   .run aside { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule); padding-top: 32px; }
 }
@@ -323,6 +437,12 @@ footer {
   body { font-size: 1rem; }
   .lede { font-size: 1.08rem; }
   .details dl { grid-template-columns: 1fr; }
+  .reasons ol, .notfor ul { grid-template-columns: 1fr; }
+  .reasons { padding-block: 0 72px; }
+  .top nav { gap: 16px; }
+  .compare table { min-width: 640px; font-size: 0.88rem; }
+  .compare th, .compare td { padding: 10px 10px; }
+  .compare tbody th { width: 34%; min-width: 9.5em; }
   .rose .p { font-size: 0.82rem; width: 6.5em; }
   .run { padding: 24px 18px; }
 }
