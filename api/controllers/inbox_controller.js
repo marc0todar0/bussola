@@ -19,12 +19,15 @@
 // cleared the moment it is resolved.
 //
 // The text is read by a language model (services/inbox/extract.js) when the
-// instance has one, in the background: see readItem below.
+// instance has one, in the background: see readItem below. A reading that
+// fails for a passing reason is tried again later (services/inbox/retry.js,
+// claimDue below).
 const db = require("../dbConn");
 const DataError = require("../services/dataError");
 const { aiEnabled, readNotification } = require("../services/inbox/extract");
 const { similarPast } = require("../services/inbox/history");
 const { createQueue } = require("../services/inbox/queue");
+const { nextDelayMs, MAX_ATTEMPTS } = require("../services/inbox/retry");
 const { readerContext } = require("../auth/bankNames");
 const notifier = require("../services/notify");
 const { writersByWallet } = require("../auth/wallets");
@@ -38,6 +41,7 @@ const TYPE_BY_CODE = { EXPENSE, INCOME, TRANSFER };
 const TEXT_MAX = 2000;
 const SOURCE_MAX = 64;
 const MERCHANT_MAX = 255;
+const CLIENT_ID_MAX = 100;
 
 // Tells the people who can confirm it, outside the browser, that an item is
 // waiting (Web Push, services/notify.js). Called only after the item's
@@ -120,6 +124,25 @@ const draftId = (value) => {
   return Number.isInteger(n) && n > 0 && n <= 2147483647 ? n : null;
 };
 
+// The sender's own id for this notification (migration 007), from the JSON
+// body's clientId, ?clientId= or the X-Bussola-Client-Id header, in that order
+// (a text/plain body can only use the last two). Trimmed, 1 to 100 characters;
+// anything else is refused rather than ignored, since a sender that meant to
+// name its notification and did not would get the duplicates it was avoiding.
+// Absent: null, and the notification is simply stored.
+const clientIdOf = (req) => {
+  const body = req.body || {};
+  const query = req.query || {};
+  const header = typeof req.get === "function" ? req.get("x-bussola-client-id") : undefined;
+  const value = body.clientId !== undefined ? body.clientId : query.clientId !== undefined ? query.clientId : header;
+  if (value === undefined) return null;
+  const s = typeof value === "string" ? value.trim() : null;
+  if (!s || s.length > CLIENT_ID_MAX) {
+    throw invalid("INVALID_CLIENT_ID", `clientId must be text of 1 to ${CLIENT_ID_MAX} characters`);
+  }
+  return s;
+};
+
 const draftConfidence = (value) => {
   if (value === undefined || value === null || value === "") return null;
   const n = Number(value);
@@ -184,9 +207,21 @@ const checkEnds = async (item) => {
 // The answer is 201 at once. Reading takes seconds and a phone must not wait
 // for it: the item is stored with extraction = 'pending' and the queue fills
 // it in once this request's transaction is over.
+//
+// A sender that names its notification (clientId, see clientIdOf) can send it
+// again safely: an id this wallet has already seen answers 200 with the
+// receipt of the item it became -- "duplicate": true -- and stores and queues
+// nothing, whatever became of the item since (read, accepted, dismissed; the
+// id outlives the text). Whatever the second body says, it is the same
+// notification. Two copies racing each other are settled by the unique index
+// (wallet_id, client_id): the INSERT ... ON CONFLICT DO NOTHING of the second
+// waits for the first to commit, inserts nothing, and the item is looked up.
+// RLS keeps the lookup in this wallet, and the index is per wallet, so another
+// wallet's id is neither seen nor in the way.
 exports.createItem = async (req, res) => {
   const body = req.body || {};
   const source = cleanText(body.source, SOURCE_MAX) || "api";
+  const clientId = clientIdOf(req);
 
   if (body.text !== undefined && body.text !== null && typeof body.text !== "string") {
     throw invalid("INVALID_REQUEST", "text must be a string");
@@ -201,6 +236,17 @@ exports.createItem = async (req, res) => {
       "INBOX_EMPTY",
       "Nothing to read: send the notification's text as a text/plain body (or JSON with \"text\"), or a draft",
     );
+  }
+  const received = { text, draft: Boolean(draft) };
+  if (clientId) {
+    // Already here: looked up before anything else is checked, so that a
+    // retry is answered the same way even if the instance changed since (its
+    // model switched off, an account in the draft deleted).
+    const seen = await byClientId(clientId);
+    if (seen) {
+      res.status(200);
+      return duplicateReceipt(seen, received);
+    }
   }
   if (!draft && !aiEnabled()) {
     throw new DataError(
@@ -232,8 +278,9 @@ exports.createItem = async (req, res) => {
   const { rows } = await db.query(
     `insert into inbox_items
        (source, raw_text, amount, tx_date, merchant, type_id, from_id, to_id,
-        type_confidence, category_confidence, account_confidence, extraction)
-     values ($1, $2, $3, coalesce($4::timestamp, localtimestamp(0)), $5, $6, $7, $8, $9, $10, $11, $12)
+        type_confidence, category_confidence, account_confidence, extraction, client_id)
+     values ($1, $2, $3, coalesce($4::timestamp, localtimestamp(0)), $5, $6, $7, $8, $9, $10, $11, $12, $13)
+     on conflict (wallet_id, client_id) where client_id is not null do nothing
      returning id`,
     [
       source,
@@ -248,8 +295,16 @@ exports.createItem = async (req, res) => {
       item.categoryConfidence ?? null,
       item.accountConfidence ?? null,
       extraction,
+      clientId,
     ],
   );
+  if (!rows.length) {
+    // The same clientId, committed by a request that raced this one.
+    const seen = await byClientId(clientId);
+    if (!seen) throw new DataError(409, "REQUEST_CONFLICT", "The request conflicted with another one: send it again");
+    res.status(200);
+    return duplicateReceipt(seen, received);
+  }
   const id = rows[0].id;
 
   // Queued once the answer has gone out, which withToken does only after its
@@ -268,7 +323,16 @@ exports.createItem = async (req, res) => {
   }
 
   res.status(201);
-  return receipt({ id, source, text, draft: Boolean(draft) });
+  return receipt({ id, source, ...received });
+};
+
+// The item a clientId became, in this wallet (RLS), whatever its state.
+const byClientId = async (clientId) => {
+  const { rows } = await db.query(
+    `select id, source, status, extraction, attempts from inbox_items where client_id = $1`,
+    [clientId],
+  );
+  return rows[0] || null;
 };
 
 // What POST /api/inbox answers, readable on its own: an automation app on a
@@ -292,6 +356,31 @@ const receipt = ({ id, source, text, draft }) => {
 };
 exports.receipt = receipt;
 
+// What a second POST with a clientId already seen answers: the receipt's
+// shape, about the item the first one became and as it is now, plus
+// "duplicate": true. `received` is what this request carried; nothing of it
+// was stored. `reading` may now also be "retrying", "done" or "failed".
+const READING_NOW = { done: "done", failed: "failed", off: "not_needed" };
+const duplicateReceipt = (item, { text, draft }) => {
+  const reading =
+    item.extraction === "pending"
+      ? item.attempts > 0
+        ? "retrying"
+        : "queued"
+      : READING_NOW[item.extraction] || "not_needed";
+  return {
+    id: item.id,
+    status: item.status,
+    received: { kind: draft ? "draft" : "text", chars: text ? text.length : 0 },
+    reading,
+    source: item.source,
+    duplicate: true,
+    message:
+      `Already received from ${item.source} (item ${item.id}, now ${item.status}): ` +
+      "this copy has the same clientId, so nothing new was stored",
+  };
+};
+
 // ---------------------------------------------------------------------------
 // The reader: one notification at a time, in the background
 // ---------------------------------------------------------------------------
@@ -300,11 +389,17 @@ exports.receipt = receipt;
 // token sent it; ask the model with nothing open; write the answer inside RLS
 // again, where every id is checked once more (checkEnds). An item accepted or
 // dismissed in the meantime is left alone: the UPDATE only touches pending ones.
+//
+// A failure waiting can mend (a quota, a server error, a timeout, the endpoint
+// down: extract.isTransient) keeps the item pending, one attempt more, and
+// sets when it may be tried again (retry.js); the scheduler (claimDue) brings
+// it back then. Nobody is told about those: only the last failure, or one
+// waiting cannot mend, leaves the item 'failed' and says so, as before.
 const readItem = async ({ id, walletId, userId }) => {
   const tenant = { userId, walletId };
   const context = await db.withTenant(tenant, async () => {
     const { rows } = await db.query(
-      `select raw_text, source, to_char(localtimestamp, 'YYYY-MM-DD') as today
+      `select raw_text, source, attempts, to_char(localtimestamp, 'YYYY-MM-DD') as today
          from inbox_items
         where id = $1 and status = 'pending' and extraction = 'pending' and raw_text is not null`,
       [id],
@@ -315,6 +410,7 @@ const readItem = async ({ id, walletId, userId }) => {
     return {
       text: rows[0].raw_text,
       source: rows[0].source,
+      attempts: Number(rows[0].attempts) || 0,
       today: rows[0].today,
       accounts: await names("is_account"),
       expenseCategories: await names("not is_account and type_id = 1"),
@@ -337,8 +433,23 @@ const readItem = async ({ id, walletId, userId }) => {
   // movement, or resolved by someone while the model thought).
   const outcome = await db.withTenant({ ...tenant, write: true }, async () => {
     if (!result.ok) {
+      const failures = context.attempts + 1;
+      const delay = result.transient ? nextDelayMs(failures, result.retryAfterMs) : null;
+      if (delay != null) {
+        const later = await db.query(
+          `update inbox_items
+              set attempts = attempts + 1, next_attempt_at = now() + $2::int * interval '1 millisecond'
+            where id = $1 and status = 'pending' and extraction = 'pending'`,
+          [id, delay],
+        );
+        if (later.rowCount) {
+          console.log(`[ai] inbox item ${id}: attempt ${failures} of ${MAX_ATTEMPTS} failed, next in ${Math.round(delay / 1000)} s`);
+        }
+        return null;
+      }
       const failed = await db.query(
-        `update inbox_items set extraction = 'failed', extracted_at = now()
+        `update inbox_items
+            set extraction = 'failed', extracted_at = now(), attempts = attempts + 1, next_attempt_at = null
           where id = $1 and status = 'pending' and extraction = 'pending'`,
         [id],
       );
@@ -350,7 +461,7 @@ const readItem = async ({ id, walletId, userId }) => {
       // touches an item that is still waiting for this reading.
       await db.query(
         `update inbox_items
-            set extraction = 'done', extracted_at = now(),
+            set extraction = 'done', extracted_at = now(), next_attempt_at = null,
                 status = 'dismissed', resolved_at = now(), raw_text = null
           where id = $1 and status = 'pending' and extraction = 'pending'`,
         [id],
@@ -362,7 +473,7 @@ const readItem = async ({ id, walletId, userId }) => {
     // midnight, as a day typed in the form does.
     const done = await db.query(
       `update inbox_items
-          set extraction = 'done', extracted_at = now(),
+          set extraction = 'done', extracted_at = now(), next_attempt_at = null,
               amount = $2, currency = $3,
               tx_date = case when $4::date is null or $4::date = tx_date::date then tx_date
                              else $4::date::timestamp end,
@@ -390,36 +501,46 @@ const queue = createQueue(async (job) => {
   }
 });
 
-// At startup: items still waiting for the model from before a restart. With
-// no model configured any more they are marked off instead, so the interface
-// does not say "Reading..." for ever. Each wallet is visited as one of the
-// members who may write there; an item is read as its own sender when they
-// still may.
-exports.resumePending = async () => {
-  const enabled = aiEnabled();
+// Finding the readings to do, across wallets
+//
+// Items are data under RLS, so they are looked for wallet by wallet, each
+// visited as one of the members who may write there; an item is read as its
+// own sender when they still may.
+//
+// A reading is *claimed* before it is queued: one UPDATE ... RETURNING over
+// the due rows, FOR UPDATE SKIP LOCKED, moves their next_attempt_at a lease
+// ahead. Two API replicas looking at once take disjoint rows -- a row the other
+// has locked is skipped, a row it has claimed is no longer due -- and the
+// lease is what brings an item back if the process that claimed it dies
+// before writing its reading. readItem then overwrites next_attempt_at with
+// whatever comes next (nothing, or the backoff). The lease outlasts a reading
+// (two minutes at most, extract.js CHAT_TIMEOUT_MS) with room for a queue.
+//
+// `fresh` also takes the items nobody scheduled -- next_attempt_at NULL, just
+// received, whose receiver queued them in memory -- which only the startup
+// does: a restart lost that memory.
+const LEASE_MS = 10 * 60 * 1000;
+
+const claimDue = async ({ fresh = false } = {}) => {
   let queued = 0;
   for (const wallet of await writersByWallet()) {
     const actor = wallet.writers[0];
     try {
-      const items = await db.withTenant({ userId: actor, walletId: wallet.id, write: !enabled }, async () => {
-        if (!enabled) {
-          // Text that was waiting for a model that is gone: dropped, like any
-          // text sent with no model, and with nothing of it kept.
-          await db.query(
-            `update inbox_items
-                set extraction = 'off', status = 'dismissed', resolved_at = now(), raw_text = null
-              where extraction = 'pending' and status = 'pending'`,
-          );
-          return [];
-        }
+      const items = await db.withTenant({ userId: actor, walletId: wallet.id, write: true }, async () => {
         const { rows } = await db.query(
-          `select id, created_by from inbox_items
-            where extraction = 'pending' and status = 'pending'
-            order by id`,
+          `update inbox_items
+              set next_attempt_at = now() + $1::int * interval '1 millisecond'
+            where id in (select id from inbox_items
+                          where extraction = 'pending' and status = 'pending'
+                            and (next_attempt_at <= now()${fresh ? " or next_attempt_at is null" : ""})
+                          order by id
+                          for update skip locked)
+            returning id, created_by`,
+          [LEASE_MS],
         );
         return rows;
       });
-      for (const item of items) {
+      for (const item of [...items].sort((a, b) => a.id - b.id)) {
         const userId = wallet.writers.includes(item.created_by) ? item.created_by : actor;
         queue.push({ id: item.id, walletId: wallet.id, userId });
         queued += 1;
@@ -428,8 +549,61 @@ exports.resumePending = async () => {
       console.error(`[ai] could not look for pending items in wallet ${wallet.id}: ${error.message}`);
     }
   }
+  return queued;
+};
+exports._claimDue = claimDue;
+exports._queue = () => queue;
+
+// At startup: items still waiting for the model from before a restart, and
+// any whose retry has come due meanwhile (a scheduled one not yet due waits
+// for its time). With no model configured any more they are marked off
+// instead, so the interface does not say "Reading..." for ever.
+exports.resumePending = async () => {
+  if (!aiEnabled()) {
+    for (const wallet of await writersByWallet()) {
+      try {
+        await db.withTenant({ userId: wallet.writers[0], walletId: wallet.id, write: true }, async () => {
+          // Text that was waiting for a model that is gone: dropped, like any
+          // text sent with no model, and with nothing of it kept.
+          await db.query(
+            `update inbox_items
+                set extraction = 'off', next_attempt_at = null,
+                    status = 'dismissed', resolved_at = now(), raw_text = null
+              where extraction = 'pending' and status = 'pending'`,
+          );
+        });
+      } catch (error) {
+        console.error(`[ai] could not look for pending items in wallet ${wallet.id}: ${error.message}`);
+      }
+    }
+    return 0;
+  }
+  const queued = await claimDue({ fresh: true });
   if (queued) console.log(`[ai] ${queued} notification(s) queued for reading`);
   return queued;
+};
+
+// The retries: every half minute, the readings whose time has come are
+// claimed and queued. In process, like the queue; a run still going when the
+// next is due is not doubled. Off with no model.
+const SCHEDULE_MS = 30 * 1000;
+let scheduler = null;
+exports.startRetryScheduler = (everyMs = SCHEDULE_MS) => {
+  if (scheduler || !aiEnabled()) return;
+  let busy = false;
+  scheduler = setInterval(async () => {
+    if (busy) return;
+    busy = true;
+    try {
+      const queued = await claimDue();
+      if (queued) console.log(`[ai] ${queued} notification(s) queued to be read again`);
+    } catch (error) {
+      console.error(`[ai] could not look for readings to retry: ${error.message}`);
+    } finally {
+      busy = false;
+    }
+  }, everyMs);
+  scheduler.unref();
 };
 
 // ---------------------------------------------------------------------------
@@ -490,7 +664,9 @@ const ITEM_COLUMNS = `
   i.category_confidence,
   i.account_confidence,
   i.extraction,
-  i.currency`;
+  i.currency,
+  i.attempts,
+  case when i.extraction = 'pending' and i.attempts > 0 then i.next_attempt_at end as next_attempt_at`;
 
 const shape = ({ type_confidence, category_confidence, account_confidence, ...row }) => ({
   ...row,

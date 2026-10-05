@@ -4,7 +4,9 @@
 // The notification reader (inbox_controller.readItem) asks a model that runs
 // on this machine's CPU; two readings at once would each take twice as long.
 // In process and in memory: a job lost to a restart is found again at the
-// next start (resumePending), because its item is still marked pending.
+// next start (resumePending), because its item is still marked pending; a
+// reading to be tried again later is not kept here but on its row, and the
+// scheduler (inbox_controller.claimDue) pushes it back when it is due.
 //
 // The worker is expected to catch its own errors; one it lets through is
 // logged and the queue goes on.

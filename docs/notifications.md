@@ -540,13 +540,24 @@ detail, because a draft that turns out to be noise costs a click while a
 movement taken for noise is lost. If you find that real movements are
 being dropped, send only the apps' payment notifications from your automation
 (in MacroDroid, a *Contains* filter on `€` or your currency), and open an issue
-with the text. A reading that fails (the model is down, a quota is spent) is a
-different case: the item stays in the inbox, with its text, for you to fill in.
+with the text. A reading that fails is a different case: the item is never
+dropped for it.
 
 Reading takes about ten seconds on a CPU. Your phone does not wait for it:
 Bussola answers at once, and the item says *Reading…* until the model is done.
-If it cannot read one (the model is not running, or its answer made no sense),
-the item says so and waits for you with the text as it came.
+
+**When a reading fails.** A failure that waiting can mend (a quota used up,
+`429`; a server error, `5xx`; a timeout; the model's server not answering) is
+**tried again later**, on its own: after 1 minute, 5 minutes, 30 minutes and
+2 hours, five readings in all. A `429` that says how long to wait
+(`Retry-After`) is obeyed when it asks for longer, up to two hours. Meanwhile
+the item stays in the inbox with its text, still *Reading…*, and nobody is
+notified; the schedule is kept in the database, so a restart does not lose it.
+A failure that waiting cannot mend (a refused key, `401`/`403`; a model that
+does not exist, `404`; an answer that is not the JSON asked for) is not tried
+again. After the last attempt, or at once for the second kind, the item says it
+could not be read and waits for you with the text as it came, and that is when
+your phone is told ([below](#getting-a-notification-on-your-phone)).
 
 On 40 real notifications from five banks, in Italian, English and German,
 `qwen3.5:4b` got the amount, the merchant, the accounts and the category right
@@ -616,9 +627,12 @@ for instance `BUSSOLA_AI_URL=http://192.168.1.20:11434/v1` and
 
 then `docker compose up -d`. Bussola asks `<URL>/chat/completions` with the
 a JSON-schema `response_format`; nothing is downloaded. The API log says once,
-at start, which host receives the notifications. A quota that is used up (`429`), a refused key, a timeout (one
-minute) or an answer that is not valid is treated like a failed reading: the
-item stays in the inbox, as it came, and you fill in the form.
+at start, which host receives the notifications. A quota that is used up
+(`429`), a server error or a timeout (two minutes) is tried again later, up to
+five times in about two and a half hours ([when a reading
+fails](#what-bussola-reads-from-a-notification)); a refused key or an answer
+that is not valid is not: the item stays in the inbox, as it came, and you fill
+in the form.
 
 **An example that fits.** [Groq](https://console.groq.com)'s free plan (as
 documented in October 2026: for `gpt-oss` models 30 requests a minute, about
@@ -632,7 +646,8 @@ to check: Bussola has not verified it.
 One limit to know: each reading sends about 2,000 tokens (your account and
 category names are part of it), so the 8,000 a minute allow three or four
 notifications in the same minute. A burst beyond that gets `429` for the
-surplus, and those items stay in the inbox, as they came, for you to fill in.
+surplus, and those items are read again a minute later (or when Groq's
+`Retry-After` says), so a burst only delays them.
 For a person's own notifications, a few an hour, it does not come up. In a test
 on 26 notifications (12 movements and 14 offers, codes, statements and alerts,
 in Italian and English) `gpt-oss-20b` told them apart correctly every time;
@@ -817,6 +832,42 @@ for a draft without one), `reading` is `queued` (the model will read it) or
 `not_needed` (a draft), and `source` the name it was filed under (`api` when
 none was given). The text itself is never sent back.
 
+**Sending the same notification twice.** A sender that may retry (a phone that
+timed out before it heard the answer) can name each notification with an id of
+its own, `clientId`: in the JSON body (`"clientId": "…"`), in the query
+(`?clientId=…`, the way for a `text/plain` body) or in an `X-Bussola-Client-Id`
+header, the first of the three that is present. It is text of 1 to 100
+characters, trimmed; anything else is `400 INVALID_CLIENT_ID`. An id is unique
+per wallet: the first POST with it is stored and answered `201` as above; any
+later POST with the same id in the same wallet stores nothing, reads nothing,
+and is answered **`200`** with the receipt of the item the first one became, as
+it is now, plus `"duplicate": true`:
+
+```json
+{
+  "id": 42,
+  "status": "pending",
+  "received": { "kind": "text", "chars": 37 },
+  "reading": "queued",
+  "source": "iPhone",
+  "duplicate": true,
+  "message": "Already received from iPhone (item 42, now pending): this copy has the same clientId, so nothing new was stored"
+}
+```
+
+Here `status` is the item's own (`pending`, `accepted` or `dismissed`: an id
+stays taken after the item is resolved, so a late retry does not bring it
+back), `reading` may also be `retrying`, `done` or `failed`, `source` is the one
+the item was filed under and `received` describes this copy. Whatever the
+second body says, it is taken to be the same notification. Two identical POSTs
+at the same moment store one item: one gets `201`, the other `200`. The same id
+in another wallet is another notification.
+
+**`GET /api/inbox`** (with the session, for the interface) lists the pending
+items; each carries `extraction` (`pending`, `done`, `failed` or `off`),
+`attempts` (failed readings so far) and `next_attempt_at` (when a reading that
+failed for a passing reason will be tried again; `null` otherwise).
+
 **`GET /api/inbox/context`** answers what an app needs to make its own
 proposals: the wallet's currency, its bank accounts and its expense and income
 categories (ids and names), and up to 200 recent `merchant → category`
@@ -827,8 +878,8 @@ revoked: the same answer for all of them), `403 TOKEN_FORBIDDEN` (the token's
 owner can no longer write to its wallet), `409 AI_DISABLED` (only text was sent
 and no reading model is configured; nothing was kept), `400` with a code for a body that is
 not valid (`INBOX_EMPTY` when there is neither text nor a draft, often a
-*Content type* other than `text/plain`; `INBOX_TEXT_TOO_LONG`; `INVALID_REQUEST`
-for JSON that does not parse), `429 TOO_MANY_ATTEMPTS` after too many invalid
+*Content type* other than `text/plain`; `INBOX_TEXT_TOO_LONG`; `INVALID_CLIENT_ID`;
+`INVALID_REQUEST` for JSON that does not parse), `429 TOO_MANY_ATTEMPTS` after too many invalid
 tokens from one address. Every error body is `{ "code": …, "error": … }`, the
 second a plain English explanation.
 

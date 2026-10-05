@@ -121,6 +121,9 @@ export const getPending = (db) =>
       confidence: { ...i.confidence },
       extraction: i.extraction ?? "off",
       currency: i.currency ?? null,
+      // The demo has no reading model: nothing is ever retried.
+      attempts: 0,
+      next_attempt_at: null,
     }));
 
 const notFound = () => new DemoError(404, "INBOX_NOT_FOUND", "This item is not in the inbox");
