@@ -59,7 +59,7 @@ For development with hot reload, see [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 | Problem | Fix |
 |---|---|
-| API won't start after changing `PG*` values | Put the old values back. They are fixed in the volume ([details](database-client.md#changing-pguser-pgpassword-or-pgdatabase)). |
+| API won't start after changing `PG*` values | Put the old values back: they are written into the volume at the first start, and changing `.env` renames nothing. To really change them, take a [backup](operations.md#backup), start on a new volume and restore. |
 | Postgres won't start on a fresh install | Set `PGPASSWORD` in `.env`. |
 | Sign-in does nothing | You are on plain `http://` with `BUSSOLA_COOKIE_SECURE=true`. Remove that setting. |
 | Locked out after 5 wrong passwords | Wait 15 min, or run `docker exec bussola-api node scripts/unlock.js <username>`. |
@@ -80,4 +80,3 @@ docker exec -i bussola-postgres sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB
 ## More
 
 - [Security notes](security.md): how passwords, sessions, lockouts and wallet isolation work
-- [Connecting a database client](database-client.md): DBeaver, psql over SSH
