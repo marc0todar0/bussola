@@ -169,16 +169,19 @@ each notification, what Bussola answered and why, save the answer into two
 variables and write them to MacroDroid's **User Log**, which holds only what
 your macros write. Everything stays on the phone.
 
-1. **Two local variables.** In the macro editor, add two local variables:
-   `bussola_code` (integer) and `bussola_answer` (string).
-2. **Before the HTTP request**, add the action **Set Variable**: `bussola_code`,
-   *Value* `0`. A request that never reaches Bussola (no network, a timeout)
-   then leaves `0` behind instead of the previous notification's code.
+1. **Two local variables.** In the macro editor, under *Local Variables* at
+   the bottom, add two with **+**: `bussola_code` (integer) and
+   `bussola_answer` (string).
+2. **Before the HTTP request**, add the action **Set Variable** (it shows as
+   *Set Local Variable (Integer)*): `bussola_code`, *Value* `0`, and drag it
+   above the request. A request that never reaches Bussola (no network, a
+   timeout) then leaves `0` behind instead of the previous notification's code.
 3. **In the HTTP request**, on the *Settings* tab: turn on *Block next action
-   until complete* (so the next actions wait for the answer), tick *Save HTTP
-   return code in integer variable* and pick `bussola_code`, and under
-   *Response* choose *Save the response into a string variable* and pick
-   `bussola_answer`.
+   until complete* (so the next actions wait for the answer); under
+   *Response*, pick `bussola_code` in *Save HTTP return code in integer
+   variable*, and under *Save response* choose *Save HTTP response in string
+   variable* and pick `bussola_answer`. Untick *Prettify JSON response*: the
+   answer then stays on one line in the log.
 4. **After it**, add the action **Log Event**, with this *Enter log message*
    (insert the tokens with the blue *…* button, or type them):
 
@@ -190,9 +193,22 @@ your macros write. Everything stays on the phone.
    so these lines are not mixed with anything else.
 5. **Optionally, a notification when it fails.** Add an **If clause** with two
    *MacroDroid Variable* conditions on `bussola_code`, *less than* `200` and
-   *greater than* `299`, joined with **OR**; inside it, **Display
-   Notification** with the title `Bussola did not take a notification` and the
-   text `[lv=bussola_code] [lv=bussola_answer]`. *End If* is added for you.
+   *greater than* `299`, joined with **OR** (tick *Don't log condition failure
+   if the condition is not satisfied*, or every successful request leaves a
+   line in the System Log); inside it, **Display Notification** with the title
+   `Bussola did not take a notification` and the text `[lv=bussola_code]
+   [lv=bussola_answer]`. *End If* is added for you.
+
+<p align="center">
+  <img src="screenshots/android-log-macro.png" width="240" alt="The macro with logging: Set Local Variable bussola_code 0, the HTTP Request POST, Log Event in the Bussola channel, and an If on bussola_code below 200 or above 299 with a Display Notification inside; the two local variables below">
+  <img src="screenshots/android-log-response.png" width="240" alt="HTTP Request, Settings tab, Response section: return code saved in bussola_code, response saved in the string variable bussola_answer">
+</p>
+
+<p align="center">
+  <img src="screenshots/android-log-event.png" width="240" alt="Log Event: the log message ending in [lv=bussola_code] [lv=bussola_answer], log level Standard, User Log Channel Bussola">
+  <img src="screenshots/android-log-if.png" width="240" alt="If clause: two MacroDroid Variable conditions joined with OR, bussola_code below 200 and bussola_code above 299">
+  <img src="screenshots/android-log-notification.png" width="240" alt="Display Notification: title Bussola did not take a notification, text with bussola_code and bussola_answer">
+</p>
 
 Open the log from the **User Log** tile on MacroDroid's home screen and pick
 the `Bussola` channel. A notification that arrived looks like this (Bussola's
