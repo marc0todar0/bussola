@@ -95,8 +95,10 @@ kbd {
 
 .top {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  gap: 8px 24px;
   padding-block: 20px;
 }
 .brand {
@@ -109,7 +111,7 @@ kbd {
   text-decoration: none;
 }
 .top nav { display: flex; gap: 24px; }
-.top nav a { color: var(--muted); text-decoration: none; font-weight: 500; }
+.top nav a { color: var(--muted); text-decoration: none; font-weight: 500; white-space: nowrap; }
 .top nav a:hover { color: var(--ink); }
 
 /* -------------------------------------------------------------------- hero */

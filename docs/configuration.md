@@ -148,7 +148,7 @@ Both URL and model are needed; with either missing nothing is read.
 - **Memory and speed** (a local model). `qwen3.5:4b` is about 3.4 GB and needs
   4 to 5 GB of free RAM; `qwen3.5:2b` is lighter and a little less accurate. On
   the CPU it reads a notification in 10 to 15 seconds on a desktop processor,
-  several times that on a Raspberry Pi or a NAS. Your phone does not wait:
+  several times that on a small low-power server. Your phone does not wait:
   Bussola answers at once and reads in the background. A model that "thinks"
   before answering is slower still; a non-thinking one is best.
 - **A hosted model.** Any provider with an OpenAI-compatible API. It sends each

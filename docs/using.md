@@ -26,7 +26,7 @@ What Bussola does and how to find your way around it once it is running. Back to
 - **Transactions from bank notifications.** An iPhone automation or an Android app sends your bank's notifications to Bussola with a personal token; they wait as drafts on the Transactions page until you accept them in one tap or review them in the form. A reading model (any OpenAI-compatible endpoint you point Bussola at, yours or hosted) drops offers and codes and fills in the rest. See [Transactions from bank notifications](notifications.md).
 - **Notifications on the phone.** Install Bussola as an app (Android: Install app; iPhone: Add to Home Screen) and turn notifications on in your profile: a message appears when a draft waits in the inbox, from Bussola itself, with no other app. Needs HTTPS. See [Getting a notification on your phone](notifications.md#getting-a-notification-on-your-phone).
 - **Keyboard shortcuts** for nearly everything, and a layout that works on a phone.
-- **Self-contained.** Three Docker containers (four with price updates), one published port, images for amd64 and arm64, no telemetry, no external account needed.
+- **Self-contained.** Three Docker containers (four with price updates), one published port, made for self-hosting, no telemetry, no external account needed.
 - **A demo in your browser** on invented data, nothing to install: [demo-bussola.marcotodaro.dev](https://demo-bussola.marcotodaro.dev).
 
 ## Screenshots

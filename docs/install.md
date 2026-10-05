@@ -28,9 +28,9 @@ Every setting is described in [Configuration](configuration.md).
 
 ## On a small home server
 
-Bussola is made to live on a Raspberry Pi, a NAS or a mini PC at home. The
-images are published for amd64 and arm64, so `docker compose up -d` downloads
-the right ones and builds nothing.
+Bussola is made for self-hosting: financial data is confidential, so it lives
+on a machine you control. The images are published for amd64 and arm64, so
+`docker compose up -d` downloads the right ones and builds nothing.
 
 - **Memory.** Bussola itself (frontend, API, Postgres) uses a few hundred MB.
   A model that reads bank notifications is not part of Bussola: if you run one
@@ -40,7 +40,7 @@ the right ones and builds nothing.
   another machine, or use a [hosted
   one](notifications.md#choosing-where-the-model-runs) (the text of your
   notifications then leaves your network).
-- **Storage.** Put Docker's data on an SSD rather than an SD card: Postgres
+- **Storage.** Put Docker's data on an SSD: Postgres
   writes often, and a local model is a few GB.
 - **A NAS** (Synology, QNAP, Unraid, TrueNAS…): create a project or stack
   from the downloaded `docker-compose.yml`, with the `.env` next to it.

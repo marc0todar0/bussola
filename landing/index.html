@@ -21,6 +21,7 @@
   <a class="brand" href="/"><img src="icon.svg" alt="" width="28" height="28">Bussola</a>
   <nav aria-label="Links">
     <a href="#compare">Compare</a>
+    <a href="#get-started">Get started</a>
     <a href="https://demo-bussola.marcotodaro.dev">Demo</a>
     <a href="https://github.com/marc0todar0/bussola">GitHub</a>
   </nav>
@@ -185,9 +186,9 @@
     <div><dt>Your language, your currency</dt>
       <dd>English, Italian, French, German, Spanish and Chinese, each person
       their own, and a currency for each wallet.</dd></div>
-    <div><dt>Small and self-contained</dt>
-      <dd>Three Docker containers, one port, images for amd64 and arm64: a
-      Raspberry Pi or a NAS is enough.</dd></div>
+    <div><dt>Made for self-hosting</dt>
+      <dd>Your finances are confidential, so they stay on a machine you
+      control: three Docker containers and one port.</dd></div>
     <div><dt>Nothing phones home</dt>
       <dd>No telemetry and no account with anyone. It only reaches out for
       prices, for push messages and for a hosted model, and only if you turn
@@ -240,8 +241,6 @@
           <td class="us y">PWA, push notifications</td><td class="p">Community apps</td><td class="y">PWA</td><td class="y">PWA</td><td class="y">PWA, companion app</td></tr>
         <tr><th scope="row">Interface languages</th>
           <td class="us p">6</td><td class="y">Many</td><td class="y">Many</td><td class="y">Many</td><td class="y">Many</td></tr>
-        <tr><th scope="row">Raspberry Pi (arm64 images)</th>
-          <td class="us y">Yes</td><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td></tr>
       </tbody>
     </table>
   </div>
@@ -276,11 +275,11 @@
   </ul>
 </section>
 
-<section class="run" aria-labelledby="run-title">
+<section class="run" id="get-started" aria-labelledby="run-title">
   <div>
     <h2 id="run-title">Run it yourself</h2>
-    <p>Three containers and one port, on a Raspberry Pi, a NAS or any
-    machine with Docker. About five minutes.</p>
+    <p>Three containers and one port, on any machine with Docker that you
+    control. About five minutes.</p>
 <pre><code>mkdir bussola &amp;&amp; cd bussola
 curl -LO https://github.com/marc0todar0/bussola/releases/latest/download/docker-compose.yml
 curl -L -o .env https://github.com/marc0todar0/bussola/releases/latest/download/example.env

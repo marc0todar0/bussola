@@ -84,7 +84,7 @@ All taken from the fictional [demo dataset](docs/install.md#demo-data-optional).
 - **Passkeys**: sign in with a fingerprint or your face, with the password as a fallback
 - **Six languages** (English, Italian, French, German, Spanish, Chinese) and **a currency per wallet**
 - **Keyboard shortcuts** for nearly everything (`?` lists them), a dark theme, and a layout that works on a phone
-- **Self-contained**: three Docker containers (four with price updates), one published port, images for amd64 and arm64, no telemetry, no external account
+- **Self-contained**: three Docker containers (four with price updates), one published port, made for self-hosting, no telemetry, no external account
 - **A demo in your browser**, on invented data: [demo-bussola.marcotodaro.dev](https://demo-bussola.marcotodaro.dev)
 
 The full list, with the details, is in [Using Bussola](docs/using.md#features).
@@ -110,7 +110,6 @@ the one that fits.
 | Passkeys | ✅ | ❌ 2FA codes | ❌ password or OpenID | ✅ fingerprint sign-in | ✅ |
 | On a phone | ✅ PWA, push notifications | Partial: community apps | ✅ PWA | ✅ PWA | ✅ PWA, companion app |
 | Interface languages | 6 | Many | Many | Many | Many |
-| Raspberry Pi (arm64 images) | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 <sub>As of October 2026, from each project's documentation and repository. ❌ means we found no such feature there.
 Firefly III, Actual Budget, Ghostfolio and Sure are the names of their own projects; Bussola is not affiliated with any of them.
@@ -119,8 +118,7 @@ Spotted a mistake? [Open an issue](https://github.com/marc0todar0/bussola/issues
 In short: for budgets, rules and bank sync, look at Firefly III or Actual
 Budget; for investments alone, Ghostfolio; for an all-in-one with bank sync,
 Sure. Bussola is for keeping many accounts, your spending and your wealth
-together without giving a bank login to anyone, in a small stack a Raspberry Pi
-runs.
+together without giving a bank login to anyone, on a machine you control.
 
 ## Who it's for
 
@@ -131,8 +129,8 @@ without handing either to a cloud service. Bussola is **multi-user and
 multi-wallets**: one installation serves a whole household or a group of
 friends, everyone with their own account and wallets, and a wallet is shared
 only with the people its owner picks, with **read** or **read-write**
-permissions. You need a machine that can run Docker: a home server, a Raspberry
-Pi, a NAS, a small VPS or your own computer.
+permissions. It is made for self-hosting, because financial data is
+confidential: you need a machine of your own that can run Docker.
 
 ### Who it's not for
 
@@ -155,9 +153,8 @@ Pi, a NAS, a small VPS or your own computer.
 
 ## Getting started
 
-You need a machine with Docker and the Compose plugin (`docker compose`): a
-Raspberry Pi, a NAS, a mini PC or your laptop. The images are built for
-amd64 and arm64; nothing to compile, no need to clone this repository.
+You need a machine with Docker and the Compose plugin (`docker compose`).
+Nothing to compile, no need to clone this repository.
 
 ```bash
 mkdir bussola && cd bussola
