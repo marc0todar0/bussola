@@ -98,10 +98,11 @@ tabs. On *Settings*:
   followed by `/api/inbox`. It has to be reachable from the phone when the
   notification arrives, so on mobile data that means the public HTTPS address
   (or a VPN back home).
-- Leave *Block next actions*, *Allow any certificate* and *Basic
-  Authorization* off, and keep *Follow redirects* on. (Turn *Block next
-  actions* on only if you add the log described in [See what was sent and what
-  came back](#see-what-was-sent-and-what-came-back).)
+- Tick *Block next actions until complete* (the actions after the request
+  wait for its answer) and keep *Follow redirects* on; leave *Allow any
+  certificate* and *Basic Authorization* off.
+- *Timeout (s)* `30` and *Max total duration (s)* `120`, so a request that
+  hangs gives up after two minutes instead of an hour.
 
 <p align="center">
   <img src="screenshots/android-http-settings.png" width="240" alt="MacroDroid's HTTP request, Settings tab: method POST and the URL ending in /api/inbox">
@@ -253,7 +254,7 @@ Any one of these fixes it:
   always-on VPN, in Android's VPN settings). A VPN that is installed but
   switched off, or that has not reconnected yet after the phone changed
   network, is the usual reason this keeps happening: requests sent in that
-  window are lost, which is what [the queue below](#when-bussola-cannot-be-reached-a-queue-on-the-phone-not-tested-yet)
+  window are lost, which is what [trying again later](#when-bussola-cannot-be-reached-try-again-later-not-tested-yet)
   is for.
 - **Split DNS.** Have the domain resolve to the private address at home and to
   the public one everywhere else, so the same URL works on both.
@@ -262,184 +263,91 @@ If the address is public and it still times out, the server or the router's
 port forwarding is not answering: try the same URL in the phone's browser on
 mobile data.
 
-### When Bussola cannot be reached: a queue on the phone [NOT TESTED YET]
+### When Bussola cannot be reached: try again later [NOT TESTED YET]
 
-> **Not tested yet.** The setup above was tried on a real phone; this one was
-> written from [MacroDroid's documentation](https://www.macrodroidforum.com/wiki/)
-> and has not been run on a phone. The names of some options may differ a little
-> between MacroDroid versions. If you try it, an issue or a correction is welcome.
+> **[NOT TESTED YET]** Built from MacroDroid's documentation; nobody has run
+> it on a phone yet.
 
-A notification that arrives while the phone has no signal, or while Bussola is
-being restarted, ends with code `0` and is lost. The recipe below keeps such
-notifications on the phone and sends them again later. It builds on the log in
-[See what was sent and what came back](#see-what-was-sent-and-what-came-back),
-so set that up first.
+Without this, a notification sent while Bussola cannot be reached (mobile data
+with the VPN down, the server restarting) is lost: you only see it in the log.
+With it, the macro keeps that notification and **sends it again when the
+connection comes back**, or every 15 minutes, for up to about 3 hours.
 
-**Why every request carries an id.** Each notification gets its own id, sent as
-the query parameter `notification_id` (1 to 100 characters), and a resend reuses it.
-A request can reach Bussola and have only its answer lost on the way back, and
-the phone, seeing `0`, would send it again and leave two drafts of one payment;
-with the id, Bussola recognises the second copy, answers `200` with
-`"duplicate": true` and stores nothing.
+Each notification gets a **name** (`notification_id`) the first time it is
+sent, and keeps it on every new try. If a try did reach Bussola but its answer
+got lost, Bussola recognises the name, answers `200` with `"duplicate": true`
+and does not store it twice.
 
-So the codes mean, for the phone: `201` taken, `200` with `"duplicate": true`
-already taken earlier, both are success. `0` (no answer) and `5xx` (Bussola
-answered but failed) are worth trying again. A `4xx` is not: a wrong token,
-an empty body or a Bussola with no model gives the same answer every time, so it
-is only reported.
-
-A few MacroDroid terms used below: a **global variable** is shared by every
-macro and is created from the **Variables** tile on MacroDroid's home screen
-(a local one belongs to one macro); a **Dictionary** variable holds entries
-under keys, and an entry can itself be a dictionary. Magic text can be written
-with square or curly brackets, `[lv=x]` or `{lv=x}`; this section uses curly
-brackets where a dictionary is involved, because its keys are written in
-square ones (`{v=bussola_queue[key][text]}`), as MacroDroid's documentation
-recommends.
-
-#### The queue
-
-On MacroDroid's home screen, open **Variables**, add one with **+**, name it
-`bussola_queue` and choose the type **Dictionary**. Each waiting notification
-will be one entry, under its id, holding two entries of its own: `source` and
-`text`. The text is stored as a string variable, so quotation marks and line
-breaks in it need no escaping.
-
-#### The main macro: an id, and the queue when it fails
-
-Open the macro from [the steps above](#see-what-was-sent-and-what-came-back).
-
-1. **Two more local variables**, both string: `bussola_id` and
-   `bussola_text`.
-2. **At the top, before** *Set Local Variable* `bussola_code`, add two
-   **Set Variable** actions:
-   - `bussola_id`, *Value* `[not_app_package]-[system_time_ms]`: the banking
-     app's package name (`com.revolut.revolut`, no spaces) and the time in
-     milliseconds, unique for each notification and well under 100 characters.
-   - `bussola_text`, *Value* `[not_title] [notification]`.
-3. **In the HTTP request**: on *Query Params* add `notification_id` = `[lv=bussola_id]`
-   next to `source` (the tab accepts magic text, as it already does for
-   `[not_app_name]`); on *Content Body* replace the text with
-   `[lv=bussola_text]`, so what is sent and what is queued are the same text.
-4. **Replace the If clause of step 5** (the failure notification) with one that
-   has two branches. Tap the If clause to add an *Else If*:
-   - **If** `bussola_code` *equals* `0` **OR** `bussola_code` *greater than*
-     `499` (two *MacroDroid Variable* conditions): put the notification in the
-     queue with two **Set Variable** actions on the global `bussola_queue`.
-     For each one choose *Define manually* as the key and enter the path, then
-     the entry type **String** and the value:
-     - key `[{lv=bussola_id}][source]`, value `[not_app_name]`;
-     - key `[{lv=bussola_id}][text]`, value `[lv=bussola_text]`.
-
-     A nested level written this way is created as a dictionary by itself.
-     Then **Log Event** in the `Bussola` channel:
-     `Bussola: queued [lv=bussola_id] after [lv=bussola_code]`.
-   - **Else If** `bussola_code` *less than* `200` **OR** *greater than* `299`
-     (this leaves the `4xx`): the **Display Notification** from before.
-
-#### A second macro: "Bussola queue"
-
-Create a new macro called `Bussola queue`.
-
-1. **Triggers**, two of them:
-   - **Regular Interval**, *Use fixed interval* `00:15:00`, *Use alarm* on;
-   - **Data Connectivity Change**, *Data Available*: the phone has Wi-Fi or
-     mobile data again. (If you reach Bussola through a VPN, **Network
-     Transport Change** with *VPN* ticked fires when the VPN comes up.)
-2. **Constraint**: **Compare Values**, type *Integer*, *Value 1*
-   `{size=bussola_queue}`, operator `>`, *Value 2* `0`. With an empty queue
-   the macro does not run at all.
-3. **Local variables**: `bussola_code` (integer), `bussola_answer` (string),
-   and `bussola_sent` (dictionary), the ids to take out of the queue at the end.
-4. **Actions**:
-
-   ```
-   Iterate Dictionary/Array: bussola_queue
-       Set Variable: bussola_code = 0
-       HTTP Request: POST …/api/inbox
-           Query Params  source   = {v=bussola_queue[{iterator_dictionary_key}][source]}
-                         notification_id = {iterator_dictionary_key}
-           Content Body  text/plain: {v=bussola_queue[{iterator_dictionary_key}][text]}
-           Header Params Authorization = Bearer bpt_…your token…
-           Block next actions until complete, code → bussola_code, response → bussola_answer
-       Log Event (Bussola): Bussola queue {iterator_dictionary_key} → [lv=bussola_code] [lv=bussola_answer]
-       If bussola_code = 0 OR bussola_code > 499
-           Break from loop
-       Else If bussola_code > 199 AND bussola_code < 300
-           Set Variable: bussola_sent[{iterator_dictionary_key}] = True
-       Else
-           Set Variable: bussola_sent[{iterator_dictionary_key}] = True
-           Display Notification: Bussola did not take a queued notification
-                                 [lv=bussola_code] [lv=bussola_answer]
-       End If
-       Wait Before Next Action: 5 seconds
-   End Loop
-   Iterate Dictionary/Array: bussola_sent
-       Clear Dictionary/Array Entry: bussola_queue[{iterator_dictionary_key}] Delete Key
-   End Loop
-   Clear Dictionary/Array Entry: bussola_sent [All entries] Delete Key
-   ```
-
-   Build the HTTP request like the main one (same URL, *Settings* and
-   token), with the values above. For the two *Set Variable* on
-   `bussola_sent`, pick the local dictionary, *Define manually* the key
-   `[{iterator_dictionary_key}]` and the type **Boolean**. For *Clear
-   Dictionary/Array Entry* on `bussola_queue`, *Define manually* the key the
-   same way and choose *Delete Key*.
-
-What it does, item by item:
-
-- **`2xx`** (`201`, or `200` with `"duplicate": true`): sent, taken out of the
-  queue.
-- **`0` or `5xx`**: Bussola is still out of reach or in trouble. *Break from
-  loop* stops there, so the queue is not run through at every attempt; the
-  item and those after it stay for the next run.
-- **Any other code** (a `4xx`: a revoked token, `409 AI_DISABLED`): trying
-  again would only give the same answer, so the item leaves the queue with a
-  notification. Its text is still in the `Bussola` User Log channel, so the
-  movement can be entered by hand.
-
-The items are removed after the loop, not inside it, because MacroDroid's
-documentation does not say whether a dictionary may change while it is being
-iterated. If two runs overlap (a regained connection a minute before the
-quarter-hour), the same item can be sent twice: Bussola answers the second with
-`"duplicate": true`, and both runs count it as sent, which is the point of the
-id. The 5-second wait keeps the loop from firing requests back to back; if
-your Bussola reads with a [cloud model on a free plan](#choosing-where-the-model-runs),
-make it 15 seconds, or a long queue sent in a burst meets the provider's limit
-per minute.
-
-To see what is waiting, open **Variables** on MacroDroid's home screen and tap
-`bussola_queue`. To throw the queue away, delete its entries there.
-
-#### A simpler variant: retry for a minute or two
-
-For short blips (a lift, a tunnel) a queue is more than you need: the main
-macro can try again by itself. Put a **Repeat actions** around the request,
-*Fixed number* `3`, so that it reads:
+Start from the macro of [See what was sent and what came
+back](#see-what-was-sent-and-what-came-back). The finished macro looks like
+this (indented lines are inside the loop or the If):
 
 ```
-Set Variable: bussola_id = [not_app_package]-[system_time_ms]
-Set Variable: bussola_text = [not_title] [notification]
-Repeat Actions: 3 times
-    Set Variable: bussola_code = 0
-    HTTP Request (notification_id = [lv=bussola_id], body [lv=bussola_text])
-    Log Event (Bussola): … → [lv=bussola_code] [lv=bussola_answer]
-    If bussola_code > 0 AND bussola_code < 500
-        Break from loop
-    End If
-    Wait Before Next Action: 1 minute
-End Loop
-If bussola_code < 200 OR bussola_code > 299
-    Display Notification: Bussola did not take a notification …
-End If
+Trigger   Notification Received
+Actions   Set Variable  bussola_id   = [not_app_package]-[system_time_ms]
+          Set Variable  bussola_app  = [not_app_name]
+          Set Variable  bussola_text = [not_title] [notification]
+          Repeat Actions (12 times)
+              Set Variable  bussola_code = 0
+              HTTP Request (POST)
+              Log Event
+              If  bussola_code > 0  AND  bussola_code < 500
+                  Break from loop
+              End If
+              Wait Until Trigger (connection back, or 15 minutes)
+              Wait Before Next Action (10 seconds)
+          End Loop
+          If  bussola_code < 200  OR  bussola_code > 299
+              Display Notification
+          End If
 ```
 
-The id is built once, before the loop, so every attempt carries the same one
-and an attempt whose answer was lost is not stored twice. Any answer from
-Bussola other than a `5xx` ends the loop; after three failed attempts, about
-two minutes, you get the notification, and the text is in the log. The two
-variants can be combined: retry three times, then queue.
+Step by step:
+
+1. **Three more local variables**, all *String*: `bussola_id`, `bussola_app`,
+   `bussola_text` (next to `bussola_code` and `bussola_answer`).
+2. **At the top of the actions**, three **Set Variable** actions:
+   - `bussola_id` = `[not_app_package]-[system_time_ms]`: the notification's
+     name, the app plus the time in milliseconds.
+   - `bussola_app` = `[not_app_name]`
+   - `bussola_text` = `[not_title] [notification]`
+
+   They keep the notification while the macro waits: after a wait, the
+   `[notification]` text may belong to something else.
+3. **Change the HTTP request** to use them:
+   - *Query Params*: `source` = `[lv=bussola_app]`, and add `notification_id` =
+     `[lv=bussola_id]`.
+   - *Content Body*: `[lv=bussola_text]`.
+4. **Change the Log Event message** to
+   `Bussola ← [lv=bussola_app]: [lv=bussola_text] → [lv=bussola_code] [lv=bussola_answer]`.
+5. **Put the request in a loop.** Add **Repeat Actions**, *Fixed number*, `12`,
+   and move into it, in this order: *Set Variable bussola_code = 0*, *HTTP
+   Request*, *Log Event*. *End Loop* is added for you, after them.
+6. **Stop when there is an answer.** Still inside the loop, after Log Event:
+   an **If clause** with two *MacroDroid Variable* conditions joined with
+   **AND**: `bussola_code` *greater than* `0` and `bussola_code` *less than*
+   `500`; inside it, **Break from loop**. A 2xx means done; a 4xx (a wrong
+   token, for example) will not get better by trying again, so it stops too.
+7. **Wait for the connection.** Still inside the loop, after that If:
+   **Wait Until Trigger**, with three triggers (any one ends the wait):
+   - **Data Connectivity Change**, *Data Available*;
+   - **Network Transport Change**, *VPN* (when Tailscale, WireGuard, Twingate…
+     connects);
+   - **Wifi State Change**, *Connected to network*, *Any Network*.
+
+   *Timeout*: **Continue after timeout**, `15` minutes. Then **Wait Before
+   Next Action**, `10` seconds, so a VPN that just came up has time to settle.
+8. **After the loop**, keep the If with **Display Notification** from before
+   (`bussola_code` less than 200 OR greater than 299): it now fires only when
+   all 12 tries failed, or Bussola refused the notification.
+
+What to expect in the User Log when the phone is offline: a line `→ 0` for the
+first try, then, when the connection comes back, a line `→ 201 …`. A resend of
+something Bussola already had shows `→ 200 {…"duplicate":true…}`: that is fine.
+
+Limits: the waiting macro lives in MacroDroid's memory, so restarting the
+phone, or Android closing MacroDroid, drops what was waiting. Twelve tries 15
+minutes apart cover about three hours; raise the number in step 5 for longer.
 
 ## iPhone [NOT TESTED YET]
 
