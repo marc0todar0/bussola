@@ -294,7 +294,7 @@ Actions   Set Variable  bussola_id   = [not_app_package]-[system_time_ms]
               If  bussola_code > 0  AND  bussola_code < 500
                   Break from loop
               End If
-              Wait Until Trigger (connection back, or 15 minutes)
+              Wait Until Trigger (data back, Wi-Fi or VPN, or 15 minutes)
               Wait Before Next Action (10 seconds)
           End Loop
           If  bussola_code < 200  OR  bussola_code > 299
@@ -329,14 +329,15 @@ Step by step:
    `500`; inside it, **Break from loop**. A 2xx means done; a 4xx (a wrong
    token, for example) will not get better by trying again, so it stops too.
 7. **Wait for the connection.** Still inside the loop, after that If:
-   **Wait Until Trigger**, with three triggers (any one ends the wait):
+   **Wait Until Trigger**, with two triggers (either one ends the wait):
    - **Data Connectivity Change**, *Data Available*;
-   - **Network Transport Change**, *VPN* (when Tailscale, WireGuard, Twingate…
-     connects);
-   - **Wifi State Change**, *Connected to network*, *Any Network*.
+   - **Network Transport Change**, only *Wi-Fi* and *VPN* ticked (it fires
+     when the phone joins a Wi-Fi network, or when Tailscale, WireGuard,
+     Twingate… connects).
 
-   *Timeout*: **Continue after timeout**, `15` minutes. Then **Wait Before
-   Next Action**, `10` seconds, so a VPN that just came up has time to settle.
+   *Timeout*: **Continue after timeout**, `15` minutes, with *Use alarm* ticked
+   so it also fires while the phone sleeps. Then **Wait Before Next Action**,
+   `10` seconds, so a VPN that just came up has time to settle.
 8. **After the loop**, keep the If with **Display Notification** from before
    (`bussola_code` less than 200 OR greater than 299): it now fires only when
    all 12 tries failed, or Bussola refused the notification.
