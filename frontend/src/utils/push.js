@@ -5,7 +5,7 @@
 // worker (public/sw.js) is registered only from here, only when push is on
 // and the person turned it on (or already had) on this device -- never for
 // anyone else, and it caches nothing.
-import { pushSubscribe, pushUnsubscribe } from "./session";
+import { pushStatus, pushSubscribe, pushUnsubscribe } from "./session";
 
 const SW_URL = "/sw.js";
 
@@ -65,6 +65,48 @@ export const currentSubscription = async () => {
   }
 };
 
+// Who turned notifications on in this browser. The server binds a
+// subscription to the session that saved it (migration 006), so signing out,
+// or a session ending, stops it; when the same person signs in here again it
+// is bound to the new session without a trip to the Profile. Somebody else
+// signing in on this browser gets nothing until they turn it on themselves.
+const OWNER_KEY = "bussola.pushOwner";
+export const rememberPushOwner = (userId) => {
+  try {
+    if (userId == null) localStorage.removeItem(OWNER_KEY);
+    else localStorage.setItem(OWNER_KEY, String(userId));
+  } catch {
+    /* no storage: it is asked for again from the Profile */
+  }
+};
+const pushOwner = () => {
+  try {
+    return localStorage.getItem(OWNER_KEY);
+  } catch {
+    return null;
+  }
+};
+
+// After a sign-in. A subscription the server holds for this session marks
+// this browser as that person's; one it no longer holds (signed out, the
+// session ended) is posted again, but only for the person who turned it on
+// here, with permission still granted. Quiet: it never asks for permission.
+export const rebindForOwner = async (status, userId) => {
+  if (!status || !status.push || userId == null) return;
+  if (pushCapability() !== "ready" || Notification.permission !== "granted") return;
+  try {
+    const subscription = await currentSubscription();
+    if (!subscription) return;
+    const held = await pushStatus(subscription.endpoint);
+    if (!held.ok) return; // unreachable or refused: try at the next start
+    if (held.body && held.body.subscribed) return rememberPushOwner(userId);
+    if (String(userId) !== pushOwner()) return;
+    await pushSubscribe(subscription.toJSON());
+  } catch {
+    /* it can still be turned on from the Profile */
+  }
+};
+
 // At startup: if push is on and this device is already subscribed, register
 // the worker again so a tap on a notification works after a reload. Anyone
 // else gets no worker at all.
@@ -110,6 +152,7 @@ export const disablePush = async () => {
     // 404: the server had already forgotten it; either way it ends here.
     if (!result.ok && result.status !== 404) return result;
     await subscription.unsubscribe();
+    rememberPushOwner(null);
     return { ok: true, status: 200, body: { ok: true } };
   } catch (error) {
     return failure("PUSH_DEVICE_ERROR", error);

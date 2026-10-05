@@ -9,6 +9,16 @@ API starts; an entry that touches the schema names its migration.
 
 ## [Unreleased]
 
+### Changed
+
+- **A session is extended as you use it.** `BUSSOLA_SESSION_DAYS` (30) now
+  counts from your last visit rather than from the sign-in, so somebody who
+  opens Bussola at least once a month stays signed in, and so do their phone
+  notifications.
+- **Phone notifications come back by themselves** when the person who turned
+  them on signs in again on that browser; nobody else signing in there gets
+  them.
+
 ## [0.2.1] - 2026-10-02
 
 ### Changed

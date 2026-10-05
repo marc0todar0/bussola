@@ -36,7 +36,7 @@ same image works for any installation without a rebuild.
 | `BUSSOLA_AI_API_KEY` | *(none)* | The endpoint's key, sent as a Bearer token; never logged or returned. Leave it out for a server that needs none |
 | `BUSSOLA_NOTIFY_DETAILS` | *(off)* | `on` adds the draft's amount and merchant to the notification on the phone. Off, it only says something is waiting. See [Getting a notification on your phone](notifications.md#getting-a-notification-on-your-phone) |
 | `BUSSOLA_PUSH_ALLOWED_HOSTS` | *(none)* | Extra push-service hostnames, comma-separated (`push.example.org`, `*.push.example.net`), added to the built-in list of Google's, Mozilla's, Apple's and Microsoft's. Almost nobody needs it; IP addresses are never accepted |
-| `BUSSOLA_SESSION_DAYS` | `30` | How long you stay signed in, in days |
+| `BUSSOLA_SESSION_DAYS` | `30` | How long you stay signed in without using Bussola, in days; each use extends it |
 | `BUSSOLA_COOKIE_SECURE` | *(off)* | `true` marks the session cookie `secure`. Set it **only** when serving over HTTPS |
 | `BUSSOLA_PUBLIC_URL` | *(none: passkeys and phone notifications off)* | The HTTPS address Bussola is served from, e.g. `https://bussola.example.com`. Setting it enables passkeys (sign-in with fingerprint, face or screen lock) and Web Push notifications on the phone, and nothing else is needed for either. See [Behind HTTPS](install.md#behind-https--a-reverse-proxy) |
 | `CORS_ORIGINS` | *(none)* | Extra origins allowed to call the API, comma-separated. Not needed in the standard setup |

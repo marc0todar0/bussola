@@ -11,7 +11,7 @@ import WalletPicker from "./components/WalletPicker";
 import ErrorBoundary, { ProblemPanel } from "./components/ErrorBoundary";
 import { I18nProvider, useT } from "./i18n";
 import { currentUser, instanceStatus, logout, onSessionExpired, onWalletLost, saveLocale } from "./utils/session";
-import { registerIfSubscribed } from "./utils/push";
+import { rebindForOwner, registerIfSubscribed } from "./utils/push";
 import { formatDate } from "./utils/generic";
 import { useToastHost } from "./utils/toastHost";
 
@@ -164,10 +164,16 @@ function App() {
   // Web Push: the service worker is registered only on a device that already
   // has a subscription (and only when the server has push on), so that a tap
   // on a notification works after a reload. Nothing else registers it.
-  const signedIn = Boolean(user);
+  // After a sign-in, the same person's subscription is bound to the new
+  // session again (utils/push.js, rebindForOwner).
+  const userId = user ? user.id : null;
   useEffect(() => {
-    if (signedIn) instanceStatus().then(registerIfSubscribed);
-  }, [signedIn]);
+    if (userId == null) return;
+    instanceStatus().then(async (status) => {
+      await rebindForOwner(status, userId);
+      await registerIfSubscribed(status);
+    });
+  }, [userId]);
 
   // The account can change under the app's feet: a new username, a renamed
   // wallet. Only App holds `user`, so a page that changes one of those has no

@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaBell, FaBellSlash, FaPaperPlane } from "react-icons/fa";
 import { useT } from "../i18n";
 import { instanceStatus, pushStatus, pushTest } from "../utils/session";
-import { currentSubscription, disablePush, enablePush, pushCapability } from "../utils/push";
+import { currentSubscription, disablePush, enablePush, pushCapability, rememberPushOwner } from "../utils/push";
+import GlobalContext from "../context/GlobalContext";
 
 // Where installing Bussola on a phone is explained, step by step.
 const DOCS_URL = "https://github.com/marc0todar0/bussola/blob/main/docs/notifications.md#getting-a-notification-on-your-phone";
@@ -17,6 +18,8 @@ const DOCS_URL = "https://github.com/marc0todar0/bussola/blob/main/docs/notifica
 // Screen), the person refused it in the browser's settings, off, on.
 export default function PushNotifications() {
   const { t } = useT();
+  const { user } = useContext(GlobalContext);
+  const userId = user && user.data ? user.data.id : null;
   const [status, setStatus] = useState(null);
   const [subscribed, setSubscribed] = useState(false);
   const [capability, setCapability] = useState(pushCapability);
@@ -121,7 +124,13 @@ export default function PushNotifications() {
               type="button"
               className="profile-button"
               disabled={busy}
-              onClick={() => run(() => enablePush(status.pushPublicKey), "profile.pushEnabled")}
+              onClick={() =>
+                run(async () => {
+                  const result = await enablePush(status.pushPublicKey);
+                  if (result.ok) rememberPushOwner(userId);
+                  return result;
+                }, "profile.pushEnabled")
+              }
             >
               <FaBell aria-hidden="true" /> {t("profile.pushEnable")}
             </button>

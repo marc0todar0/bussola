@@ -540,6 +540,12 @@ notification the model read, or one it could not read and that waits for you to
 fill in (the message says so). Items dropped as "not a transaction" send
 nothing.
 
+**Turned on once, per device.** You stay signed in as long as you open Bussola
+at least once a month (the session is extended as you use it), and the
+notifications with it. Signing out stops them on that browser; when you sign
+in there again, they come back by themselves. Somebody else signing in on the
+same browser does not get yours, and gets none until they turn them on.
+
 **If it does not arrive.** The test notification tells you whether the problem
 is Bussola or the notification you are waiting for. Check, in order: the
 permission is allowed in the browser or phone settings (Profile says when it is
@@ -661,7 +667,8 @@ another account's subscription. `GET /api/auth/status` says whether they are on
   belongs to the session that saved it: signing out, the session expiring, or
   a password change made elsewhere removes it on the server, so a shared
   browser stops hearing about the previous person's inbox. (Changing the
-  password on this device keeps it.)
+  password on this device keeps it.) When the same person signs in again on
+  that browser, the frontend posts the subscription again by itself.
 - `POST /api/auth/push/status` with `{ "endpoint": "…" }`: `{ "subscribed": true }`
   when this endpoint is subscribed for the current session, `false` otherwise
   (another session's, another account's, an unknown one, or push off). The
@@ -686,7 +693,8 @@ another account's subscription. `GET /api/auth/status` says whether they are on
   turn them on), go through the browser makers' push services encrypted for the
   device, and are sent only to subscriptions on those services' own hostnames.
   Signing out turns them off for that browser: a subscription lives only as long
-  as the session that turned it on.
+  as the session that turned it on, and comes back only when the same person
+  signs in there again.
 - With a model on your own network nothing leaves it. With a [hosted
   one](#choosing-where-the-model-runs) the text of each notification does, to
   the provider you chose; it is off unless you set it up.

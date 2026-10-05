@@ -7,6 +7,16 @@ const identifyUser = async (req, res, next) => {
   try {
     const token = req.cookies ? req.cookies[sessions.COOKIE_NAME] : null;
     req.user = await sessions.userFromToken(token);
+    if (req.user) {
+      // Pushing the end back is a convenience: failing it must not sign
+      // anybody out, so it has its own catch.
+      try {
+        const renewed = await sessions.renewIfDue(token, req.user.session_expires_at);
+        if (renewed) res.cookie(sessions.COOKIE_NAME, token, sessions.cookieOptions(renewed));
+      } catch (error) {
+        console.error("Could not renew the session:", error.message);
+      }
+    }
   } catch (error) {
     console.error("Could not resolve the session:", error.message);
     req.user = null;

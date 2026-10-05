@@ -36,7 +36,8 @@ const userFromToken = async (token) => {
   const { rows } = await db.queryAuth(
     `SELECT u.id, u.username, u.email, u.locale, u.currency, u.is_admin, u.bank_names,
             s.wallet_id, w.name AS wallet_name, m.role AS wallet_role,
-            w.currency AS wallet_currency, w.created_by AS wallet_created_by
+            w.currency AS wallet_currency, w.created_by AS wallet_created_by,
+            s.expires_at AS session_expires_at
        FROM sessions s
        JOIN users    u ON u.id = s.user_id
        LEFT JOIN wallet_members m ON m.wallet_id = s.wallet_id AND m.user_id = u.id
@@ -81,6 +82,24 @@ const setSessionWallet = (token, walletId) =>
     fingerprint(token),
     walletId,
   ]);
+
+// A session lasts DURATION_DAYS from its last use, not from the sign-in:
+// once less than half of it is left, a request pushes the end back to a full
+// DURATION_DAYS from now. Somebody who opens Bussola at least that often is
+// never signed out, and neither is the push subscription bound to the session
+// (migration 006). Half, so it is one UPDATE every couple of weeks rather
+// than one per request. Returns the new end, or null when nothing changed.
+const renewIfDue = async (token, expiresAt) => {
+  if (!token || !expiresAt) return null;
+  const fullMs = DURATION_DAYS * 24 * 60 * 60 * 1000;
+  if (new Date(expiresAt).getTime() - Date.now() > fullMs / 2) return null;
+  const next = new Date(Date.now() + fullMs);
+  const { rowCount } = await db.queryAuth(
+    "UPDATE sessions SET expires_at = $2 WHERE token_hash = $1 AND expires_at > now()",
+    [fingerprint(token), next],
+  );
+  return rowCount ? next : null;
+};
 
 const deleteSession = (token) =>
   db.queryAuth("DELETE FROM sessions WHERE token_hash = $1", [fingerprint(token)]);
@@ -147,6 +166,7 @@ module.exports = {
   fingerprint,
   DURATION_DAYS,
   createSession,
+  renewIfDue,
   userFromToken,
   setSessionWallet,
   deleteSession,
