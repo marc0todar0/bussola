@@ -9,6 +9,23 @@ API starts; an entry that touches the schema names its migration.
 
 ## [Unreleased]
 
+### Added
+
+- **A notification the model could not read is tried again.** A quota used up
+  (`429`), a server error, a timeout or a model server that is down no longer
+  leaves the item for the hand at once: it is read again after 1 min, 5 min,
+  30 min and 2 h (five readings in all; a longer `Retry-After` is obeyed, up to
+  two hours), and only the last failure is announced on your phone. A refused
+  key, a missing model or a nonsense answer still fail at once. The schedule is
+  kept in the database (migration `007_inbox_retry`), so a restart loses
+  nothing; `GET /api/inbox` gives each item's `attempts` and `next_attempt_at`.
+- **A phone can send the same notification twice safely.** `POST /api/inbox`
+  takes an optional `clientId` (JSON body, `?clientId=` or an
+  `X-Bussola-Client-Id` header; 1 to 100 characters): a second POST with an id
+  the wallet has already seen stores nothing and answers `200` with the first
+  item's receipt and `"duplicate": true`. An invalid id is `400
+  INVALID_CLIENT_ID`.
+
 ### Changed
 
 - **A session is extended as you use it.** `BUSSOLA_SESSION_DAYS` (30) now

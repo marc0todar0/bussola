@@ -115,10 +115,11 @@ const port = process.env.PORT || 3001;
 
 // The model that reads bank notifications (services/inbox/extract.js), when
 // BUSSOLA_AI_URL and BUSSOLA_AI_MODEL name one. Notifications left waiting by
-// a restart are queued again.
+// a restart are queued again, and readings that failed for a passing reason
+// (a quota, the endpoint down) are tried again when their time comes.
 const startNotificationReader = () => {
   const { aiEnabled, aiCloud, aiModel, aiHost } = require("./services/inbox/extract");
-  const { resumePending } = require("./controllers/inbox_controller");
+  const { resumePending, startRetryScheduler } = require("./controllers/inbox_controller");
   if (aiEnabled()) {
     // Host only, never the key.
     console.log(
@@ -127,7 +128,9 @@ const startNotificationReader = () => {
   } else if (process.env.BUSSOLA_AI_URL) {
     console.log("[ai] BUSSOLA_AI_URL needs BUSSOLA_AI_MODEL too: notifications are not read.");
   }
-  resumePending().catch((error) => console.error("[ai] could not resume pending notifications:", error.message));
+  resumePending()
+    .catch((error) => console.error("[ai] could not resume pending notifications:", error.message))
+    .finally(() => startRetryScheduler());
   // Is the quotes service there? (It is opt-in: its container may not run.)
   require("./services/quotes").probeQuotes().catch(() => {});
 };

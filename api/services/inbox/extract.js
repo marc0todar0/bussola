@@ -85,12 +85,39 @@ const aiHost = () => {
 };
 
 // An error whose message is safe to log: a code, never the text read.
+// `retryAfterMs` is what the endpoint asked us to wait (a 429's Retry-After),
+// when it said.
 class AiError extends Error {
-  constructor(code) {
+  constructor(code, retryAfterMs = null) {
     super(code);
     this.code = code;
+    this.retryAfterMs = retryAfterMs;
   }
 }
+
+// Whether a failed reading is worth trying again later, by its code. A quota
+// (429), a server error (5xx), a timeout and an endpoint that cannot be
+// reached are the endpoint's passing trouble: waiting mends them. A refused key
+// (401, 403), a model that does not exist (404), any other status and an
+// answer that is not the JSON asked for are not: the same question would get
+// the same answer, so the item is left for the hand at once.
+const TRANSIENT = new Set(["AI_RATE_LIMITED", "AI_TIMEOUT", "AI_UNREACHABLE", "AI_HTTP_408"]);
+const isTransient = (reason) => TRANSIENT.has(reason) || /^AI_HTTP_5\d\d$/.test(String(reason || ""));
+
+// A Retry-After header, in milliseconds from `now`: either a number of seconds
+// or an HTTP date. Anything else, or a moment already past, is null.
+const parseRetryAfter = (value, now = Date.now()) => {
+  if (value === undefined || value === null) return null;
+  const s = String(value).trim();
+  if (!s) return null;
+  if (/^\d+(?:\.\d+)?$/.test(s)) {
+    const ms = Math.round(Number(s) * 1000);
+    return ms > 0 ? ms : null;
+  }
+  const at = Date.parse(s);
+  if (Number.isNaN(at)) return null;
+  return at > now ? at - now : null;
+};
 
 // Names, case-insensitively unique, in the order given. Two categories of
 // different kinds may share a name ("Other"): the enum needs it once, and the
@@ -219,7 +246,8 @@ const post = async (url, body, timeoutMs, fetchImpl = fetch, headers = {}) => {
     } catch {
       json = null;
     }
-    return { status: res.status, json };
+    const retryAfter = res.headers && typeof res.headers.get === "function" ? res.headers.get("retry-after") : null;
+    return { status: res.status, json, retryAfter };
   } catch (error) {
     if (controller.signal.aborted) throw new AiError("AI_TIMEOUT");
     void error;
@@ -245,9 +273,11 @@ const parseAnswer = (content) => {
 // One question to the OpenAI-compatible /chat/completions, answered as the
 // schema says (response_format json_schema, best-effort rather than strict:
 // strict modes insist on a schema shape ours, with its nullable enums, does
-// not have, and toDraft() checks every field anyway). A 429 is a quota, 401 and
-// 403 a bad key: each a failed reading, the item stays for the hand. The key
-// goes in the header and nowhere else.
+// not have, and toDraft() checks every field anyway). A 429 is a quota (its
+// Retry-After kept, for the backoff), 401 and 403 a bad key, 404 a model that
+// is not there: each a failed reading, which isTransient() sorts into the ones
+// tried again later and the ones left for the hand. The key goes in the header
+// and nowhere else.
 const askModel = async (
   request,
   { url = aiUrl(), model = aiModel(), apiKey = aiApiKey(), timeoutMs = CHAT_TIMEOUT_MS, fetchImpl } = {},
@@ -264,7 +294,7 @@ const askModel = async (
   };
   const headers = apiKey ? { authorization: `Bearer ${apiKey}` } : {};
   const answer = await post(`${url}/chat/completions`, body, timeoutMs, fetchImpl, headers);
-  if (answer.status === 429) throw new AiError("AI_RATE_LIMITED");
+  if (answer.status === 429) throw new AiError("AI_RATE_LIMITED", parseRetryAfter(answer.retryAfter));
   if (answer.status === 401 || answer.status === 403) throw new AiError("AI_AUTH");
   if (answer.status === 404) throw new AiError("AI_MODEL_MISSING");
   if (answer.status !== 200) throw new AiError(`AI_HTTP_${answer.status}`);
@@ -366,7 +396,9 @@ const toDraft = (answer, { accounts = [], expenseCategories = [], incomeCategori
 };
 
 // The whole reading: prompt, model, draft. Never throws; logs one line,
-// without the text. `label` names the item in the log.
+// without the text. `label` names the item in the log. A failure says whether
+// it is worth trying again (`transient`) and, if the endpoint said, after how
+// long (`retryAfterMs`).
 const readNotification = async (context, { label = "item", ...options } = {}) => {
   const started = Date.now();
   try {
@@ -377,8 +409,10 @@ const readNotification = async (context, { label = "item", ...options } = {}) =>
     return draft.skip ? { ok: true, skip: true } : { ok: true, draft };
   } catch (error) {
     const reason = error instanceof AiError ? error.code : "AI_FAILED";
+    const transient = isTransient(reason);
     console.error(`[ai] ${label}: could not be read (${reason})`);
-    return { ok: false, reason };
+    const retryAfterMs = error instanceof AiError && error.retryAfterMs ? error.retryAfterMs : null;
+    return { ok: false, reason, transient, retryAfterMs };
   }
 };
 
@@ -392,5 +426,7 @@ module.exports = {
   askModel,
   toDraft,
   readNotification,
+  isTransient,
+  parseRetryAfter,
   AiError,
 };
