@@ -68,16 +68,74 @@ phone can reach; do not send tokens over plain HTTP across the internet.
 
 ## Android
 
-Any automation app that can react to a notification and make an HTTP request
-does the job, for example **MacroDroid** (free for up to five macros) or
-**Tasker**. The walk-through below is MacroDroid; it takes one macro, made of a
-trigger and one action. Before you start, [create a token](#creating-a-token) and
-keep it at hand: you paste it once, in step 3.
+Android needs an automation app that can react to a notification and make an
+HTTP request. The ready-made macro below is for **MacroDroid** (free for up to
+five macros); **Tasker** can do the same by hand.
+
+### Quick setup: import the ready-made macro
+
+1. **[Create a token](#creating-a-token)** in Bussola and keep it at hand.
+2. **Download the macro** on the phone:
+   [Bussola_inbox.macro](https://github.com/marc0todar0/bussola/raw/main/docs/macrodroid/Bussola_inbox.macro).
+   Open the downloaded file and choose **MacroDroid**; if it does not offer
+   MacroDroid, use MacroDroid's **Export/Import** tile on the Home tab and
+   import the file from there.
+3. **Open the macro *Bussola inbox* and change two things in the HTTP
+   Request:**
+   - *Settings* → *Enter url*: replace `https://your-bussola.example.com` with
+     your own address, keeping `/api/inbox` at the end;
+   - *Header Params* → `Authorization`: replace `bpt_YOUR_TOKEN` with your
+     token, keeping `Bearer ` and the space in front.
+4. **Open the trigger *Notification Received* and tick your own banking and
+   payment apps** (the file comes with PayPal, Revolut, Satispay, Wise and N26
+   as an example; untick the ones you do not use).
+5. **Save** (the tick) and check the macro is switched on. If MacroDroid asks
+   for *Notification access*, allow it: without it no notification reaches the
+   macro.
+
+That is all. The next payment notification becomes a draft in the inbox on the
+Transactions page, and, if you turned [phone
+notifications](#getting-a-notification-on-your-phone) on, your phone tells you.
+
+### What the macro does
+
+```
+Trigger   Notification Received (your apps)
+Actions   remember the notification: its name, its app, its text
+          Repeat up to 12 times
+              send it to Bussola (HTTP Request)
+              write the result to the User Log, channel "Bussola"
+              if Bussola answered → stop
+              wait until the connection comes back (data, Wi-Fi or VPN),
+                  or 15 minutes
+          if it never got through, or Bussola refused it → a notification
+```
+
+- **Every notification is sent once, and again only if it did not get
+  through.** No connection (VPN down, mobile data off, server restarting) means
+  the macro waits, then tries again, for about three hours. A notification
+  that reached Bussola but whose answer got lost is recognised by its name
+  (`notification_id`) and not stored twice.
+- **You can see what happened** in MacroDroid's **User Log** tile, channel
+  `Bussola`: one line per try, with the notification, the code and Bussola's
+  answer (see [the codes](#see-what-was-sent-and-what-came-back)).
+- **You hear about it only when something is wrong**: all tries failed, or
+  Bussola refused the notification (a wrong token, for example).
+
+The rest of this section builds the same macro by hand, step by step: useful
+with Tasker, or to understand or change it.
+
+### Building it yourself
 
 <p align="center">
   <img src="screenshots/android-macros.png" width="240" alt="MacroDroid's macro list with one macro, Bussola inbox">
   <img src="screenshots/android-macro-overview.png" width="240" alt="The macro: a Notification Received trigger, an HTTP Request POST action to your Bussola's /api/inbox, no constraints">
 </p>
+
+The simplest version is one trigger and one action; the two sections after
+this one add the log and the retries, which together make the ready-made macro.
+Before you start, [create a token](#creating-a-token): you paste it once, in
+step 3.
 
 **1. The trigger: a notification from your bank's app.** Add the trigger
 **Notification received** and, under *Applications*, tick your banking apps
