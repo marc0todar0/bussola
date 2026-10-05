@@ -44,7 +44,7 @@ server of your own.
   share a wallet with **read** or **read-write** permissions, and PostgreSQL
   row-level security keeps every wallet apart. MIT licence, no telemetry.
 
-The demo runs entirely in your browser, on invented data; the
+The [demo](https://demo-bussola.marcotodaro.dev)  runs entirely in your browser, on invented data; the
 [project site](https://bussola.marcotodaro.dev) has a short tour.
 
 ## Screenshots
