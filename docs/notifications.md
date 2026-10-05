@@ -176,7 +176,7 @@ your macros write. Everything stays on the phone.
    *Set Local Variable (Integer)*): `bussola_code`, *Value* `0`, and drag it
    above the request. A request that never reaches Bussola (no network, a
    timeout) then leaves `0` behind instead of the previous notification's code.
-3. **In the HTTP request**, on the *Settings* tab: turn on *Block next action
+3. **In the HTTP request**, on the *Settings* tab: turn on *Block next actions
    until complete* (so the next actions wait for the answer); under
    *Response*, pick `bussola_code` in *Save HTTP return code in integer
    variable*, and under *Save response* choose *Save HTTP response in string
