@@ -1339,20 +1339,20 @@ const main = async () => {
     inboxListA.status === 200 && !search(inboxListA.json, (i) => i.id === ofB.inbox),
     inboxListA.text.slice(0, 160));
 
-  // A sender's clientId is unique per wallet: B using an id first neither
+  // A sender's notification_id is unique per wallet: B using an id first neither
   // stops A from using it nor lets A's duplicate answer name B's item.
-  const sharedClientId = `shared-${Date.now()}`;
+  const sharedNotificationId = `shared-${Date.now()}`;
   const clientB = await tokenCall(tokenSecrets.b, "POST", "/api/inbox", {
-    source: "iso", clientId: sharedClientId, draft: { amount: 3, description: `Client id item ${MARK_B}` },
+    source: "iso", notification_id: sharedNotificationId, draft: { amount: 3, description: `Notification id item ${MARK_B}` },
   });
   const clientA = await tokenCall(tokenA, "POST", "/api/inbox", {
-    source: "iso", clientId: sharedClientId, draft: { amount: 3, description: "Client id item of A" },
+    source: "iso", notification_id: sharedNotificationId, draft: { amount: 3, description: "Notification id item of A" },
   });
-  record("the same clientId in two wallets: each a new item of its own (201 and 201)",
+  record("the same notification_id in two wallets: each a new item of its own (201 and 201)",
     clientB.status === 201 && clientA.status === 201 && clientA.json && clientB.json
       && clientA.json.id !== clientB.json.id && !clientA.json.duplicate,
     `B ${clientB.status} ${clientB.text.slice(0, 100)} / A ${clientA.status} ${clientA.text.slice(0, 100)}`);
-  const clientAgainA = await fetch(`${BASE}/api/inbox?clientId=${encodeURIComponent(sharedClientId)}`, {
+  const clientAgainA = await fetch(`${BASE}/api/inbox?notification_id=${encodeURIComponent(sharedNotificationId)}`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${tokenA}` },
     body: JSON.stringify({ source: "iso", draft: { amount: 3 } }),
@@ -1364,27 +1364,27 @@ const main = async () => {
   } catch {
     /* not JSON */
   }
-  record("A's duplicate (clientId in the query) is 200 with A's own item, never B's",
+  record("A's duplicate (notification_id in the query) is 200 with A's own item, never B's",
     clientAgainA.status === 200 && clientAgainAJson && clientAgainAJson.duplicate === true
       && clientA.json && clientAgainAJson.id === clientA.json.id
       && (!clientB.json || clientAgainAJson.id !== clientB.json.id) && !clientAgainAText.includes(MARK_B),
     `status ${clientAgainA.status}: ${clientAgainAText.slice(0, 160)}`);
   const clientAgainB = await tokenCall(tokenSecrets.b, "POST", "/api/inbox", {
-    source: "iso", clientId: sharedClientId, draft: { amount: 3 },
+    source: "iso", notification_id: sharedNotificationId, draft: { amount: 3 },
   });
   record("and B's duplicate is B's own item",
     clientAgainB.status === 200 && clientAgainB.json && clientAgainB.json.duplicate === true
       && clientB.json && clientAgainB.json.id === clientB.json.id,
     `status ${clientAgainB.status}: ${clientAgainB.text.slice(0, 160)}`);
   const afterClientA = await a("GET", "/api/inbox");
-  record("A's inbox holds its one item for that clientId, nothing of B's",
+  record("A's inbox holds its one item for that notification_id, nothing of B's",
     afterClientA.status === 200
-      && (afterClientA.json || []).filter((i) => i.merchant === "Client id item of A").length === 1
+      && (afterClientA.json || []).filter((i) => i.merchant === "Notification id item of A").length === 1
       && !afterClientA.text.includes(MARK_B),
     afterClientA.text.slice(0, 160));
-  const badClient = await tokenCall(tokenA, "POST", "/api/inbox", { source: "iso", clientId: "", draft: { amount: 3 } });
-  record("an empty clientId is 400 INVALID_CLIENT_ID",
-    badClient.status === 400 && /INVALID_CLIENT_ID/.test(badClient.text), `status ${badClient.status}: ${badClient.text.slice(0, 160)}`);
+  const badClient = await tokenCall(tokenA, "POST", "/api/inbox", { source: "iso", notification_id: "", draft: { amount: 3 } });
+  record("an empty notification_id is 400 INVALID_NOTIFICATION_ID",
+    badClient.status === 400 && /INVALID_NOTIFICATION_ID/.test(badClient.text), `status ${badClient.status}: ${badClient.text.slice(0, 160)}`);
 
   const context = await tokenCall(tokenA, "GET", "/api/inbox/context");
   record("GET /api/inbox/context answers with A's wallet and nothing of B's",

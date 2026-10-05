@@ -20,7 +20,7 @@
 // what to do; a reading that fails for a passing reason (429, 5xx, timeout,
 // endpoint down) is tried again on the backoff, Retry-After obeyed, and only
 // the last failure, or one waiting cannot mend, leaves the item 'failed' and
-// is announced; the scheduler's claim queues each due item once; a clientId
+// is announced; the scheduler's claim queues each due item once; a notification_id
 // already seen answers 200 "duplicate" with the first item and stores nothing,
 // also when two copies race.
 //
@@ -667,8 +667,8 @@ const main = async () => {
       atStart === 1 && JSON.stringify(pushed) === "[110]", JSON.stringify(pushed));
     queue.push = realPush;
 
-    // --- clientId: the same notification twice -----------------------------
-    // The table, keyed as the unique index is: (wallet, client_id). The
+    // --- notification_id: the same notification twice -----------------------------
+    // The table, keyed as the unique index is: (wallet, notification_id). The
     // insert is ON CONFLICT DO NOTHING, so a conflicting copy gets no row.
     const table = [];
     let nextId = 500;
@@ -677,15 +677,15 @@ const main = async () => {
       await new Promise((r) => setImmediate(r));
       if (/insert into inbox_items/.test(text)) {
         inserts += 1;
-        const clientId = params[12];
-        if (!/on conflict \(wallet_id, client_id\) where client_id is not null do nothing/.test(text)) throw new Error("no ON CONFLICT");
-        if (clientId != null && table.some((r) => r.client_id === clientId)) return { rows: [], rowCount: 0 };
-        const row = { id: nextId++, source: params[0], status: "pending", extraction: params[11], attempts: 0, client_id: clientId };
+        const notificationId = params[12];
+        if (!/on conflict \(wallet_id, notification_id\) where notification_id is not null do nothing/.test(text)) throw new Error("no ON CONFLICT");
+        if (notificationId != null && table.some((r) => r.notification_id === notificationId)) return { rows: [], rowCount: 0 };
+        const row = { id: nextId++, source: params[0], status: "pending", extraction: params[11], attempts: 0, notification_id: notificationId };
         table.push(row);
         return { rows: [{ id: row.id }], rowCount: 1 };
       }
-      if (/from inbox_items where client_id = \$1/.test(text)) {
-        const r = table.find((x) => x.client_id === params[0]);
+      if (/from inbox_items where notification_id = \$1/.test(text)) {
+        const r = table.find((x) => x.notification_id === params[0]);
         return { rows: r ? [{ id: r.id, source: r.source, status: r.status, extraction: r.extraction, attempts: r.attempts }] : [] };
       }
       return { rows: [], rowCount: 0 };
@@ -701,13 +701,13 @@ const main = async () => {
       }
     };
 
-    const first = await send({ body: { source: "Revolut", text: TEXT, clientId: "  notif-1 " } });
-    record("clientId: the first POST is 201, stored with the id trimmed, and queued",
-      first.res.statusCode === 201 && first.out.id === 500 && !first.out.duplicate && table[0].client_id === "notif-1"
+    const first = await send({ body: { source: "Revolut", text: TEXT, notification_id: "  notif-1 " } });
+    record("notification_id: the first POST is 201, stored with the id trimmed, and queued",
+      first.res.statusCode === 201 && first.out.id === 500 && !first.out.duplicate && table[0].notification_id === "notif-1"
         && first.listeners.includes("finish"), JSON.stringify(first.out || first.error));
-    const again = await send({ body: { source: "Revolut", text: TEXT }, query: { clientId: "notif-1" } });
+    const again = await send({ body: { source: "Revolut", text: TEXT }, query: { notification_id: "notif-1" } });
     const ag = again.out || {};
-    record("the same clientId again (in the query): 200, duplicate, the same item, nothing stored or queued",
+    record("the same notification_id again (in the query): 200, duplicate, the same item, nothing stored or queued",
       again.res.statusCode === 200 && ag.duplicate === true && ag.id === 500 && ag.status === "pending" && ag.reading === "queued"
         && ag.source === "Revolut" && ag.received && ag.received.kind === "text" && ag.received.chars === TEXT.length
         && /Already received/.test(ag.message) && table.length === 1 && again.listeners.length === 0,
@@ -716,43 +716,43 @@ const main = async () => {
 
     table[0].status = "accepted";
     table[0].extraction = "done";
-    const late = await send({ body: { text: TEXT }, headers: { "x-bussola-client-id": "notif-1" } });
+    const late = await send({ body: { text: TEXT }, headers: { "x-bussola-notification-id": "notif-1" } });
     record("a late copy (in the header) of an item already accepted: 200, duplicate, status accepted, not brought back",
       late.res.statusCode === 200 && late.out.duplicate === true && late.out.status === "accepted" && late.out.reading === "done"
         && table.length === 1, JSON.stringify(late.out || late.error));
 
     delete process.env.BUSSOLA_AI_URL;
-    const offDup = await send({ body: { text: TEXT, clientId: "notif-1" } });
+    const offDup = await send({ body: { text: TEXT, notification_id: "notif-1" } });
     record("a duplicate is answered as one even when the model has been switched off since",
       offDup.res.statusCode === 200 && offDup.out && offDup.out.duplicate === true, JSON.stringify(offDup.out || offDup.error));
     process.env.BUSSOLA_AI_URL = url;
 
     inserts = 0;
     const racing = await Promise.all([
-      send({ body: { draft: { amount: 5 }, clientId: "race" } }),
-      send({ body: { draft: { amount: 5 }, clientId: "race" } }),
+      send({ body: { draft: { amount: 5 }, notification_id: "race" } }),
+      send({ body: { draft: { amount: 5 }, notification_id: "race" } }),
     ]);
     const codes = racing.map((r) => r.res.statusCode).sort();
     record("two identical POSTs racing: both get past the first look, one row, one 201 and one 200 duplicate of it",
-      inserts === 2 && table.filter((r) => r.client_id === "race").length === 1 && JSON.stringify(codes) === "[200,201]"
+      inserts === 2 && table.filter((r) => r.notification_id === "race").length === 1 && JSON.stringify(codes) === "[200,201]"
         && racing[0].out.id === racing[1].out.id && racing.some((r) => r.out.duplicate === true),
       JSON.stringify(racing.map((r) => r.out || r.error)));
 
     const before = table.length;
     const bad = [];
-    for (const clientId of ["", "   ", "x".repeat(101), 42, ["a", "b"]]) {
-      const r = await send({ body: { text: TEXT, clientId } });
-      if (!(r.error && r.error.status === 400 && r.error.code === "INVALID_CLIENT_ID")) bad.push([clientId, r.error && r.error.code]);
+    for (const notificationId of ["", "   ", "x".repeat(101), 42, ["a", "b"]]) {
+      const r = await send({ body: { text: TEXT, notification_id: notificationId } });
+      if (!(r.error && r.error.status === 400 && r.error.code === "INVALID_NOTIFICATION_ID")) bad.push([notificationId, r.error && r.error.code]);
     }
-    const arr = await send({ body: { text: TEXT }, query: { clientId: ["a", "b"] } });
-    if (!(arr.error && arr.error.code === "INVALID_CLIENT_ID")) bad.push(["query array", arr.error && arr.error.code]);
-    record("an empty, blank, too long or non-text clientId: 400 INVALID_CLIENT_ID, nothing stored",
+    const arr = await send({ body: { text: TEXT }, query: { notification_id: ["a", "b"] } });
+    if (!(arr.error && arr.error.code === "INVALID_NOTIFICATION_ID")) bad.push(["query array", arr.error && arr.error.code]);
+    record("an empty, blank, too long or non-text notification_id: 400 INVALID_NOTIFICATION_ID, nothing stored",
       !bad.length && table.length === before, JSON.stringify(bad));
-    const ok100 = await send({ body: { draft: { amount: 1 }, clientId: "y".repeat(100) } });
-    record("a clientId of 100 characters is taken", ok100.res.statusCode === 201);
+    const ok100 = await send({ body: { draft: { amount: 1 }, notification_id: "y".repeat(100) } });
+    record("a notification_id of 100 characters is taken", ok100.res.statusCode === 201);
     const none = await send({ body: { draft: { amount: 1 } } });
     const none2 = await send({ body: { draft: { amount: 1 } } });
-    record("no clientId: every POST is stored, as before", none.res.statusCode === 201 && none2.res.statusCode === 201 && none.out.id !== none2.out.id);
+    record("no notification_id: every POST is stored, as before", none.res.statusCode === 201 && none2.res.statusCode === 201 && none.out.id !== none2.out.id);
 
     Object.assign(db, { query: real.query, withTenant: real.withTenant, queryAuth: real.queryAuth });
     Object.assign(notifier, { enabled: real.enabled, notify: real.notify });

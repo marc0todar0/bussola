@@ -20,11 +20,11 @@ API starts; an entry that touches the schema names its migration.
   kept in the database (migration `007_inbox_retry`), so a restart loses
   nothing; `GET /api/inbox` gives each item's `attempts` and `next_attempt_at`.
 - **A phone can send the same notification twice safely.** `POST /api/inbox`
-  takes an optional `clientId` (JSON body, `?clientId=` or an
-  `X-Bussola-Client-Id` header; 1 to 100 characters): a second POST with an id
+  takes an optional `notification_id` (JSON body, `?notification_id=` or an
+  `X-Bussola-Notification-Id` header; 1 to 100 characters): a second POST with an id
   the wallet has already seen stores nothing and answers `200` with the first
   item's receipt and `"duplicate": true`. An invalid id is `400
-  INVALID_CLIENT_ID`.
+  INVALID_NOTIFICATION_ID`.
 
 ### Changed
 

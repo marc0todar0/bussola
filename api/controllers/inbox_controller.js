@@ -41,7 +41,7 @@ const TYPE_BY_CODE = { EXPENSE, INCOME, TRANSFER };
 const TEXT_MAX = 2000;
 const SOURCE_MAX = 64;
 const MERCHANT_MAX = 255;
-const CLIENT_ID_MAX = 100;
+const NOTIFICATION_ID_MAX = 100;
 
 // Tells the people who can confirm it, outside the browser, that an item is
 // waiting (Web Push, services/notify.js). Called only after the item's
@@ -125,20 +125,20 @@ const draftId = (value) => {
 };
 
 // The sender's own id for this notification (migration 007), from the JSON
-// body's clientId, ?clientId= or the X-Bussola-Client-Id header, in that order
+// body's notification_id, ?notification_id= or the X-Bussola-Notification-Id header, in that order
 // (a text/plain body can only use the last two). Trimmed, 1 to 100 characters;
 // anything else is refused rather than ignored, since a sender that meant to
 // name its notification and did not would get the duplicates it was avoiding.
 // Absent: null, and the notification is simply stored.
-const clientIdOf = (req) => {
+const notificationIdOf = (req) => {
   const body = req.body || {};
   const query = req.query || {};
-  const header = typeof req.get === "function" ? req.get("x-bussola-client-id") : undefined;
-  const value = body.clientId !== undefined ? body.clientId : query.clientId !== undefined ? query.clientId : header;
+  const header = typeof req.get === "function" ? req.get("x-bussola-notification-id") : undefined;
+  const value = body.notification_id !== undefined ? body.notification_id : query.notification_id !== undefined ? query.notification_id : header;
   if (value === undefined) return null;
   const s = typeof value === "string" ? value.trim() : null;
-  if (!s || s.length > CLIENT_ID_MAX) {
-    throw invalid("INVALID_CLIENT_ID", `clientId must be text of 1 to ${CLIENT_ID_MAX} characters`);
+  if (!s || s.length > NOTIFICATION_ID_MAX) {
+    throw invalid("INVALID_NOTIFICATION_ID", `notification_id must be text of 1 to ${NOTIFICATION_ID_MAX} characters`);
   }
   return s;
 };
@@ -208,20 +208,20 @@ const checkEnds = async (item) => {
 // for it: the item is stored with extraction = 'pending' and the queue fills
 // it in once this request's transaction is over.
 //
-// A sender that names its notification (clientId, see clientIdOf) can send it
+// A sender that names its notification (notification_id, see notificationIdOf) can send it
 // again safely: an id this wallet has already seen answers 200 with the
 // receipt of the item it became -- "duplicate": true -- and stores and queues
 // nothing, whatever became of the item since (read, accepted, dismissed; the
 // id outlives the text). Whatever the second body says, it is the same
 // notification. Two copies racing each other are settled by the unique index
-// (wallet_id, client_id): the INSERT ... ON CONFLICT DO NOTHING of the second
+// (wallet_id, notification_id): the INSERT ... ON CONFLICT DO NOTHING of the second
 // waits for the first to commit, inserts nothing, and the item is looked up.
 // RLS keeps the lookup in this wallet, and the index is per wallet, so another
 // wallet's id is neither seen nor in the way.
 exports.createItem = async (req, res) => {
   const body = req.body || {};
   const source = cleanText(body.source, SOURCE_MAX) || "api";
-  const clientId = clientIdOf(req);
+  const notificationId = notificationIdOf(req);
 
   if (body.text !== undefined && body.text !== null && typeof body.text !== "string") {
     throw invalid("INVALID_REQUEST", "text must be a string");
@@ -238,11 +238,11 @@ exports.createItem = async (req, res) => {
     );
   }
   const received = { text, draft: Boolean(draft) };
-  if (clientId) {
+  if (notificationId) {
     // Already here: looked up before anything else is checked, so that a
     // retry is answered the same way even if the instance changed since (its
     // model switched off, an account in the draft deleted).
-    const seen = await byClientId(clientId);
+    const seen = await byNotificationId(notificationId);
     if (seen) {
       res.status(200);
       return duplicateReceipt(seen, received);
@@ -278,9 +278,9 @@ exports.createItem = async (req, res) => {
   const { rows } = await db.query(
     `insert into inbox_items
        (source, raw_text, amount, tx_date, merchant, type_id, from_id, to_id,
-        type_confidence, category_confidence, account_confidence, extraction, client_id)
+        type_confidence, category_confidence, account_confidence, extraction, notification_id)
      values ($1, $2, $3, coalesce($4::timestamp, localtimestamp(0)), $5, $6, $7, $8, $9, $10, $11, $12, $13)
-     on conflict (wallet_id, client_id) where client_id is not null do nothing
+     on conflict (wallet_id, notification_id) where notification_id is not null do nothing
      returning id`,
     [
       source,
@@ -295,12 +295,12 @@ exports.createItem = async (req, res) => {
       item.categoryConfidence ?? null,
       item.accountConfidence ?? null,
       extraction,
-      clientId,
+      notificationId,
     ],
   );
   if (!rows.length) {
-    // The same clientId, committed by a request that raced this one.
-    const seen = await byClientId(clientId);
+    // The same notification_id, committed by a request that raced this one.
+    const seen = await byNotificationId(notificationId);
     if (!seen) throw new DataError(409, "REQUEST_CONFLICT", "The request conflicted with another one: send it again");
     res.status(200);
     return duplicateReceipt(seen, received);
@@ -326,11 +326,11 @@ exports.createItem = async (req, res) => {
   return receipt({ id, source, ...received });
 };
 
-// The item a clientId became, in this wallet (RLS), whatever its state.
-const byClientId = async (clientId) => {
+// The item a notification_id became, in this wallet (RLS), whatever its state.
+const byNotificationId = async (notificationId) => {
   const { rows } = await db.query(
-    `select id, source, status, extraction, attempts from inbox_items where client_id = $1`,
-    [clientId],
+    `select id, source, status, extraction, attempts from inbox_items where notification_id = $1`,
+    [notificationId],
   );
   return rows[0] || null;
 };
@@ -356,7 +356,7 @@ const receipt = ({ id, source, text, draft }) => {
 };
 exports.receipt = receipt;
 
-// What a second POST with a clientId already seen answers: the receipt's
+// What a second POST with a notification_id already seen answers: the receipt's
 // shape, about the item the first one became and as it is now, plus
 // "duplicate": true. `received` is what this request carried; nothing of it
 // was stored. `reading` may now also be "retrying", "done" or "failed".
@@ -377,7 +377,7 @@ const duplicateReceipt = (item, { text, draft }) => {
     duplicate: true,
     message:
       `Already received from ${item.source} (item ${item.id}, now ${item.status}): ` +
-      "this copy has the same clientId, so nothing new was stored",
+      "this copy has the same notification_id, so nothing new was stored",
   };
 };
 

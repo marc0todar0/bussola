@@ -15,7 +15,7 @@
 -- nothing.
 --
 -- A phone that sent a notification and did not hear back sends it again. The
--- sender may name each notification with an id of its own (client_id); the
+-- sender may name each notification with an id of its own (notification_id); the
 -- same id twice in one wallet is the same notification, and the second POST
 -- stores nothing (inbox_controller.createItem).
 -- ============================================================================
@@ -31,21 +31,21 @@ ALTER TABLE inbox_items
     -- The sender's own id for this notification, so that sending it twice
     -- stores it once. Kept when the item is resolved and its text cleared: a
     -- late retry of an accepted notification must not bring it back.
-    ADD COLUMN client_id text CHECK (client_id IS NULL OR length(client_id) BETWEEN 1 AND 100);
+    ADD COLUMN notification_id text CHECK (notification_id IS NULL OR length(notification_id) BETWEEN 1 AND 100);
 
 COMMENT ON COLUMN inbox_items.attempts IS
     'Readings of raw_text by the model that failed so far; a transient failure is retried until five.';
 COMMENT ON COLUMN inbox_items.next_attempt_at IS
     'For a pending reading: when it may be tried (again). NULL = just received, its receiver reads it.';
-COMMENT ON COLUMN inbox_items.client_id IS
+COMMENT ON COLUMN inbox_items.notification_id IS
     'The sender''s id for this notification: unique per wallet, so a retried POST stores nothing new.';
 
 -- One notification per sender id and wallet. The arbiter of createItem's
 -- INSERT ... ON CONFLICT DO NOTHING, which is what makes two identical POSTs
 -- racing each other store one row. Per wallet: the same id in another wallet
 -- is somebody else's notification, and never conflicts with it.
-CREATE UNIQUE INDEX uq_inbox_items_wallet_client ON inbox_items (wallet_id, client_id)
-    WHERE client_id IS NOT NULL;
+CREATE UNIQUE INDEX uq_inbox_items_wallet_notification ON inbox_items (wallet_id, notification_id)
+    WHERE notification_id IS NOT NULL;
 
 -- What the scheduler looks for every half minute, wallet by wallet: pending
 -- readings that have come due. It replaces 003's index on the same rows.

@@ -242,15 +242,19 @@ the phone could not open a connection at all: Bussola never saw the request.
 Look at the address after the slash. When it is a private one (`192.168.…`,
 `10.…`, `172.16.…` to `172.31.…`), your domain resolves to an address that only
 exists on your home network. It works on your Wi-Fi and fails on mobile data,
-where that address leads nowhere. Any one of these fixes it:
+where that address leads nowhere, unless a VPN back home is up at that moment.
+Any one of these fixes it:
 
 - **A public address.** Point the domain at your public IP (or a tunnel) and
   serve Bussola through a [reverse proxy with HTTPS](install.md#behind-https--a-reverse-proxy),
   so the phone reaches it from anywhere.
-- **A VPN back home** such as Tailscale or WireGuard, *connected* on the phone
-  whenever it is away from home (an always-on VPN, in Android's VPN settings).
-  A VPN that is installed but switched off is the usual reason this keeps
-  happening.
+- **A VPN or zero-trust access back home** such as Tailscale, WireGuard or
+  Twingate, *connected* on the phone whenever it is away from home (an
+  always-on VPN, in Android's VPN settings). A VPN that is installed but
+  switched off, or that has not reconnected yet after the phone changed
+  network, is the usual reason this keeps happening: requests sent in that
+  window are lost, which is what [the queue below](#when-bussola-cannot-be-reached-a-queue-on-the-phone-not-tested-yet)
+  is for.
 - **Split DNS.** Have the domain resolve to the private address at home and to
   the public one everywhere else, so the same URL works on both.
 
@@ -272,7 +276,7 @@ notifications on the phone and sends them again later. It builds on the log in
 so set that up first.
 
 **Why every request carries an id.** Each notification gets its own id, sent as
-the query parameter `clientId` (1 to 100 characters), and a resend reuses it.
+the query parameter `notification_id` (1 to 100 characters), and a resend reuses it.
 A request can reach Bussola and have only its answer lost on the way back, and
 the phone, seeing `0`, would send it again and leave two drafts of one payment;
 with the id, Bussola recognises the second copy, answers `200` with
@@ -313,7 +317,7 @@ Open the macro from [the steps above](#see-what-was-sent-and-what-came-back).
      app's package name (`com.revolut.revolut`, no spaces) and the time in
      milliseconds, unique for each notification and well under 100 characters.
    - `bussola_text`, *Value* `[not_title] [notification]`.
-3. **In the HTTP request**: on *Query Params* add `clientId` = `[lv=bussola_id]`
+3. **In the HTTP request**: on *Query Params* add `notification_id` = `[lv=bussola_id]`
    next to `source` (the tab accepts magic text, as it already does for
    `[not_app_name]`); on *Content Body* replace the text with
    `[lv=bussola_text]`, so what is sent and what is queued are the same text.
@@ -354,7 +358,7 @@ Create a new macro called `Bussola queue`.
        Set Variable: bussola_code = 0
        HTTP Request: POST …/api/inbox
            Query Params  source   = {v=bussola_queue[{iterator_dictionary_key}][source]}
-                         clientId = {iterator_dictionary_key}
+                         notification_id = {iterator_dictionary_key}
            Content Body  text/plain: {v=bussola_queue[{iterator_dictionary_key}][text]}
            Header Params Authorization = Bearer bpt_…your token…
            Block next actions until complete, code → bussola_code, response → bussola_answer
@@ -419,7 +423,7 @@ Set Variable: bussola_id = [not_app_package]-[system_time_ms]
 Set Variable: bussola_text = [not_title] [notification]
 Repeat Actions: 3 times
     Set Variable: bussola_code = 0
-    HTTP Request (clientId = [lv=bussola_id], body [lv=bussola_text])
+    HTTP Request (notification_id = [lv=bussola_id], body [lv=bussola_text])
     Log Event (Bussola): … → [lv=bussola_code] [lv=bussola_answer]
     If bussola_code > 0 AND bussola_code < 500
         Break from loop
@@ -834,10 +838,10 @@ none was given). The text itself is never sent back.
 
 **Sending the same notification twice.** A sender that may retry (a phone that
 timed out before it heard the answer) can name each notification with an id of
-its own, `clientId`: in the JSON body (`"clientId": "…"`), in the query
-(`?clientId=…`, the way for a `text/plain` body) or in an `X-Bussola-Client-Id`
+its own, `notification_id`: in the JSON body (`"notification_id": "…"`), in the query
+(`?notification_id=…`, the way for a `text/plain` body) or in an `X-Bussola-Notification-Id`
 header, the first of the three that is present. It is text of 1 to 100
-characters, trimmed; anything else is `400 INVALID_CLIENT_ID`. An id is unique
+characters, trimmed; anything else is `400 INVALID_NOTIFICATION_ID`. An id is unique
 per wallet: the first POST with it is stored and answered `201` as above; any
 later POST with the same id in the same wallet stores nothing, reads nothing,
 and is answered **`200`** with the receipt of the item the first one became, as
@@ -851,7 +855,7 @@ it is now, plus `"duplicate": true`:
   "reading": "queued",
   "source": "iPhone",
   "duplicate": true,
-  "message": "Already received from iPhone (item 42, now pending): this copy has the same clientId, so nothing new was stored"
+  "message": "Already received from iPhone (item 42, now pending): this copy has the same notification_id, so nothing new was stored"
 }
 ```
 
@@ -878,7 +882,7 @@ revoked: the same answer for all of them), `403 TOKEN_FORBIDDEN` (the token's
 owner can no longer write to its wallet), `409 AI_DISABLED` (only text was sent
 and no reading model is configured; nothing was kept), `400` with a code for a body that is
 not valid (`INBOX_EMPTY` when there is neither text nor a draft, often a
-*Content type* other than `text/plain`; `INBOX_TEXT_TOO_LONG`; `INVALID_CLIENT_ID`;
+*Content type* other than `text/plain`; `INBOX_TEXT_TOO_LONG`; `INVALID_NOTIFICATION_ID`;
 `INVALID_REQUEST` for JSON that does not parse), `429 TOO_MANY_ATTEMPTS` after too many invalid
 tokens from one address. Every error body is `{ "code": …, "error": … }`, the
 second a plain English explanation.
