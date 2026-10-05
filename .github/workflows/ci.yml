@@ -69,11 +69,11 @@ jobs:
           cd "$RUNNER_TEMP/release" && cp example.env .env && docker compose config -q
 
   # The two gates of CONTRIBUTING.md, against a throwaway stack built from this
-  # commit (docker-compose.test.yml).
+  # commit (docker-compose.yml with api/test/stack.env).
   isolation-and-security:
     runs-on: ubuntu-latest
     env:
-      COMPOSE: docker compose -p bussola-test -f docker-compose.yml -f docker-compose.test.yml
+      COMPOSE: docker compose -p bussola-test --env-file api/test/stack.env
       BASE_URL: http://localhost:3100
     steps:
       - uses: actions/checkout@v4

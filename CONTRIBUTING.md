@@ -17,14 +17,14 @@ cd frontend && yarn install && yarn dev   # terminal 2: Vite on :5173
 CI runs all of these; run them yourself first.
 
 - `yarn lint` in `api/` and in `frontend/`, and `yarn test:quotes`, `yarn test:ai` and `yarn test:notify` in `api/`, plus `node test/service.js` in `quotes/`.
-- The API tests, against a throwaway stack on port 3100 (its own containers and volume, never your real data):
+- The API tests, against a throwaway stack on port 3100 (`docker-compose.yml` with `api/test/stack.env` instead of `.env`, its own volume; stop a local stack first, the container names are the same):
 
   ```bash
-  docker compose -p bussola-test -f docker-compose.yml -f docker-compose.test.yml up -d --build --wait
+  docker compose -p bussola-test --env-file api/test/stack.env up -d --build --wait
   node frontend/scripts/demo-check.mjs compare
   BASE_URL=http://localhost:3100 node api/test/isolation.js
   BASE_URL=http://localhost:3100 ADMIN_USER=bussola ADMIN_PASS=test-admin-pass node api/test/security.js
-  docker compose -p bussola-test -f docker-compose.yml -f docker-compose.test.yml down -v
+  docker compose -p bussola-test --env-file api/test/stack.env down -v
   ```
 
   Run them in this order, on a fresh stack: `security.js` sends dozens of

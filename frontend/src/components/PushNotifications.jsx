@@ -7,7 +7,7 @@ import { currentSubscription, disablePush, enablePush, pushCapability, rememberP
 import GlobalContext from "../context/GlobalContext";
 
 // Where installing Bussola on a phone is explained, step by step.
-const DOCS_URL = "https://github.com/marc0todar0/bussola/blob/main/docs/notifications.md#getting-a-notification-on-your-phone";
+const DOCS_URL = "https://github.com/marc0todar0/bussola/blob/main/docs/push-notifications.md";
 
 // "Notifications on this device": a section of the profile page, in its frame
 // and with its classes (Profile.css). It is about this browser, not the

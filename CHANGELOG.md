@@ -183,7 +183,7 @@ API starts; an entry that touches the schema names its migration.
   `example.env`: two `curl` commands and `docker compose up -d`, on amd64 or
   arm64 (a Raspberry Pi 5, a NAS). Upgrading is downloading the new release's
   compose file, then `pull` and `up -d`. See the README and
-  [docs/operations.md](docs/operations.md#upgrading).
+  [docs/operations.md](docs/operations.md#upgrade).
 
 ### Changed
 

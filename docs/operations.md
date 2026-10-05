@@ -1,32 +1,20 @@
-# Operations
+# Backups and upgrades
 
-Keeping a Bussola instance safe over time: backups, restores and upgrades. Back to the [README](../README.md).
+[← README](../README.md)
 
-- [Backups and restore](#backups-and-restore)
-- [Upgrading](#upgrading)
+## Backup
 
-## Backups and restore
-
-Everything lives in the Postgres volume, so a backup is a database dump.
-
-### Back up
-
-A one-off dump:
+All the data lives in Postgres.
 
 ```bash
 docker exec bussola-postgres sh -c 'pg_dump -U "$POSTGRES_USER" "$POSTGRES_DB"' > bussola-$(date +%F).sql
 ```
 
-For regular backups, `api/backup.sh` does the same thing: it reads `.env`,
-writes a gzipped dump named `<PGDATABASE>_<timestamp>.sql.gz`, refuses to leave
-a truncated file behind if `pg_dump` fails, and deletes dumps older than the
-retention period. Run it from cron, for example every night at 4:00:
+For nightly backups, run `api/backup.sh` from cron. It writes gzipped dumps and deletes old ones:
 
 ```cron
 0 4 * * * /path/to/bussola/api/backup.sh
 ```
-
-It is configured through environment variables:
 
 | Variable | Default |
 |---|---|
@@ -34,37 +22,25 @@ It is configured through environment variables:
 | `BUSSOLA_CONTAINER` | `bussola-postgres` |
 | `BUSSOLA_KEEP_DAYS` | `30` |
 
-Keep a copy somewhere other than the machine running Bussola.
+Keep a copy on another machine.
 
-A wallet can also be exported as a single archive (see
-[Import and export](using.md#import-and-export)), but that is a way to move a
-wallet, not a backup of the instance.
+## Restore
 
-### Restore
-
-A restore replaces the whole database, every wallet included:
+⚠️ This replaces **every wallet** on the instance.
 
 ```bash
 docker compose stop frontend api
-
 docker exec bussola-postgres sh -c 'dropdb -U "$POSTGRES_USER" "$POSTGRES_DB" && createdb -U "$POSTGRES_USER" "$POSTGRES_DB"'
-
-# a plain .sql dump
 docker exec -i bussola-postgres sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"' < bussola-2026-09-10.sql
-# or a gzipped one from backup.sh
-gunzip -c ~/backup/bussola/bussola_20260910040000.sql.gz | docker exec -i bussola-postgres sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"'
-
+# gzipped: gunzip -c file.sql.gz | docker exec -i bussola-postgres sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"'
 docker compose up -d
 ```
 
-To restore on a **new machine**, run `docker compose up -d` once first, then
-follow the steps above. The first start creates the `bussola_app` database role,
-which lives outside the dump, and the dump's permissions refer to it.
+On a **new machine**, run `docker compose up -d` once before you restore: the first start creates the `bussola_app` role that the dump refers to.
 
-## Upgrading
+## Upgrade
 
-Take a backup first. Then, in the folder with `docker-compose.yml` and `.env`,
-download the new version's compose file and restart:
+Back up first, then:
 
 ```bash
 curl -LO https://github.com/marc0todar0/bussola/releases/latest/download/docker-compose.yml
@@ -72,20 +48,7 @@ docker compose pull
 docker compose up -d
 ```
 
-Each release's compose file names the images of that version, so nothing
-changes until you download a new one. `BUSSOLA_VERSION` in `.env` overrides it
-(e.g. `0.2.0`, to stay on or go back to a release). Your `.env` stays as it is;
-the [releases page](https://github.com/marc0todar0/bussola/releases) says what
-changed in each version, and whether there is anything new to set.
-
-With a clone of the repository instead ([From the source
-code](install.md#from-the-source-code)):
-
-```bash
-git pull
-docker compose up -d --build
-```
-
-Pending database migrations are applied automatically when the API starts, before
-it accepts any request. There is nothing to run by hand.
-
+- Database migrations run by themselves.
+- To pin a version, set `BUSSOLA_VERSION=0.2.0` in `.env`.
+- Each [release](https://github.com/marc0todar0/bussola/releases) says whether there is anything new to set.
+- From a git clone: `git pull && docker compose up -d --build`.

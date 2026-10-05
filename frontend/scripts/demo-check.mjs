@@ -4,7 +4,7 @@
 // ---------------------------------------------------------------------------
 // The demo (src/demo/) is a second implementation of the API's read and write
 // logic, and a second implementation drifts. This keeps it honest, against a
-// throwaway stack (docker-compose.test.yml):
+// throwaway stack (api/test/stack.env):
 //
 //   node scripts/demo-check.mjs fixture    writes src/demo/fixture.json
 //   node scripts/demo-check.mjs compare    fails if any answer of the demo
@@ -23,7 +23,7 @@
 // both, and asks again. Numbers may differ by half a cent; nothing else may.
 //
 // Environment: BASE_URL (http://localhost:3100), ADMIN_USER and ADMIN_PASS
-// (the test stack's own), PG_CONTAINER (bussola-test-postgres).
+// (the test stack's own), PG_CONTAINER (bussola-postgres).
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -37,7 +37,7 @@ const FIXTURE = join(HERE, "..", "src", "demo", "fixture.json");
 const BASE = (process.env.BASE_URL || "http://localhost:3100").replace(/\/$/, "");
 const ADMIN_USER = process.env.ADMIN_USER || "bussola";
 const ADMIN_PASS = process.env.ADMIN_PASS || "test-admin-pass";
-const PG = process.env.PG_CONTAINER || "bussola-test-postgres";
+const PG = process.env.PG_CONTAINER || "bussola-postgres";
 
 let cookie = "";
 const call = async (method, path, body) => {

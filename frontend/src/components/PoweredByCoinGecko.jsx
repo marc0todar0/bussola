@@ -8,7 +8,7 @@ import { useQuotesEnabled } from "../utils/useQuotesEnabled";
 //   - Eulerpool's free plan: "Data by Eulerpool" in any public-facing
 //     product, so it is drawn only when Eulerpool is one of the providers the
 //     quote service reports on (`quoteSources` in /api/auth/me).
-// Twelve Data, EODHD and OpenFIGI ask for nothing (docs/configuration.md).
+// Twelve Data, EODHD and OpenFIGI ask for nothing (docs/price-sources.md).
 export default function PoweredByCoinGecko({ style }) {
   const enabled = useQuotesEnabled();
   const context = useContext(GlobalContext);

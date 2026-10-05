@@ -6,15 +6,15 @@
 
 <p align="center">
   <strong>All your money, in one place, adding up.</strong><br>
-  Every bank, card, wallet, broker and pocket of cash: your spending <em>and</em> your net worth, in one app you run yourself<br>
-  Free and open source, self-hosted, no telemetry<br>
+  Every bank, card, wallet, broker and pocket of cash: your spending <em>and</em> your net worth.<br>
+  Self-hosted, free and open source, no telemetry.<br>
   <a href="https://demo-bussola.marcotodaro.dev"><strong>Try the demo</strong></a>
 </p>
 
 <p align="center">
-  <a href="docs/using.md">Read the docs</a> ·
-  <a href="https://github.com/marc0todar0/bussola/releases/latest">Download the latest release</a> ·
-  <a href="https://github.com/marc0todar0/bussola/issues/new?template=bug.md">Submit a bug</a> ·
+  <a href="docs/using.md">Docs</a> ·
+  <a href="https://github.com/marc0todar0/bussola/releases/latest">Latest release</a> ·
+  <a href="https://github.com/marc0todar0/bussola/issues/new?template=bug.md">Report a bug</a> ·
   <a href="https://github.com/marc0todar0/bussola/discussions">Ask a question</a> ·
   <a href="#support-the-development">🙏 Donate</a>
 </p>
@@ -23,138 +23,11 @@
   <img src="docs/screenshots/summary.png" width="820" alt="The yearly summary: income, expenses and net, and a chart by month">
 </p>
 
-## Why Bussola
-
-Two banks, a credit card, PayPal or Satispay, a broker, a crypto exchange, the
-cash in your pocket. Each app shows you its own slice, and none of them tells
-you where the money goes overall or what it all adds up to. Bussola does, on a
-server of your own.
-
-- **Every account, one total.** Banks, cards, payment apps, brokers, exchanges
-  and cash are all just accounts. Open new ones and close old ones as often as
-  you like: archive what you no longer use and its history stays.
-- **Spending and net worth together.** Expenses and income month by month, and
-  next to them everything you own: ETFs, stocks, bonds, crypto and deposits
-  across four pillars, with a snapshot every month and, if you want them,
-  automatic prices.
-- **No aggregator, no bank passwords.** Your phone forwards each bank
-  notification; a language model of your choice turns it into a draft, and you
-  accept it in one tap. Or import any bank's CSV.
-- **Yours, shared on your terms.** Self-hosted, **multi-user, multi-wallets**:
-  share a wallet with **read** or **read-write** permissions, and PostgreSQL
-  row-level security keeps every wallet apart. MIT licence, no telemetry.
-
-The [demo](https://demo-bussola.marcotodaro.dev)  runs entirely in your browser, on invented data; the
-[project site](https://bussola.marcotodaro.dev) has a short tour.
-
-## Screenshots
-
-All taken from the fictional [demo dataset](docs/install.md#demo-data-optional).
-
-| | |
-|:---:|:---:|
-| ![A new expense on the keypad: from Cartesio Bank to Groceries, 42.50](docs/screenshots/transaction-form.png) | ![The yearly summary: income, expenses and net, and a chart by month](docs/screenshots/summary.png) |
-| **Adding a transaction.** A keypad that does arithmetic, driven entirely from the keyboard. | **Summary.** A year at a time, then month by month and category by category. |
-| ![The portfolio split across the four pillars, and its history](docs/screenshots/portfolio.png) | ![The accounts list with every amount blurred](docs/screenshots/bank-mode.png) |
-| **Portfolio.** Wealth across the four pillars, with a monthly history. | **Bank mode.** One key (`H`) hides every amount on screen. |
-| ![The yearly summary in the dark theme](docs/screenshots/summary-dark.png) | ![The sign-in card with a "Sign in with a passkey" button](docs/screenshots/passkey.png) |
-| **Dark theme**, or follow the system. | **Passkeys.** Sign in with a fingerprint or face instead of typing the password. |
-
-<p align="center">
-  <img src="docs/screenshots/mobile-transactions.png" alt="The transaction list on a phone" width="200">
-  <img src="docs/screenshots/mobile-keypad.png" alt="A new expense on the keypad, on a phone" width="200">
-  <img src="docs/screenshots/mobile-summary.png" alt="The yearly summary on a phone" width="200">
-  <img src="docs/screenshots/mobile-portfolio.png" alt="The portfolio's four pillars on a phone" width="200">
-</p>
-<p align="center"><b>On a phone</b>, the same app.</p>
-
-## Features
-
-- **Accounts, categories and transactions**: expenses, income and transfers, entered on a keypad that does arithmetic (`12.40+7.90` is one entry); archive an account or category you no longer use and its history stays
-- **Search and history**: filter by account, category, type and words, and page back through years of transactions
-- **Summaries**: a year at a time, then month by month and category by category
-- **Portfolio**: ETFs, ETCs, stocks, bonds, funds, crypto and deposit accounts across four pillars (cash, emergency fund, planned expenses, long term), each holding's return and annualised return, and diversification by type, issuer, country and currency. Your bank balances count as cash, so the total is your net worth
-- **Monthly snapshots** of the portfolio, kept as history
-- **Automatic prices** (optional): ETFs, ETCs and stocks by ISIN, and crypto, from official APIs and in your wallet's currency
-- **Transactions from bank notifications**: your phone sends each bank notification to an inbox; a language model of your choice (on your network or hosted) drops offers and codes, fills in the rest as a draft, and you **accept** it in one tap or review it first
-- **Phone notifications**: install Bussola as an app (PWA) and get a notification when a draft waits in your inbox, with no third-party app (Web Push)
-- **Multi-user, multi-wallets**: one installation hosts as many people as you like, each with their own account and as many wallets as they need; share a wallet with **read** or **read-write** permissions (read-write with your partner, read with your accountant). Isolation is enforced by PostgreSQL row-level security, not by application code
-- **Import and export**: any bank's CSV through a mapping wizard, with a preview and probable duplicates flagged, and a whole wallet as one archive that imports into any installation
-- **Bank mode**: one key (`H`) blurs every amount on screen
-- **Passkeys**: sign in with a fingerprint or your face, with the password as a fallback
-- **Six languages** (English, Italian, French, German, Spanish, Chinese) and **a currency per wallet**
-- **Keyboard shortcuts** for nearly everything (`?` lists them), a dark theme, and a layout that works on a phone
-- **Self-contained**: three Docker containers (four with price updates), one published port, made for self-hosting, no telemetry, no external account
-- **A demo in your browser**, on invented data: [demo-bussola.marcotodaro.dev](https://demo-bussola.marcotodaro.dev)
-
-The full list, with the details, is in [Using Bussola](docs/using.md#features).
-
-## How it compares
-
-Other good open source projects, each strong at what it sets out to do. Pick
-the one that fits.
-
-| | **Bussola** | Firefly III | Actual Budget | Ghostfolio | Sure |
-|---|:---:|:---:|:---:|:---:|:---:|
-| Self-hosted | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Free and open source | ✅ MIT | ✅ AGPL-3.0 | ✅ MIT | ✅ AGPL-3.0 | ✅ AGPL-3.0 |
-| Several people, shared with read or read-write permissions | ✅ per wallet | ❌ each user separate | Partial: shared budgets, needs an OpenID provider | Partial: view-only access | ✅ per account |
-| Spending: transactions and categories | ✅ | ✅ | ✅ | ❌ | ✅ |
-| Investments, with automatic prices | ✅ optional | ❌ | ❌ balances by hand | ✅ | ✅ |
-| Spending and net worth in one app | ✅ | Partial: no portfolio | Partial: no portfolio | ❌ no spending | ✅ |
-| Budgets | ❌ | ✅ | ✅ envelope | ❌ | ✅ |
-| Rules for transactions | ❌ | ✅ | ✅ | ❌ | ✅ |
-| Bank sync (open banking) | ❌ by design | ✅ via its data importer | ✅ | ❌ | ✅ |
-| Bank CSV import | ✅ | ✅ | ✅ | Partial: activities only | ✅ |
-| Transactions from phone notifications, read by a language model | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Passkeys | ✅ | ❌ 2FA codes | ❌ password or OpenID | ✅ fingerprint sign-in | ✅ |
-| On a phone | ✅ PWA, push notifications | Partial: community apps | ✅ PWA | ✅ PWA | ✅ PWA, companion app |
-| Interface languages | 6 | Many | Many | Many | Many |
-
-<sub>As of October 2026, from each project's documentation and repository. ❌ means we found no such feature there.
-Firefly III, Actual Budget, Ghostfolio and Sure are the names of their own projects; Bussola is not affiliated with any of them.
-Spotted a mistake? [Open an issue](https://github.com/marc0todar0/bussola/issues).</sub>
-
-In short: for budgets, rules and bank sync, look at Firefly III or Actual
-Budget; for investments alone, Ghostfolio; for an all-in-one with bank sync,
-Sure. Bussola is for keeping many accounts, your spending and your wealth
-together without giving a bank login to anyone, on a machine you control.
-
-## Who it's for
-
-For anyone whose money is spread across **many places** (several banks, cards,
-payment apps, brokers, exchanges, cash), who opens and closes accounts often,
-and wants to see **where the money goes and what it adds up to** in one place,
-without handing either to a cloud service. Bussola is **multi-user and
-multi-wallets**: one installation serves a whole household or a group of
-friends, everyone with their own account and wallets, and a wallet is shared
-only with the people its owner picks, with **read** or **read-write**
-permissions. It is made for self-hosting, because financial data is
-confidential: you need a machine of your own that can run Docker.
-
-### Who it's not for
-
-- **One bank account and no cash?** Your bank's app already shows you
-  everything. You do not need this.
-- **You want transactions to arrive by themselves from the bank.** Bussola has
-  no open banking sync, on purpose: it never holds a bank login. It reads your
-  bank's notifications and its CSV files instead, and you confirm each movement.
-- **You budget with envelopes or zero-based.** There are no budgets, rules or
-  recurring transactions. Bussola shows what you actually spent, category by
-  category and month by month, and the *planned expenses* pillar keeps the money
-  for known costs apart.
-- **You trade actively.** A holding has one purchase price, a return and an
-  annualised return; there is no trade-by-trade history or dividend tracking.
-  Ghostfolio does that well.
-- **You run a business.** No invoicing, no double-entry accounting, no tax
-  reports.
-- **You cannot or will not run Docker.** There is no hosted version: Bussola
-  runs on a machine of yours, or nowhere.
-
 ## Getting started
 
-You need a machine with Docker and the Compose plugin (`docker compose`).
-Nothing to compile, no need to clone this repository.
+**You need** a computer or server with [Docker](https://docs.docker.com/get-docker/). Nothing else.
+
+**1. Download two files** into a new folder:
 
 ```bash
 mkdir bussola && cd bussola
@@ -162,131 +35,79 @@ curl -LO https://github.com/marc0todar0/bussola/releases/latest/download/docker-
 curl -L -o .env https://github.com/marc0todar0/bussola/releases/latest/download/example.env
 ```
 
-Open `.env` and set these three values:
+**2. Open `.env`** and fill in these three lines:
 
-| Variable | What to put there |
-|---|---|
-| `BUSSOLA_AUTH_USER` | the username you will sign in with (3–64 characters: letters, digits, `.`, `-`, `_`). Default `bussola` |
-| `BUSSOLA_AUTH_PASS` | your password, at least 6 characters |
-| `PGPASSWORD` | a password for the database. Pick something long and random; you will rarely type it |
+```bash
+BUSSOLA_AUTH_USER=yourname          # the username you will sign in with
+BUSSOLA_AUTH_PASS=your-password     # at least 6 characters
+PGPASSWORD=long-random-string       # database password; you'll never type it again
+```
 
-Then start it:
+> To generate a random string, run `openssl rand -hex 24`.
+
+**3. Start Bussola:**
 
 ```bash
 docker compose up -d
 ```
 
-When the images are downloaded and the containers up, open
-**<http://localhost:3000>** (or the server's address, port 3000) and sign in.
-Bussola asks you to name a wallet and gives it one account and a handful of
-categories, so you can enter a transaction straight away. [Using
-Bussola](docs/using.md) takes it from there; [Installation](docs/install.md)
-covers HTTPS, other devices and passkeys, [Upgrading](docs/operations.md#upgrading)
-the next version.
+The first time, this downloads the images, which takes a minute or two.
 
-### Optional: price updates and bank notifications
+**4. Open <http://localhost:3000>** (from another device: `http://<server-ip>:3000`). Sign in with the username and password from step 2, then name your first wallet. You're ready: go to *Transactions* and press `N`.
 
-Both are **off by default**: a fresh install is the three containers above and
-works fully with values you type in. Each is a few lines in `.env`:
+To stop it, run `docker compose down`. Your data is kept.
 
-| Feature | Default | To turn it on | Setup guide |
-|---|---|---|---|
-| **Price updates** for ETFs, stocks and crypto (the `quotes` container) | Off: no container, refresh buttons disabled | `COMPOSE_PROFILES=quotes` and, for ETFs and stocks, a free key from a price provider | [Price updates](docs/price-updates.md) |
-| **Bank notifications read by a language model** (inbox, MacroDroid, iPhone Shortcuts, phone notifications) | Off: notifications that are only text are refused | `BUSSOLA_AI_URL` and `BUSSOLA_AI_MODEL`: your own Ollama, or a hosted model | [Bank notifications](docs/notifications.md) |
+### Optional extras
 
+| Extra | Guide |
+|---|---|
+| Automatic prices for ETFs, stocks and crypto | [Price updates](docs/price-updates.md) |
+| Transactions from bank notifications | [Bank notifications](docs/notifications.md) |
+| HTTPS, passkeys, phone notifications | [Installation](docs/install.md#https-and-passkeys) |
 
-## How it fits together
+## Screenshots
+
+| | |
+|:---:|:---:|
+| ![A new expense on the keypad](docs/screenshots/transaction-form.png) | ![The portfolio across the four pillars](docs/screenshots/portfolio.png) |
+| **Keypad** that does arithmetic | **Portfolio** across four pillars |
+| ![Every amount blurred](docs/screenshots/bank-mode.png) | ![Sign in with a passkey](docs/screenshots/passkey.png) |
+| **Bank mode** (`H`) | **Passkeys** |
 
 <p align="center">
-  <img src="docs/architecture.svg" width="900" alt="Bussola's containers: a browser and a phone reach the frontend (nginx, the only published port), which proxies /api to the api (Express), which stores everything in postgres. An optional fourth container on the same internal network, quotes, fetches ETF, ETC and crypto prices from CoinGecko, Eulerpool, Twelve Data and EODHD. An optional OpenAI-compatible model, yours or hosted, outside the compose file, reads bank notifications.">
+  <img src="docs/screenshots/mobile-transactions.png" alt="Transactions on a phone" width="180">
+  <img src="docs/screenshots/mobile-keypad.png" alt="The keypad on a phone" width="180">
+  <img src="docs/screenshots/mobile-summary.png" alt="The summary on a phone" width="180">
+  <img src="docs/screenshots/mobile-portfolio.png" alt="The portfolio on a phone" width="180">
 </p>
 
-Three containers make Bussola: **frontend** (nginx serving the app, and the only
-port you open), **api** and **postgres**. A fourth, **quotes**, is optional and
-off until you ask for it: it fetches today's price of your ETFs and crypto so the
-refresh buttons work (see [Price updates](#price-updates)). They share an
-internal network, so nothing but the frontend is exposed. There is no model inside Bussola: for notifications you
-point it at any OpenAI-compatible endpoint (see [Reading bank
-notifications](#reading-bank-notifications)).
+## Features
 
-Everything runs on your machine. Nothing is sent anywhere else, except the
-quotes service asking for prices when you press refresh, an encrypted message through your browser
-maker's push service if you turn on phone notifications, and, only if you
-point notifications at a model outside your own network, the text of each one to
-that provider.
+- **Every account, one total.** Banks, cards, payment apps, brokers, exchanges, cash. You can archive old ones and their history stays.
+- **Spending and net worth together.** Expenses and income month by month, next to ETFs, stocks, bonds, crypto and deposits, with automatic prices if you want them.
+- **No bank passwords.** Your phone forwards bank notifications and a language model turns them into drafts you accept in one tap. You can also import any bank's CSV.
+- **Shared on your terms.** Many users, many wallets, each shared **read** or **read-write**. PostgreSQL row-level security keeps the wallets apart.
+- Also: a keypad that does arithmetic, bank mode (`H` hides every amount), passkeys, six languages, a currency per wallet, keyboard shortcuts, dark theme, installable on a phone.
 
-## Price updates
-
-Optional, **off by default**: without it everything works, with values you type
-in, and the refresh buttons are disabled. To turn it on, add to `.env`:
-
-```bash
-COMPOSE_PROFILES=quotes   # starts the quotes container; the refresh buttons come on by themselves
-EULERPOOL_API_KEY=...     # ETFs and stocks by ISIN: a free key from eulerpool.com
-TWELVEDATA_API_KEY=...    # optional second source: a free key from twelvedata.com
-EODHD_API_KEY=...         # optional last source (ETCs too): a free key from eodhd.com
-COINGECKO_API_KEY=...     # optional, crypto: a free Demo key, if the keyless API refuses you
-```
-
-and run `docker compose up -d`. [Price updates](docs/price-updates.md) is the step-by-step guide.
-
-Crypto prices come from the public [CoinGecko](https://www.coingecko.com) API.
-ETF and stock
-prices come from [Eulerpool](https://eulerpool.com/developers) (free account;
-ETFs at their last daily close, a day or two behind) and, when it cannot find
-the instrument in your wallet's currency or has used up its quota, from
-[Twelve Data](https://twelvedata.com) (free plan: 800 credits a day, but only a
-few markets) and then from [EODHD](https://eodhd.com/financial-apis) (free
-plan: 20 calls a day); set any of the keys. All are official APIs used within their
-terms, for your own portfolio. [Configuration](docs/configuration.md#price-updates)
-has the details.
-
-## Reading bank notifications
-
-Optional. Your phone can send each bank notification to Bussola's inbox
-([docs/notifications.md](docs/notifications.md) has the iPhone and Android
-recipes), where it waits as a draft until you confirm it. With a reading model
-on, the model first decides whether it is a movement of money at all (offers,
-tips and codes are dropped), then fills in the whole draft: amount, day,
-merchant, expense, income or transfer, the account, the category and, for a
-transfer, the other account, choosing only among your own. You then **Accept**
-the draft in one tap or **Review** it in the form. Add to `.env`:
-
-```bash
-BUSSOLA_AI_URL=http://192.168.1.20:11434/v1   # any OpenAI-compatible base address
-BUSSOLA_AI_MODEL=qwen3.5:4b
-#BUSSOLA_AI_API_KEY=                          # only if the endpoint wants one
-```
-
-and run `docker compose up -d`. Bussola ships no model and downloads none: the
-endpoint is one you run (Ollama, llama.cpp, LM Studio… on this machine or
-another; `qwen3.5:4b` needs 4 to 5 GB of RAM and reads a notification in about
-ten seconds on a CPU) or a hosted one. If it is on your own network the text
-stays there; **if it is anyone else's server, the text of each notification
-leaves your machine**: [the guide](docs/notifications.md#choosing-where-the-model-runs)
-spells out what is sent and which free tiers are safe for financial data.
-
-Without any reading model, a notification that is only text is refused and
-nothing is kept; a sender that posts a ready-made draft still works.
+How it compares with Firefly III, Actual, Ghostfolio and Sure, and who it is *not* for: [Comparison](docs/comparison.md).
 
 ## Documentation
 
-- [Installation](docs/install.md): running on a network, HTTPS and reverse proxies, security, database clients, troubleshooting, demo data
-- [Using Bussola](docs/using.md): first steps, adding people, import and export, keyboard shortcuts
-- [Transactions from bank notifications](docs/notifications.md): personal tokens, the inbox, iPhone and Android setup, the reading model and phone notifications
-- [Configuration](docs/configuration.md): every setting in `.env`
-- [Operations](docs/operations.md): backups, restore and upgrading
-- [Contributing](CONTRIBUTING.md): development setup and the checks a change must pass
+- [Installation](docs/install.md): HTTPS, home servers, troubleshooting
+- [Using Bussola](docs/using.md): wallets, transactions, sharing, shortcuts
+- [Bank notifications](docs/notifications.md): phone setup and the reading model
+- [Price updates](docs/price-updates.md)
+- [Configuration](docs/configuration.md): every `.env` setting
+- [Backups and upgrades](docs/operations.md)
+- [Contributing](CONTRIBUTING.md)
 
-## Contributing
-
-Bug reports, ideas and pull requests are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md).
+<p align="center">
+  <img src="docs/architecture.svg" width="760" alt="Bussola's containers: frontend (nginx, the only published port) proxies /api to the api (Express), which stores everything in postgres. An optional quotes container fetches prices; an optional OpenAI-compatible model reads bank notifications.">
+</p>
 
 ## Support the development
 
-Bussola is free and open source, all of it, and it stays that way: no paid
-plans, no premium features. If it is useful to you and you want to help, you can
-make a donation.
+Bussola is free and stays free: no paid plans, no premium features. If it helps you, you can donate.
 
 <p>
   <a href="https://ko-fi.com/marc0todar0"><img src="https://ko-fi.com/img/githubbutton_sm.svg" height="36" alt="Support Bussola on Ko-fi"></a>

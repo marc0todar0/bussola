@@ -5,7 +5,7 @@
 // ready-made, a notification the model read, or one it could not read and
 // that waits for the hand), the devices of that wallet's active members who
 // may write there are told, through Web Push (services/push.js). Off unless
-// Web Push is: BUSSOLA_PUBLIC_URL set, see docs/notifications.md.
+// Web Push is: BUSSOLA_PUBLIC_URL set, see docs/push-notifications.md.
 //
 //   BUSSOLA_NOTIFY_DETAILS    "on" adds amount and merchant. Default off: the
 //                             message only says that something is waiting.
