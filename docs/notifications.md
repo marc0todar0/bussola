@@ -34,31 +34,16 @@ A token can only add drafts to the wallet you had open and read the names of its
 
 ## 3. Set up the phone
 
-### Android (Automate, recommended)
+### Android (Automate)
 
-[Automate](https://llamalab.com/automate/) is free, with no ads. A flow of 21 blocks:
+1. Install [Automate](https://play.google.com/store/apps/details?id=com.llamalab.automate) (free, no ads).
+2. Download [Bussola_inbox.flo](https://github.com/marc0todar0/bussola/raw/main/docs/automate/Bussola_inbox.flo) on the phone and import it (Automate menu → **Import**).
+3. In the flowchart, set your address (block 2), your token (block 3) and your bank apps (block 4).
+4. Start the flow and allow *notification access*.
 
-- sends each bank notification once, also when several arrive in the same second;
-- picks up any notification it missed at the next wake-up;
-- retries for about two hours when the phone is offline;
-- notifies you only when something fails.
+Each bank notification is sent once, also when several arrive in the same second; a missed one is picked up at the next wake-up; sends are retried for about two hours when the phone is offline, and you are notified only when something fails.
 
-→ [Build the flow, block by block](automate.md)
-
-### Android (MacroDroid)
-
-MacroDroid's free version shows ads, and several notifications arriving together can be mixed up ([why](macrodroid.md#notifications-arriving-together)).
-
-1. Download [Bussola_inbox.macro](https://github.com/marc0todar0/bussola/raw/main/docs/macrodroid/Bussola_inbox.macro) on the phone and open it with **MacroDroid**.
-2. In the macro's **HTTP Request**:
-   - *Enter url*: your address + `/api/inbox`
-   - *Header* `Authorization`: `Bearer bpt_…your token…`
-3. In the trigger **Notification Received**, tick your bank and payment apps.
-4. Save, and allow *Notification access* if asked.
-
-The macro retries for about 3 hours when the phone is offline, logs every attempt to the **User Log** (channel `Bussola`), and notifies you only when something fails.
-
-→ [Building the macro by hand, response codes, timeouts](macrodroid.md)
+→ [Details, how the flow works, response codes](automate.md)
 
 ### iPhone *(not tested yet)*
 

@@ -46,8 +46,8 @@ const NOTIFICATION_ID_MAX = 100;
 // this recently is a copy, whatever notification_id it carries. A bank's text
 // carries the balance after the movement, so two real ones never read the
 // same within two minutes; two copies of one do, when a phone automation
-// running several times at once mixes up its variables (MacroDroid's local
-// variables are one per macro, shared by simultaneous runs).
+// running several times at once mixes up its variables (an app whose
+// variables are shared by simultaneous runs).
 const SAME_TEXT_SECONDS = 120;
 
 // Tells the people who can confirm it, outside the browser, that an item is
