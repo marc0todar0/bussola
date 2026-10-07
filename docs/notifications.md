@@ -45,6 +45,21 @@ Each bank notification is sent once, also when several arrive in the same second
 
 → [Details, how the flow works, response codes](automate.md)
 
+### Android (MacroDroid)
+
+If you already use [MacroDroid](https://www.macrodroid.com/): its free version shows ads and allows a few macros.
+
+1. Download [Bussola_inbox.macro](https://github.com/marc0todar0/bussola/raw/main/docs/macrodroid/Bussola_inbox.macro) on the phone and open it with **MacroDroid**. It brings the macro and its action block, **Bussola send**.
+2. In the action block's **HTTP Request**:
+   - *Enter url*: your address + `/api/inbox`
+   - *Header* `Authorization`: `Bearer bpt_…your token…`
+3. In the macro's trigger **Notification Received**, tick your bank and payment apps.
+4. Save, and allow *Notification access* if asked.
+
+Each notification is handed to the action block, whose variables belong to that one call, so notifications arriving together cannot mix. It retries for about 3 hours when the phone is offline, logs every attempt to the **User Log** (channel `Bussola`), and notifies you only when something fails.
+
+→ [Building the macro by hand, response codes, timeouts](macrodroid.md)
+
 ### iPhone *(not tested yet)*
 
 **Shortcuts → Automation → New → Transaction** (Apple Pay), *Run Immediately*:

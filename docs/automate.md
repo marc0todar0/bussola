@@ -104,4 +104,4 @@ If your domain points to a home address (`192.168.x.x`), the phone can't reach i
 ## Tips
 
 - On **Android 15+**, if notifications arrive empty, turn off *Enhanced notifications*.
-- Another automation app works too, as long as each send keeps its own variables. The request is in [Inbox API](inbox-api.md): `POST /api/inbox`, `text/plain` body, `X-Bussola-Source` and `X-Bussola-Notification-Id` headers.
+- [MacroDroid](macrodroid.md) works too. Any other automation app also works, as long as each send keeps its own variables. The request is in [Inbox API](inbox-api.md): `POST /api/inbox`, `text/plain` body, `X-Bussola-Source` and `X-Bussola-Notification-Id` headers.
