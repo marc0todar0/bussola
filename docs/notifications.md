@@ -34,7 +34,20 @@ A token can only add drafts to the wallet you had open and read the names of its
 
 ## 3. Set up the phone
 
+### Android (Automate, recommended)
+
+[Automate](https://llamalab.com/automate/) is free, with no ads. A flow of 21 blocks:
+
+- sends each bank notification once, also when several arrive in the same second;
+- picks up any notification it missed at the next wake-up;
+- retries for about two hours when the phone is offline;
+- notifies you only when something fails.
+
+→ [Build the flow, block by block](automate.md)
+
 ### Android (MacroDroid)
+
+MacroDroid's free version shows ads, and several notifications arriving together can be mixed up ([why](macrodroid.md#notifications-arriving-together)).
 
 1. Download [Bussola_inbox.macro](https://github.com/marc0todar0/bussola/raw/main/docs/macrodroid/Bussola_inbox.macro) on the phone and open it with **MacroDroid**.
 2. In the macro's **HTTP Request**:

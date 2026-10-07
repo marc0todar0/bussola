@@ -79,7 +79,7 @@ MacroDroid's local variables are **one copy per macro, shared by every run in pr
 
 - Bussola drops the extra copy: the same text from the same app within 2 minutes is answered `200 "duplicate": true` ("same text") and stored once.
 - The overwritten notification is still lost. Check the log for runs whose `Set Variable bussola_text` is not the text they posted, and enter that movement by hand.
-- Tasker keeps local variables per run, so it does not have this problem.
+- [Automate](automate.md) gives every send its own copy of the variables, and Tasker keeps local variables per run, so neither has this problem.
 
 ## Response codes
 
