@@ -37,6 +37,8 @@ A ready-made draft, which needs no model:
 
 **Idempotency:** pass `notification_id` (1–100 characters) in the body, the query or the `X-Bussola-Notification-Id` header. A repeat in the same wallet stores nothing and returns `200` with the original item and `"duplicate": true`.
 
+**Copies by text:** a text-only notification with exactly the same text, from the same `source`, as one received in the last 2 minutes is also answered `200` `"duplicate": true` (the message says "same text"), whatever its `notification_id`. Bank texts carry the balance, so two real movements do not read the same; two copies of one do, when an automation running several times at once mixes up its variables. Drafts are never matched by text.
+
 ## `GET /api/inbox/context`
 
 Returns the wallet currency, the accounts and categories (ids and names), and up to 200 recent `merchant → category` pairs. No balances or amounts.

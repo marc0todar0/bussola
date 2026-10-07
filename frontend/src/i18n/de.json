@@ -149,6 +149,7 @@
   "transaction.searchPlaceholder": "Notizen, Konten, Kategorien, Beträge durchsuchen…",
   "transaction.confirmDelete": "Diese Buchung löschen?",
   "transaction.deleted": "Buchung gelöscht",
+  "transaction.actualReset": "{names}: Die einzige Position wird von Hand bewertet, daher wurden sie und der tatsächliche Saldo an den Saldo angeglichen",
   "transaction.deleteFailed": "Buchung konnte nicht gelöscht werden",
   "transaction.noneFound": "Keine Buchung gefunden",
   "transaction.loadMore": "Mehr laden",

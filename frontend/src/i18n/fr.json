@@ -149,6 +149,7 @@
   "transaction.searchPlaceholder": "Rechercher notes, comptes, catégories, montants…",
   "transaction.confirmDelete": "Supprimer cette opération ?",
   "transaction.deleted": "Opération supprimée",
+  "transaction.actualReset": "{names} : la seule position est évaluée à la main, elle et le solde réel ont donc été alignés sur le solde",
   "transaction.deleteFailed": "Impossible de supprimer l'opération",
   "transaction.noneFound": "Aucune opération trouvée",
   "transaction.loadMore": "Afficher plus",

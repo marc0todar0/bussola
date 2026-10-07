@@ -22,7 +22,8 @@
 // the last failure, or one waiting cannot mend, leaves the item 'failed' and
 // is announced; the scheduler's claim queues each due item once; a notification_id
 // already seen answers 200 "duplicate" with the first item and stores nothing,
-// also when two copies race.
+// also when two copies race; so does the same text from the same source
+// within two minutes, whatever its notification_id.
 //
 // The global fetch is wrapped so that a request anywhere but this machine
 // fails the test instead of leaving it.
@@ -440,7 +441,7 @@ const main = async () => {
         : { rows: [], rowCount: 1 };
     transactionsController.insertTransaction = async () => {
       inserted += 1;
-      return 99;
+      return { id: 99, actualReset: [] };
     };
     const acceptAs = async (currency) => {
       itemCurrency = currency;
@@ -671,6 +672,7 @@ const main = async () => {
     // The table, keyed as the unique index is: (wallet, notification_id). The
     // insert is ON CONFLICT DO NOTHING, so a conflicting copy gets no row.
     const table = [];
+    const locks = [];
     let nextId = 500;
     let inserts = 0;
     db.query = async (text, params = []) => {
@@ -680,9 +682,22 @@ const main = async () => {
         const notificationId = params[12];
         if (!/on conflict \(wallet_id, notification_id\) where notification_id is not null do nothing/.test(text)) throw new Error("no ON CONFLICT");
         if (notificationId != null && table.some((r) => r.notification_id === notificationId)) return { rows: [], rowCount: 0 };
-        const row = { id: nextId++, source: params[0], status: "pending", extraction: params[11], attempts: 0, notification_id: notificationId };
+        const row = {
+          id: nextId++, source: params[0], raw_text: params[1], received: Date.now(),
+          status: "pending", extraction: params[11], attempts: 0, notification_id: notificationId,
+        };
         table.push(row);
         return { rows: [{ id: row.id }], rowCount: 1 };
+      }
+      if (/pg_advisory_xact_lock/.test(text)) {
+        locks.push(params[0]);
+        return { rows: [{}], rowCount: 1 };
+      }
+      if (/where source = \$1 and raw_text = \$2/.test(text)) {
+        const r = table
+          .filter((x) => x.source === params[0] && x.raw_text === params[1] && x.received > Date.now() - params[2] * 1000)
+          .sort((x, y) => y.id - x.id)[0];
+        return { rows: r ? [{ id: r.id, source: r.source, status: r.status, extraction: r.extraction, attempts: r.attempts }] : [] };
       }
       if (/from inbox_items where notification_id = \$1/.test(text)) {
         const r = table.find((x) => x.notification_id === params[0]);
@@ -753,6 +768,31 @@ const main = async () => {
     const none = await send({ body: { draft: { amount: 1 } } });
     const none2 = await send({ body: { draft: { amount: 1 } } });
     record("no notification_id: every POST is stored, as before", none.res.statusCode === 201 && none2.res.statusCode === 201 && none.out.id !== none2.out.id);
+
+    // --- the same text twice, under two notification_ids ---------------------
+    // What a phone automation running several times at once sends: one
+    // notification's text under another's id. The copy is recognised by its
+    // text, from the same source, within the window.
+    const SAME = "Amazon Paid EUR19.50 at Amazon EUR Balance: EUR13.65 SECRET-CARD-4242";
+    locks.length = 0;
+    const firstCopy = await send({ body: { source: "Revolut", text: SAME, notification_id: "mixed-1" } });
+    const copy = await send({ body: { source: "Revolut", text: SAME }, query: { notification_id: "mixed-2" } });
+    const cp = copy.out || {};
+    record("the same text from the same source under another notification_id: 200, duplicate of the first, nothing stored or queued",
+      firstCopy.res.statusCode === 201 && copy.res.statusCode === 200 && cp.duplicate === true && cp.id === firstCopy.out.id
+        && /same text/.test(cp.message) && !table.some((r) => r.notification_id === "mixed-2") && copy.listeners.length === 0,
+      JSON.stringify(copy.out || copy.error));
+    record("the same-text look is taken under a lock on wallet, source and text, and the answer never carries the text",
+      locks.length === 2 && locks.every((k) => k === `inbox:1:Revolut:${SAME}`) && !JSON.stringify(cp).includes("SECRET-CARD-4242"),
+      JSON.stringify(locks.map((k) => k.length)));
+    const otherSource = await send({ body: { source: "PayPal", text: SAME, notification_id: "mixed-3" } });
+    record("the same text from another source is stored", otherSource.res.statusCode === 201 && !otherSource.out.duplicate);
+    table.find((r) => r.id === firstCopy.out.id).received = Date.now() - 121 * 1000;
+    const later = await send({ body: { source: "Revolut", text: SAME, notification_id: "mixed-4" } });
+    record("the same text after the window is stored", later.res.statusCode === 201 && !later.out.duplicate,
+      JSON.stringify(later.out || later.error));
+    const draftSame = await send({ body: { source: "Revolut", text: SAME, draft: { amount: 19.5 } } });
+    record("a draft is never taken for a copy by its text", draftSame.res.statusCode === 201 && !draftSame.out.duplicate);
 
     Object.assign(db, { query: real.query, withTenant: real.withTenant, queryAuth: real.queryAuth });
     Object.assign(notifier, { enabled: real.enabled, notify: real.notify });

@@ -149,6 +149,7 @@
   "transaction.searchPlaceholder": "搜索备注、账户、类别、金额…",
   "transaction.confirmDelete": "删除这笔交易？",
   "transaction.deleted": "交易已删除",
+  "transaction.actualReset": "{names}：唯一的持仓为手动估值，因此该持仓和实际余额已与余额对齐",
   "transaction.deleteFailed": "无法删除该交易",
   "transaction.noneFound": "未找到交易",
   "transaction.loadMore": "加载更多",

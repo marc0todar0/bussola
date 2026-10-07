@@ -149,6 +149,7 @@
   "transaction.searchPlaceholder": "Search notes, accounts, categories, amounts…",
   "transaction.confirmDelete": "Delete this transaction?",
   "transaction.deleted": "Transaction deleted",
+  "transaction.actualReset": "{names}: the only holding is valued by hand, so it and the actual balance now match the balance",
   "transaction.deleteFailed": "Could not delete the transaction",
   "transaction.noneFound": "No transaction found",
   "transaction.loadMore": "Load more",

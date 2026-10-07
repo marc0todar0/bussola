@@ -149,6 +149,7 @@
   "transaction.searchPlaceholder": "Cerca in note, conti, categorie, importi…",
   "transaction.confirmDelete": "Sei sicuro di voler eliminare il movimento?",
   "transaction.deleted": "Movimento eliminato",
+  "transaction.actualReset": "{names}: l'unico strumento è a valore manuale, quindi strumento e saldo effettivo sono stati allineati al saldo",
   "transaction.deleteFailed": "Impossibile eliminare il movimento",
   "transaction.noneFound": "Nessun movimento trovato",
   "transaction.loadMore": "Carica altri",

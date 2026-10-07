@@ -3,7 +3,7 @@ const db = require("../dbConn");
 const csv = require("../services/csv");
 const DataError = require("../services/dataError");
 const format = require("../services/walletFormat");
-const { balanceEffects, ACTUAL_AFTER_MOVE } = require("./transactions_controller");
+const { balanceEffects, ACTUAL_AFTER_MOVE, resetManualActualQuery } = require("./transactions_controller");
 
 // ---------------------------------------------------------------------------
 // Import
@@ -1111,6 +1111,11 @@ exports.commit = async (req) => {
         where a.id = u.id`,
       [[...deltas.keys()], [...deltas.values()]],
     );
+    // And the same exception: an investment account with one hand-valued
+    // holding has it reset to the new balance (resetManualActualQuery). An
+    // archive's holdings come after this and set their own value.
+    const reset = resetManualActualQuery([...deltas.keys()]);
+    await db.query(reset.text, reset.params);
   }
 
   // --- holdings -------------------------------------------------------------

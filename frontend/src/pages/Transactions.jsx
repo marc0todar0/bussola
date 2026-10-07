@@ -201,16 +201,27 @@ export default function Transactions() {
 
   // After a save or a delete only the first page comes back: the change is
   // near the top of the list, and the totals above it come with page one.
-  const afterWrite = useCallback(() => {
+  // A movement on an investment account whose only holding is valued by hand
+  // resets that holding to the balance; the answer names such accounts.
+  const announceActualReset = useCallback(
+    (body) => {
+      const reset = body && Array.isArray(body.actualReset) ? body.actualReset : [];
+      if (reset.length) toast.success(t("transaction.actualReset", { names: reset.map((a) => a.name).join(", ") }));
+    },
+    [t],
+  );
+
+  const afterWrite = useCallback((body) => {
     // Saved from an inbox item: the item is resolved now.
     if (savePath) toast.success(t("inbox.accepted"));
+    announceActualReset(body);
     setOpen(false);
     setTransaction(null);
     setDraft(null);
     setSavePath(null);
     reload();
     loadInbox();
-  }, [reload, loadInbox, savePath, t]);
+  }, [reload, loadInbox, savePath, t, announceActualReset]);
 
   const reviewInboxItem = (item) => {
     setInboxOpen(false);
@@ -236,6 +247,7 @@ export default function Transactions() {
       if (response.ok) {
         recorded = true;
         toast.success(t("inbox.accepted"));
+        announceActualReset(await response.json().catch(() => null));
       } else {
         const body = await response.json().catch(() => null);
         // Somebody else resolved it first: nothing to report, the list
@@ -295,7 +307,7 @@ export default function Transactions() {
         if (response.status === 404) afterWrite();
       } else {
         toast.success(t("transaction.deleted"));
-        afterWrite();
+        afterWrite(await response.json().catch(() => null));
       }
     } catch (error) {
       toast.error(String(error));

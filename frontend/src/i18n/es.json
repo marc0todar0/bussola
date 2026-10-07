@@ -149,6 +149,7 @@
   "transaction.searchPlaceholder": "Buscar notas, cuentas, categorías, importes…",
   "transaction.confirmDelete": "¿Eliminar este movimiento?",
   "transaction.deleted": "Movimiento eliminado",
+  "transaction.actualReset": "{names}: la única posición se valora a mano, así que ella y el saldo real se han igualado al saldo",
   "transaction.deleteFailed": "No se pudo eliminar el movimiento",
   "transaction.noneFound": "No se encontró ningún movimiento",
   "transaction.loadMore": "Cargar más",

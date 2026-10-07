@@ -71,6 +71,15 @@ If bussola_code < 200 OR > 299 → Display Notification
 
 - `notification_id` makes resends safe: Bussola answers `200 "duplicate": true` and stores nothing new.
 - A phone restart drops notifications that are still waiting.
+- To tell runs apart in the log, put the id in the Log Event: `Bussola #[lv=bussola_id] ← [lv=bussola_app] …`.
+
+### Notifications arriving together
+
+MacroDroid's local variables are **one copy per macro, shared by every run in progress**. When a bank posts two or three notifications in the same second, each run overwrites the text and id the previous one set before its request goes out: one notification is sent twice and another is never sent.
+
+- Bussola drops the extra copy: the same text from the same app within 2 minutes is answered `200 "duplicate": true` ("same text") and stored once.
+- The overwritten notification is still lost. Check the log for runs whose `Set Variable bussola_text` is not the text they posted, and enter that movement by hand.
+- Tasker keeps local variables per run, so it does not have this problem.
 
 ## Response codes
 

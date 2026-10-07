@@ -166,8 +166,8 @@ export const accept = (db, rawId, body) => {
       { currency: itemCurrency, walletCurrency },
     );
   }
-  ledger.createTransaction(db, body || {}, db.user);
+  const { actualReset } = ledger.createTransaction(db, body || {}, db.user);
   settle(item, "accepted");
   item.transaction_id = db.sequences.transactions;
-  return { id: item.id, status: "accepted", transaction_id: item.transaction_id, has_text: false };
+  return { id: item.id, status: "accepted", transaction_id: item.transaction_id, has_text: false, actualReset };
 };

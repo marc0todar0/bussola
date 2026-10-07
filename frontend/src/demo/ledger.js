@@ -54,6 +54,26 @@ const moveBalance = (db, accountId, delta) => {
   a.actual_amount = a.is_investment ? a.actual_amount : null;
 };
 
+// The one exception (resetManualActualQuery in the API): an investment
+// account whose only holding is valued by hand has that holding and its actual
+// balance reset to the balance after a movement. Returns those accounts.
+const resetManualActual = (db, accountIds) => {
+  const reset = [];
+  for (const id of [...new Set(accountIds.filter((x) => x != null).map(Number))]) {
+    const a = byId(db.accounts, id);
+    if (!a || !a.is_investment || a.amount == null) continue;
+    const held = db.holdings.filter((h) => h.account_id === a.id);
+    if (held.length !== 1 || (held[0].quantity != null && held[0].current_price != null)) continue;
+    held[0].amount = a.amount;
+    held[0].updated_at = stamp(db);
+    a.actual_amount = a.amount;
+    reset.push({ id: a.id, name: a.name });
+  }
+  return reset.sort((x, y) => x.id - y.id);
+};
+
+const endsOf = (t) => balanceEffects(t).map((e) => e.accountId);
+
 const apply = (db, t, sign) => {
   for (const { accountId, delta } of balanceEffects(t)) {
     moveBalance(db, accountId, delta == null ? null : sign * delta);
@@ -388,8 +408,9 @@ export const createTransaction = (db, body, user) => {
   };
   db.transactions.push(row);
   apply(db, row, 1);
+  const actualReset = resetManualActual(db, endsOf(row));
   const { from_id, to_id, amount, type_id, description, tx_date } = body;
-  return { from_id, to_id, amount, type_id, description, tx_date };
+  return { from_id, to_id, amount, type_id, description, tx_date, actualReset };
 };
 
 const vanished = () => new DemoError(404, "TRANSACTION_NOT_FOUND", "The transaction no longer exists");
@@ -414,7 +435,8 @@ export const updateTransaction = (db, id, body, user) => {
   };
   db.transactions[index] = edited;
   apply(db, edited, 1);
-  return "Updated transaction with id:" + id;
+  const actualReset = resetManualActual(db, [...endsOf(old), ...endsOf(edited)]);
+  return { message: "Updated transaction with id:" + id, actualReset };
 };
 
 export const deleteTransaction = (db, id) => {
@@ -422,7 +444,8 @@ export const deleteTransaction = (db, id) => {
   if (index < 0) throw vanished();
   const [removed] = db.transactions.splice(index, 1);
   apply(db, removed, -1);
-  return "Deleted transaction with id:" + id;
+  const actualReset = resetManualActual(db, endsOf(removed));
+  return { message: "Deleted transaction with id:" + id, actualReset };
 };
 
 // ---------------------------------------------------------------------------

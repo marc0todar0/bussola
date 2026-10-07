@@ -293,7 +293,10 @@ const TransactionForm = ({ closeForm, onSaved, transaction, onDelete, draft = nu
         toast.error(text && text !== key ? text : t("form.saveFailed"));
       } else {
         saved = true;
-        if (onSaved) onSaved();
+        // The answer may name accounts whose manual holding was reset to the
+        // balance (actualReset): the page says so.
+        const body = await response.json().catch(() => null);
+        if (onSaved) onSaved(body);
         else closeForm();
       }
     } catch (error) {

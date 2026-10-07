@@ -454,8 +454,11 @@ const insertNew = async (body) => {
       description,
       tx_date,
     );
-    const results = await db.queryTransaction(applyTransactionQueries(transaction));
-    return { transaction, id: results[0].rows[0].id };
+    const results = await db.queryTransaction([
+      ...applyTransactionQueries(transaction),
+      resetManualActualQuery(endsOf(transaction)),
+    ]);
+    return { transaction, id: results[0].rows[0].id, actualReset: resetIds(results[results.length - 1]) };
   } catch (error) {
     const wrapped = new Error(error.message || "Could not create the transaction");
     // A missing or foreign end (23503), a missing column (23502), a value
@@ -466,11 +469,20 @@ const insertNew = async (body) => {
   }
 };
 
-exports.createTransaction = async (req) => (await insertNew(req.body)).transaction;
+// The model, as POST /api/transactions has always answered, plus actualReset:
+// the accounts whose manual holding was reset to the balance (see
+// resetManualActualQuery), for the interface to say so.
+exports.createTransaction = async (req) => {
+  const { transaction, actualReset } = await insertNew(req.body);
+  return { ...transaction, actualReset };
+};
 
 // The same, answering the new row's id: for the inbox, which records which
 // transaction a draft became.
-exports.insertTransaction = async (body) => (await insertNew(body)).id;
+exports.insertTransaction = async (body) => {
+  const { id, actualReset } = await insertNew(body);
+  return { id, actualReset };
+};
 
 // ---------------------------------------------------------------------------
 // Undoing a transaction: only what was actually deleted
@@ -518,16 +530,20 @@ exports.updateTransaction = async (req) => {
   // The row comes back with its author: the column default would make
   // whoever edits it the author instead.
   edited.created_by = old.created_by;
-  await db.queryTransaction([...reverseBalanceQueries(old), ...applyTransactionQueries(edited)]);
-  return "Updated transaction with id:" + id;
+  const results = await db.queryTransaction([
+    ...reverseBalanceQueries(old),
+    ...applyTransactionQueries(edited),
+    resetManualActualQuery([...endsOf(old), ...endsOf(edited)]),
+  ]);
+  return { message: "Updated transaction with id:" + id, actualReset: resetIds(results[results.length - 1]) };
 };
 
 exports.deleteTransaction = async (id) => {
   const removed = await deleteReturning(id);
   if (!removed) throw await vanished(id);
 
-  await db.queryTransaction(reverseBalanceQueries(removed));
-  return "Deleted transaction with id:" + id;
+  const results = await db.queryTransaction([...reverseBalanceQueries(removed), resetManualActualQuery(endsOf(removed))]);
+  return { message: "Deleted transaction with id:" + id, actualReset: resetIds(results[results.length - 1]) };
 };
 
 function formatDate(date) {
@@ -584,6 +600,44 @@ exports.balanceEffects = balanceEffects;
 // Shared with the import, which moves balances in bulk with the same rule.
 const ACTUAL_AFTER_MOVE = "case when is_investment then actual_amount end";
 exports.ACTUAL_AFTER_MOVE = ACTUAL_AFTER_MOVE;
+
+// The one exception: an investment account whose only holding is valued by
+// hand (no quantity x price, see holdings_controller's computeAmount) is a
+// deposit account in practice -- a savings pot with one line -- and nothing
+// would ever bring that line up to date. After a movement, the holding and the
+// actual balance are reset to the new balance, so 7,000 / 7,200 less a 2,000
+// transfer reads 5,000 / 5,000, not 5,000 / 7,200. Issued last, in the same
+// transaction as the balance moves; returns the accounts it reset (id and
+// name), which the answer passes on as actualReset so the interface can say so.
+//
+// Shared with the import, like ACTUAL_AFTER_MOVE.
+const resetManualActualQuery = (accountIds) =>
+  new Query(
+    `with target as (
+       select a.id, a.amount
+         from accounts a
+        where a.id = any($1::int[]) and a.is_investment and a.amount is not null
+          and (select count(*) from holdings h where h.account_id = a.id) = 1
+          and not exists (
+            select 1 from holdings h
+             where h.account_id = a.id and h.quantity is not null and h.current_price is not null)
+     ), held as (
+       update holdings h set amount = t.amount, updated_at = now()
+         from target t
+        where h.account_id = t.id
+     )
+     update accounts a set actual_amount = t.amount
+       from target t
+      where a.id = t.id
+     returning a.id, a.name`,
+    [[...new Set(accountIds.filter((id) => id != null).map(Number))]],
+  );
+exports.resetManualActualQuery = resetManualActualQuery;
+
+// The accounts a movement touches: the ones balanceEffects moves.
+const endsOf = (transaction) => balanceEffects(transaction).map((e) => e.accountId);
+
+const resetIds = (result) => result.rows.map((r) => ({ id: r.id, name: r.name })).sort((x, y) => x.id - y.id);
 
 const moveBalance = (delta, accountId) =>
   new Query(`update accounts set amount = amount + $1, actual_amount = ${ACTUAL_AFTER_MOVE} where id = $2`, [

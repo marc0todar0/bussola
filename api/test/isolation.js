@@ -470,6 +470,10 @@ const populateA = async (a) => {
     name: "A's holding",
     pillar_id: 4,
     amount: 500,
+    // Quantity x price, so the holding is not valued by hand: a single manual
+    // holding would be reset to the balance by every movement (see 3d).
+    quantity: 5,
+    current_price: 100,
     issuer: "A's issuer",
     auto_update: false,
   });
@@ -978,6 +982,46 @@ const main = async () => {
   record("transactions leave an investment account's holdings value alone",
     Boolean(investment) && near(investment.actual_amount, 500),
     `actual_amount=${investment && investment.actual_amount}`);
+
+  // The exception: an investment account whose only holding is valued by
+  // hand (a savings pot) has that holding and its actual balance reset to the
+  // balance by a movement -- 7,000 / 7,200 less 2,000 is 5,000 / 5,000 --
+  // and the answer says which account. With a second, priced holding nothing
+  // is reset any more.
+  const savingsName = `A's savings ${RUN}`;
+  await a("POST", "/api/accounts", {
+    name: savingsName, color: "teal", icon: "bank", iconFamily: "FontAwesome", amount: 7000, is_investment: true,
+  });
+  const savings = search((await a("GET", "/api/accounts")).json, (c) => c.name === savingsName);
+  await a("POST", `/api/accounts/${savings && savings.id}/holdings`, {
+    name: "A's pot", pillar_id: 4, amount: 7200, auto_update: false,
+  });
+  const out = await a("POST", "/api/transactions", {
+    from_id: savings && savings.id, to_id: mine.account, amount: 2000, type_id: 3,
+    description: `savings out ${RUN}`, tx_date: new Date().toISOString(),
+  });
+  const savingsAfter = search((await a("GET", "/api/accounts")).json, (c) => c.id === (savings && savings.id));
+  const pot = search((await a("GET", `/api/accounts/${savings && savings.id}/holdings`)).json, (h) => h.name === "A's pot");
+  record("a movement resets an investment account's one hand-valued holding to the balance, and says so",
+    out.status === 200 && Boolean(savingsAfter) && near(savingsAfter.amount, 5000) && near(savingsAfter.actual_amount, 5000)
+      && Boolean(pot) && near(pot.amount, 5000)
+      && Array.isArray(out.json && out.json.actualReset) && out.json.actualReset.some((r) => r.id === savings.id),
+    `status ${out.status}: ${out.text.slice(0, 160)}; amount ${savingsAfter && savingsAfter.amount}, ` +
+      `actual ${savingsAfter && savingsAfter.actual_amount}, holding ${pot && pot.amount}`);
+
+  await a("POST", `/api/accounts/${savings && savings.id}/holdings`, {
+    name: "A's priced line", pillar_id: 4, quantity: 1, current_price: 10, auto_update: false,
+  });
+  const outAgain = await a("POST", "/api/transactions", {
+    from_id: savings && savings.id, to_id: mine.account, amount: 100, type_id: 3,
+    description: `savings out again ${RUN}`, tx_date: new Date().toISOString(),
+  });
+  const savingsLater = search((await a("GET", "/api/accounts")).json, (c) => c.id === (savings && savings.id));
+  record("with a second, priced holding the actual balance is left alone",
+    outAgain.status === 200 && Boolean(savingsLater) && near(savingsLater.amount, 4900)
+      && near(savingsLater.actual_amount, 5010) && outAgain.json && outAgain.json.actualReset.length === 0,
+    `status ${outAgain.status}: ${outAgain.text.slice(0, 160)}; amount ${savingsLater && savingsLater.amount}, ` +
+      `actual ${savingsLater && savingsLater.actual_amount}`);
 
   // Two deletes of one transaction at the same moment -- a double click, or
   // two members. The second must find nothing to undo.

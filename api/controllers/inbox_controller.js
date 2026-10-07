@@ -42,6 +42,13 @@ const TEXT_MAX = 2000;
 const SOURCE_MAX = 64;
 const MERCHANT_MAX = 255;
 const NOTIFICATION_ID_MAX = 100;
+// A text-only notification identical to one received from the same source
+// this recently is a copy, whatever notification_id it carries. A bank's text
+// carries the balance after the movement, so two real ones never read the
+// same within two minutes; two copies of one do, when a phone automation
+// running several times at once mixes up its variables (MacroDroid's local
+// variables are one per macro, shared by simultaneous runs).
+const SAME_TEXT_SECONDS = 120;
 
 // Tells the people who can confirm it, outside the browser, that an item is
 // waiting (Web Push, services/notify.js). Called only after the item's
@@ -244,6 +251,7 @@ exports.createItem = async (req, res) => {
     // model switched off, an account in the draft deleted).
     const seen = await byNotificationId(notificationId);
     if (seen) {
+      logReceipt(seen.id, source, text, notificationId, "duplicate (same notification_id)");
       res.status(200);
       return duplicateReceipt(seen, received);
     }
@@ -254,6 +262,20 @@ exports.createItem = async (req, res) => {
       "AI_DISABLED",
       "Not kept: this Bussola has no reading model configured, so a notification with only text cannot be read. Send a draft, or ask the administrator to set BUSSOLA_AI_URL and BUSSOLA_AI_MODEL",
     );
+  }
+  if (!draft) {
+    // The same text from the same source, just received: a copy (see
+    // SAME_TEXT_SECONDS). Two copies in the same instant are put in line by a
+    // lock on (wallet, source, text) held to the end of the transaction, so
+    // the second looks only once the first is committed. The text is still on
+    // the first item while it is being read, which is exactly the window.
+    await db.query(`select pg_advisory_xact_lock(hashtext($1))`, [`inbox:${req.token.walletId}:${source}:${text}`]);
+    const twin = await bySameText(source, text);
+    if (twin) {
+      logReceipt(twin.id, source, text, notificationId, "duplicate (same text)");
+      res.status(200);
+      return duplicateReceipt(twin, received, "text");
+    }
   }
 
   // What the sender said, validated; its ids kept only if they exist in this
@@ -302,10 +324,12 @@ exports.createItem = async (req, res) => {
     // The same notification_id, committed by a request that raced this one.
     const seen = await byNotificationId(notificationId);
     if (!seen) throw new DataError(409, "REQUEST_CONFLICT", "The request conflicted with another one: send it again");
+    logReceipt(seen.id, source, text, notificationId, "duplicate (same notification_id)");
     res.status(200);
     return duplicateReceipt(seen, received);
   }
   const id = rows[0].id;
+  logReceipt(id, source, text, notificationId, draft ? "stored, a draft" : "stored, to be read");
 
   // Queued once the answer has gone out, which withToken does only after its
   // transaction is over: the reader, in a transaction of its own, has to see
@@ -324,6 +348,30 @@ exports.createItem = async (req, res) => {
 
   res.status(201);
   return receipt({ id, source, ...received });
+};
+
+// The latest item from this source with this very text, received within
+// SAME_TEXT_SECONDS, in this wallet (RLS). Only an item still holding its
+// text can match: once read and resolved, the text is gone.
+const bySameText = async (source, text) => {
+  const { rows } = await db.query(
+    `select id, source, status, extraction, attempts
+       from inbox_items
+      where source = $1 and raw_text = $2
+        and received_at > now() - make_interval(secs => $3)
+      order by id desc
+      limit 1`,
+    [source, text, SAME_TEXT_SECONDS],
+  );
+  return rows[0] || null;
+};
+
+// One line per POST, so that the server's log tells what each copy became.
+// Never the text: its length, the source and the sender's own id only.
+const logReceipt = (id, source, text, notificationId, outcome) => {
+  const chars = text ? `${text.length} chars` : "no text";
+  const nid = notificationId ? `, notification_id ${notificationId}` : "";
+  console.log(`[inbox] item ${id} <- ${source}, ${chars}${nid}: ${outcome}`);
 };
 
 // The item a notification_id became, in this wallet (RLS), whatever its state.
@@ -356,12 +404,13 @@ const receipt = ({ id, source, text, draft }) => {
 };
 exports.receipt = receipt;
 
-// What a second POST with a notification_id already seen answers: the receipt's
+// What a second POST with a notification_id already seen -- or the same text
+// just received (bySameText) -- answers: the receipt's
 // shape, about the item the first one became and as it is now, plus
 // "duplicate": true. `received` is what this request carried; nothing of it
 // was stored. `reading` may now also be "retrying", "done" or "failed".
 const READING_NOW = { done: "done", failed: "failed", off: "not_needed" };
-const duplicateReceipt = (item, { text, draft }) => {
+const duplicateReceipt = (item, { text, draft }, why = "notification_id") => {
   const reading =
     item.extraction === "pending"
       ? item.attempts > 0
@@ -377,7 +426,9 @@ const duplicateReceipt = (item, { text, draft }) => {
     duplicate: true,
     message:
       `Already received from ${item.source} (item ${item.id}, now ${item.status}): ` +
-      "this copy has the same notification_id, so nothing new was stored",
+      (why === "text"
+        ? `this copy has the same text, received less than ${SAME_TEXT_SECONDS / 60} minutes ago, so nothing new was stored`
+        : "this copy has the same notification_id, so nothing new was stored"),
   };
 };
 
@@ -753,7 +804,7 @@ exports.accept = async (req) => {
       { currency: String(currency).trim().toUpperCase(), walletCurrency: String(walletCurrency).trim().toUpperCase() },
     );
   }
-  const transactionId = await transactions.insertTransaction(req.body || {});
+  const { id: transactionId, actualReset } = await transactions.insertTransaction(req.body || {});
   await db.query(`update inbox_items set transaction_id = $2 where id = $1`, [id, transactionId]);
-  return { id, status: "accepted", transaction_id: transactionId, has_text: hasText };
+  return { id, status: "accepted", transaction_id: transactionId, has_text: hasText, actualReset };
 };
