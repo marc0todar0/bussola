@@ -2,7 +2,7 @@
 
 [← Bank notifications](notifications.md)
 
-[Automate](https://llamalab.com/automate/) (LlamaLab) is free, with no ads. The free version runs at most 30 blocks at once; this flow has 23.
+[Automate](https://llamalab.com/automate/) (LlamaLab) is free, with no ads. The free version runs at most 30 blocks at once; this flow has 29.
 
 The flow handles the cases that break a simpler automation:
 
@@ -12,19 +12,21 @@ The flow handles the cases that break a simpler automation:
 - **No network.** The send is retried 12 times over about two hours (after 1, 2, 3 and 4 minutes, then every 15). If it still fails, or Bussola refuses it (a wrong token, say), you get a notification on the phone.
 - **Privacy.** The log shows the id, the app and Bussola's answer. The notification text never goes into the log.
 
-Tested on a Pixel 8a (Android 17, Automate 1.53): three notifications in the same second became three drafts, a restart sent nothing twice, a send with the server down arrived on the first retry, and a revoked token raised the *not sent* notification.
+Tested on a Pixel 8a (Android 17, Automate 1.53): the app picker (two apps chosen, kept after a restart); three notifications in the same second became three drafts, a restart sent nothing twice, a send with the server down arrived on the first retry, and a revoked token raised the *not sent* notification.
 
 ## Install
 
 1. Download [Bussola_inbox.flo](https://github.com/marc0todar0/bussola/raw/main/docs/automate/Bussola_inbox.flo) on the phone. In **Automate**, open the menu (⋮) → **Import** and pick the file.
-2. Open the flow → **Flowchart** and change three blocks (tap a block to edit it, then **Save**):
+2. Open the flow → **Flowchart** and change two blocks (tap a block to edit it, then **Save**):
    - **2** `url`: your address + `/api/inbox`, in quotes, e.g. `"https://bussola.example.com/api/inbox"`
    - **3** `token`: your token, in quotes. To make one, see [Create a token](notifications.md#2-create-a-token).
-   - **4** `banks`: your bank apps, each with the name Bussola will show, e.g. `{"com.revolut.revolut": "Revolut", "it.hype.app": "HYPE"}`. The package name is in the app's Play Store address, after `id=`.
 3. Clear your bank notifications from the status bar. Otherwise the flow sends them all when it starts.
 4. Tap **Start** and grant the privileges it asks for. *Access notifications* opens Android's settings: allow Automate there.
-5. **Automate → Settings → Run on system startup**: on, so the flow comes back after a reboot.
-6. **Android Settings → Apps → Automate → Battery → Unrestricted**, so it is not stopped in the background.
+5. **Pick your bank apps.** A notification *App pick?* appears: tap it, search for your bank and choose it. *Bussola: bank apps* then asks **Add another** (the picker again) or **Done**. Your choice is kept when the flow stops, restarts or the phone reboots.
+6. **Automate → Settings → Run on system startup**: on, so the flow comes back after a reboot.
+7. **Android Settings → Apps → Automate → Battery → Unrestricted**, so it is not stopped in the background.
+
+To change the bank apps later, edit any block and save: Automate forgets the choice when a flow is changed, and the picker comes back at the next start. In the inbox, the source of each draft is the app's package name, e.g. `com.revolut.revolut`.
 
 To check it, open the flow → **Log** after the next bank notification. A line `Bussola #… → 201 {"id":…}` is the draft arriving in the inbox.
 
@@ -32,14 +34,21 @@ Automate also lists *access to manage all files* among the privileges. The flow 
 
 ## How it works
 
-Block numbers are the ones shown on the flowchart (13 and 16 are not used).
+Block numbers are the ones shown on the flowchart (4, 13 and 16 are not used).
 
 ### Finding the notifications
 
 | # | Block | Settings | Exits |
 |---|---|---|---|
 | 1 | **Flow beginning** | | → 2 |
-| 2–4 | **Variable set** | `url`, `token`, `banks` (see Install) | → 5 |
+| 2–3 | **Variable set** | `url`, `token` (see Install) | → 26 |
+| 26 | **Atomic load** | `banks`, kept across restarts | → 27 |
+| 27 | **Expression true?** | `banks` (empty or never chosen is false) | YES → 5 · NO → 28 |
+| 28 | **Variable set** | `banks` = `{}` | → 31 |
+| 31 | **App pick?** | output `picked` | OK → 29 |
+| 29 | **Dictionary put** | `banks[picked]` = `picked` | → 32 |
+| 32 | **Dialog confirm?** | *Bussola: bank apps* · *Add another* / *Done* | YES → 31 · NO → 30 |
+| 30 | **Atomic store** | `banks` | → 5 |
 | 5 | **Variable set** | `sent` = `{}` | → 6 |
 | 6 | **Variable set** | `i` = `0` | → 7 |
 | 7 | **Notification posted?** | Proceed *Immediately* · Exclude *Ongoing*, *Foreground service*, *Group summary* · Index `i` · outputs `pkg`, `title`, `message`, `when`, `extras`, `nid` | YES → 8 · NO → 14 |

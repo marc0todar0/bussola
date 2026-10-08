@@ -38,8 +38,8 @@ A token can only add drafts to the wallet you had open and read the names of its
 
 1. Install [Automate](https://play.google.com/store/apps/details?id=com.llamalab.automate) (free, no ads).
 2. Download [Bussola_inbox.flo](https://github.com/marc0todar0/bussola/raw/main/docs/automate/Bussola_inbox.flo) on the phone and import it (Automate menu → **Import**).
-3. In the flowchart, set your address (block 2), your token (block 3) and your bank apps (block 4).
-4. Start the flow and allow *notification access*.
+3. In the flowchart, set your address (block 2) and your token (block 3).
+4. Start the flow, allow *notification access*, and pick your bank apps from the list it shows.
 
 Each bank notification is sent once, also when several arrive in the same second; a missed one is picked up at the next wake-up; sends are retried for about two hours when the phone is offline, and you are notified only when something fails.
 
