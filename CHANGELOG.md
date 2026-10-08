@@ -25,8 +25,26 @@ API starts; an entry that touches the schema names its migration.
   the wallet has already seen stores nothing and answers `200` with the first
   item's receipt and `"duplicate": true`. An invalid id is `400
   INVALID_NOTIFICATION_ID`.
+- **The same text twice is one item.** A text-only POST with the same text and
+  source as an item received in the last two minutes is a duplicate too,
+  whatever its id. Every POST logs one `[inbox]` line (source, length, id,
+  outcome), never the text.
+- **Android: a ready-made Automate flow** (`docs/automate/Bussola_inbox.flo`,
+  guide in `docs/automate.md`). You tick your bank apps in one list at the
+  first start, and a toast and the flow's log show the apps you chose. Each
+  notification is sent by its own fiber, so notifications arriving together no
+  longer mix; a failed send is retried for about two hours. It fits the free
+  version's 30 blocks.
 
 ### Changed
+
+- **MacroDroid is the second option**, and its macro sends through an action
+  block whose variables belong to each call: simultaneous notifications used to
+  overwrite each other's text, sending one twice and losing another.
+- **An investment account valued by hand follows its balance.** When the
+  account's only holding has no quantity × price, a transaction resets that
+  holding and the account's actual value to the new balance, and a toast says
+  so. Accounts with several holdings, or with quoted ones, are unchanged.
 
 - **A session is extended as you use it.** `BUSSOLA_SESSION_DAYS` (30) now
   counts from your last visit rather than from the sign-in, so somebody who
