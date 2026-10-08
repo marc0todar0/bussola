@@ -12,23 +12,23 @@ The flow handles the cases that break a simpler automation:
 - **No network.** The send is retried 12 times over about two hours (after 1, 2, 3 and 4 minutes, then every 15). If it still fails, or Bussola refuses it (a wrong token, say), you get a notification on the phone.
 - **Privacy.** The log shows the id, the app and Bussola's answer. The notification text never goes into the log.
 
-Tested on a Pixel 8a (Android 17, Automate 1.53): the app list (two apps ticked, kept after a restart); three notifications in the same second became three drafts, a restart sent nothing twice, a send with the server down arrived on the first retry, and a revoked token raised the *not sent* notification.
+Tested on a Pixel 8a (Android 17, Automate 1.53): the app list (two apps ticked, shown in a toast and in the log, kept after a restart); three notifications in the same second became three drafts, a restart sent nothing twice, a send with the server down arrived on the first retry, and a revoked token raised the *not sent* notification.
 
 ## Install
 
-1. Download [Bussola_inbox.flo](https://github.com/marc0todar0/bussola/raw/main/docs/automate/Bussola_inbox.flo) on the phone. In **Automate**, open the menu (⋮) → **Import** and pick the file.
+1. Download [Bussola_inbox.flo](https://github.com/marc0todar0/bussola/raw/main/docs/automate/Bussola_inbox.flo) on the phone. In **Automate**, open the menu (⋮) → **Import** and pick the file. Untick **Logging** in the import dialog: it writes a line for every block and buries the flow's own lines.
 2. Open the flow → **Flowchart** and change two blocks (tap a block to edit it, then **Save**):
    - **2** `url`: your address + `/api/inbox`, in quotes, e.g. `"https://bussola.example.com/api/inbox"`
    - **3** `token`: your token, in quotes. To make one, see [Create a token](notifications.md#2-create-a-token).
 3. Clear your bank notifications from the status bar. Otherwise the flow sends them all when it starts.
 4. Tap **Start** and grant the privileges it asks for. *Access notifications* opens Android's settings: allow Automate there.
-5. **Tick your bank apps.** A notification *Bussola: your bank and payment apps* appears: tap it, tick your banking and payment apps in the list (only the apps you installed are shown) and tap **OK**. Your choice is kept when the flow stops, restarts or the phone reboots.
+5. **Tick your bank apps.** A notification *Bussola: your bank and payment apps* appears: tap it, tick your banking and payment apps in the list (only the apps you installed are shown) and tap **OK**. A toast shows the apps you chose, e.g. *Bussola: PayPal, Revolut*. Your choice is kept when the flow stops, restarts or the phone reboots.
 6. **Automate → Settings → Run on system startup**: on, so the flow comes back after a reboot.
 7. **Android Settings → Apps → Automate → Battery → Unrestricted**, so it is not stopped in the background.
 
-To change the bank apps later, edit any block and save: Automate forgets the choice when a flow is changed, and the list comes back at the next start. In the inbox, each draft's source is the app's name, e.g. *Revolut*.
+To see the apps you chose, open the flow in Automate: every start writes them in its **Log**, e.g. `Bussola apps: PayPal, Revolut`. To change them, edit any block and save: Automate forgets the choice when a flow is changed, and the list comes back at the next start. In the inbox, each draft's source is the app's name, e.g. *Revolut*.
 
-To check it, open the flow → **Log** after the next bank notification. A line `Bussola #… → 201 {"id":…}` is the draft arriving in the inbox.
+To check the sending, look at the same **Log** after the next bank notification. A line `Bussola #… Revolut -> 201 {"id":…}` is the draft arriving in the inbox.
 
 Automate also lists *access to manage all files* among the privileges. The flow reads and writes no files; the HTTP block asks for it because it *can* save a response to a file. You can deny it.
 
@@ -42,14 +42,14 @@ Block numbers are the ones shown on the flowchart; the gaps are blocks that were
 |---|---|---|---|
 | 1 | **Flow beginning** | | → 2 |
 | 2–3 | **Variable set** | `url`, `token` (see Install) | → 26 |
-| 26 | **Atomic load** | `banks`, kept across restarts | → 27 |
-| 27 | **Expression true?** | `banks` (empty or never chosen is false) | YES → 5 · NO → 28 |
-| 28 | **Variable set** | `banks` = `{}` | → 35 |
+| 26 | **Atomic load** | `banks`, kept across restarts | → 38 |
+| 38 | **Log append** | `"Bussola apps: " ++ join(values(banks), ", ")` | → 27 |
+| 27 | **Expression true?** | `banks` (empty or never chosen is false) | YES → 5 · NO → 35 |
 | 35 | **App list** | Exclude *System*, *Updated system app* · outputs `pkgs`, `names` | → 36 |
-| 36 | **Dialog choice?** | *Bussola: your bank and payment apps* · titles `names` · descriptions `pkgs` · multi-select · sorted · output `sel` | OK → 37 |
-| 37 | **For each** | container `sel` · value `k` | DO → 29 · OK → 30 |
-| 29 | **Dictionary put** | `banks[pkgs[k]]` = `names[k]` | → 37 |
-| 30 | **Atomic store** | `banks` | → 5 |
+| 36 | **Dialog choice?** | *Bussola: your bank and payment apps* · titles `associate(pkgs, names)` · descriptions `associate(pkgs, pkgs)` · multi-select · sorted · output `sel`, the ticked packages | OK → 28 |
+| 28 | **Variable set** | `banks` = `sift(associate(pkgs, names), sel)` | → 30 |
+| 30 | **Atomic store** | `banks` | → 39 |
+| 39 | **Toast show** | `"Bussola: " ++ join(values(banks), ", ")` · long | → 38 |
 | 5 | **Variable set** | `sent` = `{}` | → 6 |
 | 6 | **Variable set** | `i` = `0` | → 7 |
 | 7 | **Notification posted?** | Proceed *Immediately* · Exclude *Ongoing*, *Foreground service*, *Group summary* · Index `i` · outputs `pkg`, `title`, `message`, `when`, `extras`, `nid` | YES → 8 · NO → 14 |
@@ -59,6 +59,8 @@ Block numbers are the ones shown on the flowchart; the gaps are blocks that were
 | 11 | **Fork** | | OK → 12 · NEW → 15 |
 | 12 | **Variable set** | `i` = `i + 1` | → 7 |
 | 14 | **Notification posted?** | Proceed *When transition* · same exclusions | YES → 6 · NO → 14 |
+
+Blocks 35–39 run only while no app is chosen. Titles and descriptions are dictionaries keyed by package, so the list returns the ticked packages, and `sift` keeps their names. After the choice, block 38 logs it and block 27 now lets the flow on to 5.
 
 Blocks 6–12 go through every notification in the status bar. A bank notification not seen before is marked in `sent` and handed to a new fiber (block 11, NEW). Block 14 then waits for the next notification from any app, and the scan starts again.
 
