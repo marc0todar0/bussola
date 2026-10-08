@@ -37,9 +37,15 @@ A token can only add drafts to the wallet you had open and read the names of its
 ### Android (Automate)
 
 1. Install [Automate](https://play.google.com/store/apps/details?id=com.llamalab.automate) (free, no ads).
-2. Download [Bussola_inbox.flo](https://github.com/marc0todar0/bussola/raw/main/docs/automate/Bussola_inbox.flo) on the phone and import it (Automate menu → **Import**).
+2. Download [Bussola_inbox.flo](https://github.com/marc0todar0/bussola/raw/main/docs/automate/Bussola_inbox.flo) on the phone and import it (Automate menu → **Import**; untick *Logging*).
 3. In the flowchart, set your address (block 2) and your token (block 3).
-4. Start the flow, allow *notification access*, and tick your bank apps in the list it shows.
+4. Start the flow, allow *notification access*, and tick your bank apps in the list it shows. A toast and the flow's log show the apps you chose.
+
+<p>
+  <img src="screenshots/automate-flowchart.png" width="200" alt="Automate flowchart: Flow beginning, then block 2 setting url and block 3 setting token, both still holding the placeholders">
+  <img src="screenshots/automate-apps.png" width="240" alt="The list Bussola: your bank and payment apps, with Revolut ticked, and the buttons All, Cancel and OK">
+  <img src="screenshots/automate-chosen.png" width="280" alt="The flow running, its log line Bussola apps: PayPal, Revolut, and the toast Bussola: PayPal, Revolut">
+</p>
 
 Each bank notification is sent once, also when several arrive in the same second; a missed one is picked up at the next wake-up; sends are retried for about two hours when the phone is offline, and you are notified only when something fails.
 
@@ -55,6 +61,10 @@ If you already use [MacroDroid](https://www.macrodroid.com/): its free version s
    - *Header* `Authorization`: `Bearer bpt_…your token…`
 3. In the macro's trigger **Notification Received**, tick your bank and payment apps.
 4. Save, and allow *Notification access* if asked.
+
+<p>
+  <img src="screenshots/android-trigger.png" width="200" alt="MacroDroid's Notification Received trigger: the chosen apps, any text content, Prevent multiple triggers ticked">
+</p>
 
 Each notification is handed to the action block, whose variables belong to that one call, so notifications arriving together cannot mix. It retries for about 3 hours when the phone is offline, logs every attempt to the **User Log** (channel `Bussola`), and notifies you only when something fails.
 
