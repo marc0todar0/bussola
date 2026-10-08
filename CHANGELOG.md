@@ -9,6 +9,8 @@ API starts; an entry that touches the schema names its migration.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-08
+
 ### Added
 
 - **A notification the model could not read is tried again.** A quota used up
