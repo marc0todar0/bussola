@@ -20,7 +20,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/summary.png" width="820" alt="The yearly summary: income, expenses and net, and a chart by month">
+  <a href="https://bussola.marcotodaro.dev/bussola-promo.mp4"><img src="tools/promo/poster-play.jpg" width="820" alt="Watch the 30-second video: a bank notification becomes a transaction in one tap, every account adds up to one total, and the portfolio grows"></a>
 </p>
 
 ## Getting started
@@ -66,6 +66,10 @@ To stop it, run `docker compose down`. Your data is kept.
 | HTTPS, passkeys, phone notifications | [Installation](docs/install.md#https-and-passkeys) |
 
 ## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/summary.png" width="820" alt="The yearly summary: income, expenses and net, and a chart by month">
+</p>
 
 | | |
 |:---:|:---:|

@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Bussola promo</title>
+<!-- A 30-second promo, drawn in HTML and recorded frame by frame by
+     render.mjs. Every frame is a pure function of the time: seek(t) sets the
+     whole stage, so the recording is exact and repeatable. Opened in a
+     browser on its own, the page plays in a loop. -->
+<style>
+@font-face {
+  font-family: "Schibsted Grotesk";
+  src: url("../../landing/fonts/schibsted-grotesk.woff2") format("woff2");
+  font-weight: 400 800;
+}
+:root {
+  --navy: #0b1624;
+  --navy-2: #12263f;
+  --ink: #13233a;
+  --muted: #56667b;
+  --rule: #e3e9f0;
+  --blue: #1e90ff;
+  --green: #1f9d55;
+  --red: #e5484d;
+  --cash: #42a5f5;
+  --emergency: #66bb6a;
+  --planned: #ffa726;
+  --longterm: #ef5350;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #000; overflow: hidden; }
+body { font-family: "Schibsted Grotesk", system-ui, sans-serif; }
+#stage {
+  position: relative; width: 1920px; height: 1080px; overflow: hidden;
+  background: radial-gradient(1200px 900px at 72% 50%, #173659 0%, var(--navy) 62%);
+  color: #fff; transform-origin: 0 0;
+}
+.abs { position: absolute; }
+.will { will-change: transform, opacity; }
+
+/* ---------------------------------------------------------- backdrop */
+#bgRose { left: 1330px; top: 540px; width: 1500px; height: 1500px; margin: -750px 0 0 -750px; opacity: .06; }
+#glow { left: 1330px; top: 540px; width: 900px; height: 900px; margin: -450px 0 0 -450px;
+  background: radial-gradient(closest-side, rgba(30,144,255,.38), rgba(30,144,255,0)); }
+
+/* ---------------------------------------------------------- intro / outro */
+.center { left: 0; width: 1920px; text-align: center; }
+#introLogo, #endLogo { left: 960px; width: 200px; height: 200px; margin-left: -100px; }
+#introLogo { top: 300px; }
+#introName, #endName { top: 530px; font-size: 120px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+#introTag, #endTag { top: 680px; font-size: 44px; font-weight: 500; color: #b9d8fb; letter-spacing: -0.01em; }
+#endLogo { top: 190px; width: 170px; height: 170px; margin-left: -85px; }
+#endName { top: 390px; }
+#endTag { top: 535px; }
+#endChips { top: 650px; display: flex; justify-content: center; gap: 18px; }
+.chip { padding: 14px 28px; border-radius: 999px; background: rgba(255,255,255,.08);
+  border: 1.5px solid rgba(255,255,255,.18); font-size: 30px; font-weight: 600; }
+#endUrl { top: 790px; font-size: 36px; font-weight: 700; color: #fff; }
+#endUrl span { display: inline-block; padding: 18px 40px; border-radius: 999px; background: var(--blue); }
+#endSub { top: 900px; font-size: 26px; color: #8fa6c0; }
+
+/* ---------------------------------------------------------- headlines */
+#brand { left: 150px; top: 80px; display: flex; align-items: center; gap: 16px; font-size: 36px; font-weight: 800; letter-spacing: -0.02em; }
+#brand svg { width: 52px; height: 52px; }
+.head { left: 150px; top: 330px; width: 800px; }
+.kicker { display: inline-flex; align-items: center; gap: 12px; font-size: 26px; font-weight: 700; color: #6cb6ff;
+  text-transform: uppercase; letter-spacing: .12em; }
+.kicker b { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(30,144,255,.18); color: #6cb6ff; font-size: 22px; letter-spacing: 0; }
+.title { text-wrap: balance; margin-top: 26px; font-size: 92px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.0; }
+.sub { text-wrap: balance; margin-top: 30px; font-size: 36px; line-height: 1.35; color: #a9bdd4; max-width: 720px; }
+.badge { padding: 16px 26px; border-radius: 20px; background: #fff; color: var(--ink); font-size: 26px; font-weight: 700;
+  box-shadow: 0 20px 50px rgba(0,0,0,.35); display: flex; align-items: center; gap: 12px; white-space: nowrap; }
+.badge i { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; font-style: normal; color: #fff; font-size: 22px; }
+
+/* ---------------------------------------------------------- phone */
+#phone { left: 1110px; top: 80px; width: 440px; height: 920px; border-radius: 64px; background: #05080d;
+  padding: 13px; box-shadow: 0 0 0 2px #2a3a50, 0 60px 120px rgba(0,0,0,.55); }
+#screen { position: relative; width: 100%; height: 100%; border-radius: 52px; overflow: hidden; background: #fff; }
+#island { left: 50%; top: 12px; width: 118px; height: 34px; margin-left: -59px; border-radius: 20px; background: #000; z-index: 50; }
+.scr { position: absolute; inset: 0; overflow: hidden; }
+.status { height: 58px; padding: 18px 34px 0; display: flex; justify-content: space-between; font-size: 17px; font-weight: 700; }
+
+/* lock screen */
+#lock { background: linear-gradient(170deg, #27406a 0%, #142238 55%, #0c1626 100%); color: #fff; }
+#lockTime { top: 92px; left: 0; width: 100%; text-align: center; font-size: 96px; font-weight: 600; letter-spacing: -0.03em; }
+#lockDate { top: 210px; left: 0; width: 100%; text-align: center; font-size: 21px; color: #c8d6e8; }
+.notif { left: 14px; width: 386px; padding: 16px; border-radius: 26px; background: rgba(255,255,255,.16);
+  backdrop-filter: blur(20px); display: flex; gap: 13px; }
+.notif .ic { flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; font-size: 22px; }
+.notif .hd { display: flex; justify-content: space-between; font-size: 14px; color: #c8d6e8; }
+.notif .tt { font-size: 17px; font-weight: 700; margin-top: 2px; }
+.notif .bd { font-size: 16px; line-height: 1.3; color: #e4ecf5; margin-top: 2px; }
+#nBank { top: 300px; }
+#nBussola { top: 300px; }
+
+/* app chrome */
+#app { background: #f4f7fa; color: var(--ink); }
+#tabs { top: 58px; left: 0; width: 100%; height: 70px; display: flex; background: #fff; border-bottom: 1px solid var(--rule); }
+.tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11.5px; color: #7b8a9c; }
+.tab svg { width: 24px; height: 24px; fill: #7b8a9c; }
+.tab.on { color: var(--blue); } .tab.on svg { fill: var(--blue); }
+#tabLine { top: 125px; height: 3px; width: 60px; background: var(--blue); border-radius: 2px; }
+.page { top: 128px; left: 0; width: 100%; bottom: 0; padding: 20px 20px 0; }
+.ptitle { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; text-align: center; }
+.card { background: #fff; border-radius: 20px; border: 1px solid var(--rule); }
+
+/* inbox */
+.pill { display: inline-block; padding: 7px 16px; border-radius: 999px; border: 1.5px solid var(--blue); color: var(--blue); font-weight: 700; font-size: 15px; }
+.row { display: flex; align-items: center; gap: 12px; padding: 13px 14px; border-bottom: 1px solid var(--rule); background: #fff; }
+.row .dot { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-size: 19px; color: #fff; font-weight: 800; }
+.row .nm { font-weight: 700; font-size: 16.5px; }
+.row .ds { font-size: 13.5px; color: var(--muted); }
+.row .am { margin-left: auto; font-weight: 700; font-size: 16.5px; white-space: nowrap; }
+.neg { color: var(--red); } .pos { color: var(--green); }
+#sheet { left: 0; bottom: 0; width: 100%; padding: 14px 16px 26px; background: #fff; border-radius: 28px 28px 0 0;
+  box-shadow: 0 -10px 40px rgba(19,35,58,.18); }
+#sheet .grab { width: 44px; height: 5px; border-radius: 3px; background: #cfd8e3; margin: 0 auto 12px; }
+#sheet .hint { font-size: 14px; line-height: 1.4; color: var(--muted); text-align: center; padding: 0 6px 12px; }
+.draft { border: 1px solid var(--rule); border-radius: 18px; padding: 14px; }
+.draft .top { display: flex; justify-content: space-between; font-size: 13.5px; color: var(--muted); }
+.draft .mer { text-align: center; font-weight: 800; font-size: 20px; margin: 8px 0 4px; }
+.draft .raw { text-align: center; font-style: italic; font-size: 13.5px; color: var(--muted); }
+.draft .meta { font-size: 14.5px; margin: 10px 0 12px; display: flex; gap: 12px; }
+.btns { display: flex; gap: 8px; }
+.btn { flex: 1; text-align: center; padding: 11px 0; border-radius: 999px; font-weight: 700; font-size: 16px; color: #fff; }
+.btn.ok { background: #2e7d32; } .btn.rv { background: var(--blue); } .btn.no { color: var(--ink); border: 1.5px solid #cfd8e3; }
+#toast { left: 50%; bottom: 36px; margin-left: -150px; width: 300px; padding: 14px 18px; border-radius: 16px; background: var(--ink); color: #fff;
+  font-size: 15.5px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+#toast i { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #2e7d32; font-style: normal; font-size: 15px; }
+#finger { left: 0; top: 0; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%; background: rgba(255,255,255,.55);
+  border: 3px solid rgba(19,35,58,.35); z-index: 40; }
+#ripple { left: 0; top: 0; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%; border: 3px solid rgba(46,125,50,.8); z-index: 39; }
+
+/* accounts */
+#total { padding: 18px; text-align: center; background: linear-gradient(135deg, #1e90ff, #0b62c4); color: #fff; border: 0; }
+#total .lb { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; opacity: .85; font-weight: 600; }
+#total .vl { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; margin-top: 4px; }
+#accList .row:first-child { border-radius: 18px 18px 0 0; } #accList .row:last-child { border-radius: 0 0 18px 18px; border-bottom: 0; }
+
+/* summary */
+.kpi { display: flex; justify-content: space-around; text-align: center; margin-top: 8px; }
+.kpi .lb { font-size: 12px; letter-spacing: .12em; color: #8a97a8; font-weight: 600; }
+.kpi .vl { font-size: 21px; font-weight: 800; }
+#net { text-align: center; margin-top: 8px; } #net .lb { font-size: 12px; letter-spacing: .12em; color: #8a97a8; font-weight: 600; }
+#net .vl { font-size: 42px; font-weight: 800; color: var(--green); letter-spacing: -0.02em; }
+.ctitle { font-size: 15px; font-weight: 700; margin: 0 0 8px 2px; }
+.cat { display: flex; align-items: center; gap: 10px; font-size: 14.5px; margin: 7px 0; }
+.cat .nm { width: 92px; } .cat .bar { flex: 1; height: 12px; border-radius: 6px; background: #edf1f6; overflow: hidden; }
+.cat .bar div { height: 100%; border-radius: 6px; } .cat .pc { width: 42px; text-align: right; font-weight: 700; }
+
+/* portfolio */
+.legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; font-size: 13.5px; margin-top: 4px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend span::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--c); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <svg id="bgRose" class="abs" viewBox="0 0 32 32"><path d="M16 1 19.5 12.5 31 16 19.5 19.5 16 31 12.5 19.5 1 16 12.5 12.5Z" fill="#fff"/></svg>
+  <div id="glow" class="abs"></div>
+
+  <!-- intro -->
+  <svg id="introLogo" class="abs will" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#1E90FF"/><path d="M16 1 19.5 12.5 31 16 19.5 19.5 16 31 12.5 19.5 1 16 12.5 12.5Z" fill="#fff"/></svg>
+  <div id="introName" class="abs center will">Bussola</div>
+  <div id="introTag" class="abs center will">Tutti i tuoi soldi, in un posto solo.</div>
+
+  <!-- brand mark during the scenes -->
+  <div id="brand" class="abs will"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#1E90FF"/><path d="M16 1 19.5 12.5 31 16 19.5 19.5 16 31 12.5 19.5 1 16 12.5 12.5Z" fill="#fff"/></svg>Bussola</div>
+
+  <div id="heads"></div>
+
+
+  <!-- the phone -->
+  <div id="phone" class="abs will">
+    <div id="screen">
+      <div id="island" class="abs"></div>
+
+      <!-- lock screen -->
+      <div id="lock" class="scr will">
+        <div class="status"><span>18:11</span><span>5G ▮▮▮ 91%</span></div>
+        <div id="lockTime" class="abs">18:11</div>
+        <div id="lockDate" class="abs">martedì 20 ottobre</div>
+        <div id="nBank" class="abs notif will">
+          <div class="ic" style="background:#ff6b3d;color:#fff">A</div>
+          <div style="flex:1"><div class="hd"><span>Banca Aurora</span><span>ora</span></div>
+            <div class="tt">Pagamento con carta</div>
+            <div class="bd">Hai speso 12,40 € presso Supermercato Rossi. Saldo disponibile: ••••</div></div>
+        </div>
+        <div id="nBussola" class="abs notif will">
+          <div class="ic" style="background:#1e90ff"><svg viewBox="0 0 32 32" width="30" height="30"><path d="M16 1 19.5 12.5 31 16 19.5 19.5 16 31 12.5 19.5 1 16 12.5 12.5Z" fill="#fff"/></svg></div>
+          <div style="flex:1"><div class="hd"><span>Bussola</span><span>ora</span></div>
+            <div class="tt">12,40 € · Supermercato Rossi</div>
+            <div class="bd">Un movimento aspetta la tua conferma</div></div>
+        </div>
+      </div>
+
+      <!-- the app -->
+      <div id="app" class="scr will">
+        <div class="status" style="background:#fff"><span>18:12</span><span>5G ▮▮▮ 91%</span></div>
+        <div id="tabs" class="abs">
+          <div class="tab"><svg viewBox="0 0 24 24"><path d="M12 2 2 7v2h20V7L12 2zM4 11v7h3v-7H4zm6.5 0v7h3v-7h-3zM17 11v7h3v-7h-3zM2 20v2h20v-2H2z"/></svg>Conti</div>
+          <div class="tab"><svg viewBox="0 0 24 24"><path d="M2 4v7.6l10.4 10.4 9.6-9.6L11.6 2H4a2 2 0 0 0-2 2zm5 1.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/></svg>Categorie</div>
+          <div class="tab"><svg viewBox="0 0 24 24"><path d="M16 3l5 4.5L16 12V9H4V6h12V3zM8 12v3h12v3H8v3l-5-4.5L8 12z"/></svg>Movimenti</div>
+          <div class="tab"><svg viewBox="0 0 24 24"><path d="M11 2.05A10 10 0 1 0 21.95 13H11V2.05zM13 2.05V11h8.95A10 10 0 0 0 13 2.05z"/></svg>Riepilogo</div>
+          <div class="tab"><svg viewBox="0 0 24 24"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7 7 0 0 0-1.7-1L14.9 3h-4l-.4 2.7a7 7 0 0 0-1.7 1l-2.5-1-2 3.5L6.4 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7 7 0 0 0 1.7 1l.4 2.9h4l.4-2.7a7 7 0 0 0 1.7-1l2.5 1 2-3.5-2.1-1.8zM12.9 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg>Impostaz.</div>
+        </div>
+        <div id="tabLine" class="abs"></div>
+
+        <!-- transactions + inbox -->
+        <div id="pTx" class="abs page will">
+          <div class="ptitle">ottobre 2026</div>
+          <div style="text-align:center;margin:12px 0 14px"><span id="pending" class="pill">1 da confermare</span></div>
+          <div style="display:flex;justify-content:space-between;font-weight:800;font-size:19px;margin:0 4px 10px"><span class="pos">2.450,00 €</span><span id="monthOut" class="neg">−1.182,30 €</span></div>
+          <div class="card" style="overflow:hidden">
+            <div id="newRow" class="row will" style="overflow:hidden"><div class="dot" style="background:#66bb6a">🛒</div><div><div class="nm">Supermercato Rossi</div><div class="ds">Alimentari · Banca Aurora</div></div><div class="am neg">−12,40 €</div></div>
+            <div class="row"><div class="dot" style="background:#ffa726">⛽</div><div><div class="nm">Carburante</div><div class="ds">Trasporti · Nova Card</div></div><div class="am neg">−58,00 €</div></div>
+            <div class="row"><div class="dot" style="background:#ab47bc">🎬</div><div><div class="nm">Cinema</div><div class="ds">Svago · PayGo</div></div><div class="am neg">−18,50 €</div></div>
+            <div class="row"><div class="dot" style="background:#26a69a">💼</div><div><div class="nm">Stipendio</div><div class="ds">Entrate · Banca Aurora</div></div><div class="am pos">+2.450,00 €</div></div>
+            <div class="row"><div class="dot" style="background:#42a5f5">🏠</div><div><div class="nm">Affitto</div><div class="ds">Casa · Banca Aurora</div></div><div class="am neg">−750,00 €</div></div>
+            <div class="row"><div class="dot" style="background:#ef5350">📱</div><div><div class="nm">Telefono</div><div class="ds">Bollette · Nova Card</div></div><div class="am neg">−9,99 €</div></div>
+          </div>
+          <div id="sheet" class="abs will">
+            <div class="grab"></div>
+            <div class="hint">Bozze inviate dal telefono a partire dalle notifiche della banca. Nulla viene registrato finché non lo confermi.</div>
+            <div class="draft">
+              <div class="top"><span>Banca Aurora · 20/10/26, 18:11</span><span class="neg" style="font-weight:800">12,40 €</span></div>
+              <div class="mer">Supermercato Rossi</div>
+              <div class="raw">Hai speso 12,40 € presso Supermercato Rossi…</div>
+              <div class="meta"><span>Spesa</span><span>Da: <b>Banca Aurora</b></span><span>A: <b>Alimentari</b></span></div>
+              <div class="btns"><div id="btnOk" class="btn ok will">Accetta</div><div class="btn rv">Rivedi</div><div class="btn no">Scarta</div></div>
+            </div>
+          </div>
+          <div id="toast" class="abs will"><i>✓</i>Movimento registrato</div>
+        </div>
+
+        <!-- accounts -->
+        <div id="pAcc" class="abs page will">
+          <div class="ptitle" style="margin-bottom:14px">Conti</div>
+          <div id="total" class="card"><div class="lb">Patrimonio totale</div><div id="totalVal" class="vl">0,00 €</div></div>
+          <div id="accList" class="card" style="margin-top:14px"></div>
+        </div>
+
+        <!-- summary -->
+        <div id="pSum" class="abs page will">
+          <div class="ptitle">2026</div>
+          <div id="net"><div class="lb">NETTO</div><div id="netVal" class="vl">0,00 €</div></div>
+          <div class="kpi"><div><div class="lb">ENTRATE</div><div id="inVal" class="vl pos">0,00 €</div></div><div><div class="lb">USCITE</div><div id="outVal" class="vl neg">0,00 €</div></div></div>
+          <div class="card" style="padding:14px 12px 8px;margin-top:14px">
+            <div class="ctitle">Entrate e uscite per mese</div>
+            <svg id="bars" width="346" height="200" viewBox="0 0 346 200"></svg>
+          </div>
+          <div class="card" style="padding:14px 16px;margin-top:12px">
+            <div class="ctitle">Uscite per categoria</div>
+            <div id="cats"></div>
+          </div>
+        </div>
+
+        <!-- portfolio -->
+        <div id="pPort" class="abs page will">
+          <div class="ptitle" style="font-size:26px">Investimenti</div>
+          <div style="position:relative;width:240px;height:240px;margin:10px auto 0">
+            <svg id="donut" width="240" height="240" viewBox="0 0 240 240" style="transform:rotate(-90deg)"></svg>
+            <div class="abs" style="inset:0;display:grid;place-items:center;text-align:center">
+              <div><div style="font-size:14px;color:var(--muted)">Totale</div><div id="portVal" style="font-size:27px;font-weight:800;letter-spacing:-0.02em">0 €</div></div>
+            </div>
+          </div>
+          <div class="legend"><span style="--c:var(--cash)">Liquidità</span><span style="--c:var(--emergency)">Fondo di emergenza</span><span style="--c:var(--planned)">Spese previste</span><span style="--c:var(--longterm)">Lungo termine</span></div>
+          <div class="card" style="padding:14px 12px 8px;margin-top:14px">
+            <div class="ctitle">Andamento investimenti</div>
+            <svg id="line" width="346" height="150" viewBox="0 0 346 150">
+              <defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1e90ff" stop-opacity=".28"/><stop offset="1" stop-color="#1e90ff" stop-opacity="0"/></linearGradient></defs>
+              <g stroke="#edf1f6" stroke-width="1"><line x1="0" y1="25" x2="346" y2="25"/><line x1="0" y1="75" x2="346" y2="75"/><line x1="0" y1="125" x2="346" y2="125"/></g>
+              <path id="lineArea" fill="url(#area)"/>
+              <path id="linePath" fill="none" stroke="#1e90ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle id="lineDot" r="7" fill="#1e90ff" stroke="#fff" stroke-width="3"/>
+            </svg>
+          </div>
+          <div id="holdings" class="card" style="margin-top:12px;overflow:hidden"></div>
+        </div>
+
+        <div id="finger" class="abs will"></div>
+        <div id="ripple" class="abs will"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="badgeNoPass" class="abs badge will" style="left:150px;top:770px"><i style="background:#2e7d32">✓</i>Nessuna password della banca</div>
+  <div id="badgeUp" class="abs badge will" style="left:150px;top:770px"><i style="background:#2e7d32">↗</i>+12,4% in un anno</div>
+
+  <!-- end card -->
+  <svg id="endLogo" class="abs will" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#1E90FF"/><path d="M16 1 19.5 12.5 31 16 19.5 19.5 16 31 12.5 19.5 1 16 12.5 12.5Z" fill="#fff"/></svg>
+  <div id="endName" class="abs center will">Bussola</div>
+  <div id="endTag" class="abs center will">Tutti i tuoi soldi, in un posto solo.</div>
+  <div id="endChips" class="abs center">
+    <span class="chip will">Gratis</span><span class="chip will">Open source</span><span class="chip will">Self-hosted</span><span class="chip will">Zero telemetria</span>
+  </div>
+  <div id="endUrl" class="abs center will"><span>Prova la demo · demo-bussola.marcotodaro.dev</span></div>
+  <div id="endSub" class="abs center will">github.com/marc0todar0/bussola</div>
+</div>
+
+<script>
+const DURATION = 30;
+
+// ------------------------------------------------------------ language
+// The markup and the data below are in Italian, but the video is English:
+// every string that has an entry here is swapped, unless ?lang=it. App
+// strings follow frontend/src/i18n/en.json.
+const $ = id => document.getElementById(id);
+const LANG = new URLSearchParams(location.search).get("lang") === "it" ? "it" : "en";
+const EN = {
+  "Tutti i tuoi soldi, in un posto solo.": "All your money, in one place, adding up.",
+  "martedì 20 ottobre": "Tuesday, October 20",
+  "ora": "now",
+  "Banca Aurora": "Aurora Bank",
+  "Pagamento con carta": "Card payment",
+  "Hai speso 12,40 € presso Supermercato Rossi. Saldo disponibile: ••••": "You spent €12.40 at Corner Market. Available balance: ••••",
+  "12,40 € · Supermercato Rossi": "€12.40 · Corner Market",
+  "Un movimento aspetta la tua conferma": "A transaction is waiting for you to confirm",
+  "Conti": "Accounts", "Categorie": "Categories", "Movimenti": "Transactions", "Riepilogo": "Summary", "Impostaz.": "Settings",
+  "ottobre 2026": "October 2026",
+  "1 da confermare": "1 to confirm",
+  "2.450,00 €": "€2,450.00", "−1.182,30 €": "−€1,182.30",
+  "Supermercato Rossi": "Corner Market", "Alimentari · Banca Aurora": "Groceries · Aurora Bank", "−12,40 €": "−€12.40",
+  "Carburante": "Fuel", "Trasporti · Nova Card": "Transport · Nova Card", "−58,00 €": "−€58.00",
+  "Svago · PayGo": "Leisure · PayGo", "−18,50 €": "−€18.50",
+  "Stipendio": "Salary", "Entrate · Banca Aurora": "Income · Aurora Bank", "+2.450,00 €": "+€2,450.00",
+  "Affitto": "Rent", "Casa · Banca Aurora": "Home · Aurora Bank", "−750,00 €": "−€750.00",
+  "Telefono": "Phone", "Bollette · Nova Card": "Bills · Nova Card", "−9,99 €": "−€9.99",
+  "Bozze inviate dal telefono a partire dalle notifiche della banca. Nulla viene registrato finché non lo confermi.": "Drafts sent by your phone from bank notifications. Nothing is recorded until you confirm it.",
+  "Banca Aurora · 20/10/26, 18:11": "Aurora Bank · 20/10/26, 18:11",
+  "12,40 €": "€12.40",
+  "Hai speso 12,40 € presso Supermercato Rossi…": "You spent €12.40 at Corner Market…",
+  "Spesa": "Expense", "Da:": "From:", "A:": "To:", "Alimentari": "Groceries",
+  "Accetta": "Accept", "Rivedi": "Review", "Scarta": "Dismiss",
+  "Movimento registrato": "Transaction recorded",
+  "Patrimonio totale": "Net worth",
+  "NETTO": "NET", "ENTRATE": "INCOME", "USCITE": "EXPENSES",
+  "Entrate e uscite per mese": "Income and expenses by month",
+  "Uscite per categoria": "Expenses by category",
+  "Investimenti": "Portfolio", "Totale": "Total",
+  "Liquidità": "Cash", "Fondo di emergenza": "Emergency fund", "Spese previste": "Planned expenses", "Lungo termine": "Long term",
+  "Andamento investimenti": "Portfolio over time",
+  "Nessuna password della banca": "No bank passwords",
+  "+12,4% in un anno": "+12.4% in a year",
+  "Gratis": "Free", "Zero telemetria": "No telemetry",
+  "Prova la demo · demo-bussola.marcotodaro.dev": "Try the demo · demo-bussola.marcotodaro.dev",
+  // headlines
+  "Notifiche della banca": "Bank notifications",
+  "Paghi con la carta.": "You pay by card.",
+  "La banca ti manda la solita notifica sul telefono.": "Your bank sends the usual notification to your phone.",
+  "Bussola la legge per te.": "Bussola reads it for you.",
+  "E prepara il movimento: importo, conto, categoria.": "And drafts the transaction: amount, account, category.",
+  "Un tocco": "One tap",
+  "Accetti,<br>ed è registrato.": "Accept,<br>and it’s recorded.",
+  "Nulla viene salvato finché non lo confermi tu.": "Nothing is saved until you confirm it.",
+  "Tutti i conti": "Every account",
+  "Ogni banca, un solo totale.": "Every bank, one total.",
+  "Conti, carte, app di pagamento, broker, crypto e contanti.": "Bank accounts, cards, payment apps, brokers, crypto and cash.",
+  "Andamento": "Trends",
+  "Sai dove vanno i tuoi soldi.": "See where your money goes.",
+  "Entrate e uscite, mese per mese, categoria per categoria.": "Income and expenses, month by month, category by category.",
+  "Guarda crescere il tuo patrimonio.": "Watch your net worth grow.",
+  "ETF, azioni, obbligazioni, crypto. Prezzi aggiornati da soli.": "ETFs, stocks, bonds, crypto. Prices that update themselves.",
+  // data
+  "Conto corrente": "Current account", "Carta": "Card", "App di pagamento": "Payment app",
+  "Broker · ETF e azioni": "Broker · ETFs and stocks", "Conto deposito": "Savings account",
+  "Vincolato 12 mesi": "12-month term", "Contanti": "Cash", "Portafoglio": "Wallet",
+  "GFMAMGLASO": "JFMAMJJASO",
+  "Casa": "Home", "Trasporti": "Transport", "Svago": "Leisure",
+  "ETF Azionario Mondo": "World Equity ETF", "Trade+ · 142 quote": "Trade+ · 142 shares",
+  "Trade+ · obbligazione": "Trade+ · bond", "Crypto Vault · 0,032 BTC": "Crypto Vault · 0.032 BTC",
+  "+14,2%": "+14.2%", "+3,1%": "+3.1%", "+38,0%": "+38.0%",
+};
+const tr = s => (LANG === "en" && s in EN ? EN[s] : s);
+document.documentElement.lang = LANG;
+{
+  const walk = document.createTreeWalker($("stage"), NodeFilter.SHOW_TEXT);
+  for (let n; (n = walk.nextNode());) {
+    const key = n.nodeValue.trim();
+    if (key && tr(key) !== key) n.nodeValue = n.nodeValue.replace(key, tr(key));
+  }
+}
+
+// ------------------------------------------------------------ helpers
+const clamp = x => Math.min(1, Math.max(0, x));
+const ease = {
+  out: x => 1 - Math.pow(1 - x, 3),
+  inOut: x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
+  back: x => { const c = 1.6; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); },
+};
+// Progress of a tween that starts at `a` and lasts `d` seconds.
+const p = (t, a, d, e = ease.out) => e(clamp((t - a) / d));
+const set = (el, o, tr) => { el.style.opacity = o; el.style.transform = tr || ""; el.style.visibility = o <= 0.001 ? "hidden" : "visible"; };
+const lerp = (a, b, k) => a + (b - a) * k;
+const euro = (v, dec = 2) => {
+  const s = Math.abs(v).toFixed(dec).split(".");
+  const en = LANG === "en";
+  s[0] = s[0].replace(/\B(?=(\d{3})+(?!\d))/g, en ? "," : ".");
+  const n = s.join(en ? "." : ",");
+  return (v < 0 ? "−" : "") + (en ? "€" + n : n + " €");
+};
+
+// ------------------------------------------------------------ headlines
+const HEADS = [
+  { a: 3.2, b: 5.5, n: 1, k: "Notifiche della banca", t: "Paghi con la carta.", s: "La banca ti manda la solita notifica sul telefono." },
+  { a: 5.7, b: 7.7, n: 1, k: "Notifiche della banca", t: "Bussola la legge per te.", s: "E prepara il movimento: importo, conto, categoria." },
+  { a: 7.9, b: 12.0, n: 2, k: "Un tocco", t: "Accetti,<br>ed è registrato.", s: "Nulla viene salvato finché non lo confermi tu." },
+  { a: 12.4, b: 16.4, n: 3, k: "Tutti i conti", t: "Ogni banca, un solo totale.", s: "Conti, carte, app di pagamento, broker, crypto e contanti." },
+  { a: 16.8, b: 20.8, n: 4, k: "Andamento", t: "Sai dove vanno i tuoi soldi.", s: "Entrate e uscite, mese per mese, categoria per categoria." },
+  { a: 21.2, b: 25.4, n: 5, k: "Investimenti", t: "Guarda crescere il tuo patrimonio.", s: "ETF, azioni, obbligazioni, crypto. Prezzi aggiornati da soli." },
+];
+const heads = $("heads");
+for (const h of HEADS) {
+  const el = document.createElement("div");
+  el.className = "abs head";
+  el.innerHTML = `<div class="kicker will"><b>${h.n}</b>${tr(h.k)}</div><div class="title will">${tr(h.t)}</div><div class="sub will">${tr(h.s)}</div>`;
+  heads.appendChild(el);
+  h.parts = [...el.children];
+}
+
+// ------------------------------------------------------------ accounts
+const ACCOUNTS = [
+  ["Banca Aurora", "Conto corrente", 8420.35, "#ff6b3d", "A"],
+  ["Nova Card", "Carta", 1204.10, "#7c4dff", "N"],
+  ["PayGo", "App di pagamento", 245.80, "#00b8d4", "P"],
+  ["Trade+", "Broker · ETF e azioni", 18530.00, "#1e90ff", "T"],
+  ["Crypto Vault", "Exchange", 3120.55, "#f4a100", "₿"],
+  ["Conto deposito", "Vincolato 12 mesi", 9000.00, "#43a047", "D"],
+  ["Contanti", "Portafoglio", 159.20, "#8d6e63", "€"],
+];
+const TOTAL = ACCOUNTS.reduce((s, a) => s + a[2], 0);
+$("accList").innerHTML = ACCOUNTS.map(a =>
+  `<div class="row will"><div class="dot" style="background:${a[3]}">${a[4]}</div><div><div class="nm">${tr(a[0])}</div><div class="ds">${tr(a[1])}</div></div><div class="am">${euro(a[2])}</div></div>`).join("");
+const accRows = [...$("accList").children];
+
+// ------------------------------------------------------------ summary
+const INCOME = [2350, 2350, 2420, 2350, 2600, 2380, 3550, 2350, 2380, 2450];
+const SPEND = [1610, 1480, 1890, 1720, 1950, 1560, 2380, 2120, 1540, 1182];
+const MONTHS = tr("GFMAMGLASO");
+const barsSvg = $("bars");
+const BAR_H = 170, MAXV = 3600, step = 346 / 10;
+let barsHtml = "";
+for (let i = 0; i < 10; i++) {
+  const x = i * step + 6;
+  barsHtml += `<rect class="bi" x="${x}" width="11" rx="3" fill="#2e9d55"/><rect class="bo" x="${x + 13}" width="11" rx="3" fill="#e5484d"/>` +
+    `<text x="${x + 12}" y="197" font-size="12" text-anchor="middle" fill="#8a97a8">${MONTHS[i]}</text>`;
+}
+barsSvg.innerHTML = barsHtml;
+const bi = [...barsSvg.querySelectorAll(".bi")], bo = [...barsSvg.querySelectorAll(".bo")];
+const IN_TOT = INCOME.reduce((a, b) => a + b, 0), OUT_TOT = SPEND.reduce((a, b) => a + b, 0) + 0.48;
+const CATS = [["Casa", 34, "#42a5f5"], ["Alimentari", 21, "#66bb6a"], ["Trasporti", 12, "#ffa726"], ["Svago", 9, "#ab47bc"]];
+$("cats").innerHTML = CATS.map(c => `<div class="cat"><span class="nm">${tr(c[0])}</span><span class="bar"><div style="background:${c[2]}"></div></span><span class="pc">${c[1]}%</span></div>`).join("");
+const catBars = [...$("cats").querySelectorAll(".bar div")];
+
+// ------------------------------------------------------------ portfolio
+const PILLARS = [[49.0, "#42a5f5"], [12.3, "#66bb6a"], [11.1, "#ffa726"], [27.7, "#ef5350"]];
+const R = 96, CIRC = 2 * Math.PI * R;
+$("donut").innerHTML = PILLARS.map(pl => `<circle cx="120" cy="120" r="${R}" fill="none" stroke="${pl[1]}" stroke-width="40"/>`).join("");
+const segs = [...$("donut").children];
+const HOLDINGS = [["ETF Azionario Mondo", "Trade+ · 142 quote", "+14,2%", "#ef5350"], ["BTP 2030", "Trade+ · obbligazione", "+3,1%", "#ffa726"], ["Bitcoin", "Crypto Vault · 0,032 BTC", "+38,0%", "#f4a100"]];
+$("holdings").innerHTML = HOLDINGS.map(h => `<div class="row will" style="padding:10px 14px"><div class="dot" style="background:${h[3]};width:34px;height:34px;font-size:15px">${tr(h[0])[0]}</div><div><div class="nm" style="font-size:15px">${tr(h[0])}</div><div class="ds">${tr(h[1])}</div></div><div class="am pos">${tr(h[2])}</div></div>`).join("");
+const holdRows = [...$("holdings").children];
+// A gently rising, slightly noisy value series for the investments line.
+const PTS = [];
+for (let i = 0; i <= 36; i++) {
+  const v = 0.18 + 0.62 * (i / 36) + 0.05 * Math.sin(i * 0.9) + 0.03 * Math.sin(i * 2.3) - (i > 14 && i < 19 ? 0.06 : 0);
+  PTS.push([i / 36 * 330 + 8, 140 - v * 125]);
+}
+const lineD = "M" + PTS.map(q => q.map(n => n.toFixed(1)).join(",")).join("L");
+$("linePath").setAttribute("d", lineD);
+const LINE_LEN = $("linePath").getTotalLength();
+$("linePath").style.strokeDasharray = LINE_LEN;
+
+// ------------------------------------------------------------ the frame
+function seek(t) {
+  // backdrop
+  $("bgRose").style.transform = `rotate(${t * 3}deg) scale(${1 + 0.04 * Math.sin(t / 3)})`;
+
+  // intro
+  const iOut = p(t, 2.45, 0.45, ease.inOut);
+  const il = p(t, 0.15, 1.0, ease.back);
+  set($("introLogo"), clamp(il * 1.5) * (1 - iOut), `rotate(${(1 - il) * -120}deg) scale(${lerp(0.3, 1, il) * (1 + iOut * 0.3)})`);
+  const iname = p(t, 0.6, 0.6);
+  set($("introName"), iname * (1 - iOut), `translateY(${(1 - iname) * 40 - iOut * 30}px)`);
+  const itag = p(t, 1.0, 0.6);
+  set($("introTag"), itag * (1 - iOut), `translateY(${(1 - itag) * 30 - iOut * 30}px)`);
+
+  // phone in at 2.7, out at 25.5
+  const phIn = p(t, 2.65, 0.85, ease.out), phOut = p(t, 25.5, 0.6, ease.inOut);
+  set($("phone"), clamp(phIn * 2) * (1 - phOut),
+    `translateY(${(1 - phIn) * 1000 - phOut * 140}px) rotate(${(1 - phIn) * 8}deg) scale(${1 - phOut * 0.08})`);
+  $("glow").style.opacity = phIn * (1 - phOut);
+  const br = p(t, 3.0, 0.5) * (1 - p(t, 25.4, 0.4));
+  set($("brand"), br, `translateY(${(1 - br) * -20}px)`);
+
+  // headlines
+  for (const h of HEADS) {
+    const out = p(t, h.b - 0.35, 0.35, ease.inOut);
+    h.parts.forEach((el, i) => {
+      const k = p(t, h.a + i * 0.09, 0.55);
+      set(el, k * (1 - out), `translateY(${(1 - k) * 36 - out * 24}px)`);
+    });
+  }
+
+  // lock screen
+  const lockOut = p(t, 7.55, 0.4, ease.inOut);
+  set($("lock"), 1 - lockOut, `scale(${1 + lockOut * 0.06})`);
+  const nb = p(t, 3.75, 0.5, ease.back);
+  const nbPush = p(t, 5.85, 0.45);
+  set($("nBank"), clamp(nb * 2), `translateY(${(1 - nb) * -140 + nbPush * 132}px) scale(${lerp(0.9, 1, nb) - nbPush * 0.04})`);
+  $("nBank").style.opacity = clamp(nb * 2) * (1 - nbPush * 0.35);
+  const nbs = p(t, 5.85, 0.5, ease.back);
+  set($("nBussola"), clamp(nbs * 2), `translateY(${(1 - nbs) * -140}px) scale(${lerp(0.9, 1, nbs)})`);
+  $("nBussola").style.boxShadow = `0 0 0 ${2 * nbs}px rgba(30,144,255,${0.9 * nbs})`;
+
+  // the app and its pages
+  const appIn = p(t, 7.55, 0.45);
+  set($("app"), appIn, `translateY(${(1 - appIn) * 40}px)`);
+  const pages = [["pTx", 7.55, 12.2], ["pAcc", 12.2, 16.6], ["pSum", 16.6, 21.0], ["pPort", 21.0, 99]];
+  for (const [id, a, b] of pages) {
+    const k = id === "pTx" ? 1 : p(t, a, 0.5, ease.inOut);
+    const o = p(t, b, 0.5, ease.inOut);
+    set($(id), k * (1 - o), `translateX(${(1 - k) * 80 - o * 80}px)`);
+  }
+  // active tab and the line under it
+  const tabIdx = t < 12.2 ? 2 : t < 16.6 ? 0 : t < 21.0 ? 3 : 0;
+  [...$("tabs").children].forEach((el, i) => el.classList.toggle("on", i === tabIdx));
+  const tabX = i => i * 82.8 + 41.4 - 30;
+  let tx = tabX(2);
+  tx = lerp(tx, tabX(0), p(t, 12.2, 0.45, ease.inOut));
+  tx = lerp(tx, tabX(3), p(t, 16.6, 0.45, ease.inOut));
+  tx = lerp(tx, tabX(0), p(t, 21.0, 0.45, ease.inOut));
+  $("tabLine").style.transform = `translateX(${tx}px)`;
+
+  // inbox: sheet up, tap Accetta, sheet down, row lands, toast
+  const shUp = p(t, 8.0, 0.55), shDown = p(t, 10.35, 0.45, ease.inOut);
+  set($("sheet"), 1, `translateY(${(1 - shUp) * 420 + shDown * 440}px)`);
+  const fIn = p(t, 9.2, 0.45), fOut = p(t, 10.4, 0.3);
+  const press = p(t, 9.85, 0.12) * (1 - p(t, 10.0, 0.15));
+  set($("finger"), fIn * (1 - fOut), `translate(${lerp(330, 86, fIn)}px, ${lerp(900, 830, fIn)}px) scale(${1 - press * 0.2})`);
+  const rp = p(t, 9.9, 0.55);
+  set($("ripple"), (t > 9.9 ? 1 - rp : 0), `translate(86px, 830px) scale(${1 + rp * 1.8})`);
+  $("btnOk").style.transform = `scale(${1 - press * 0.07})`;
+  $("btnOk").style.filter = `brightness(${1 + press * 0.25})`;
+  const nr = p(t, 10.55, 0.5);
+  $("newRow").style.height = `${nr * 67}px`;
+  $("newRow").style.padding = `${nr * 13}px 14px`;
+  $("newRow").style.opacity = nr;
+  $("newRow").style.background = `rgba(${lerp(30, 255, p(t, 11.2, 0.8))},${lerp(144, 255, p(t, 11.2, 0.8))},255,${lerp(0.14, 1, p(t, 11.2, 0.8))})`;
+  $("newRow").style.borderBottomWidth = nr > 0.01 ? "1px" : "0";
+  set($("pending"), 1 - p(t, 10.4, 0.3), `scale(${1 - p(t, 10.4, 0.3) * 0.3})`);
+  $("monthOut").textContent = euro(-(1182.30 - 12.40 + 12.40 * p(t, 10.6, 0.5)));
+  const ts = p(t, 10.65, 0.4, ease.back), tsOut = p(t, 11.75, 0.3);
+  set($("toast"), clamp(ts * 2) * (1 - tsOut), `translateY(${(1 - ts) * 60}px)`);
+
+  // badge: no bank passwords
+  const bnp = p(t, 6.4, 0.5, ease.back), bnpOut = p(t, 11.6, 0.4);
+  set($("badgeNoPass"), clamp(bnp * 2) * (1 - bnpOut), `translateY(${(1 - bnp) * 30}px) scale(${lerp(0.8, 1, bnp)})`);
+
+  // accounts
+  accRows.forEach((el, i) => {
+    const k = p(t, 12.55 + i * 0.13, 0.45, ease.back);
+    set(el, clamp(k * 2), `translateX(${(1 - k) * 60}px)`);
+  });
+  $("totalVal").textContent = euro(TOTAL * p(t, 12.7, 1.9, ease.inOut));
+
+  // summary
+  const sc = p(t, 16.9, 1.7, ease.inOut);
+  $("netVal").textContent = euro((IN_TOT - OUT_TOT) * sc);
+  $("inVal").textContent = euro(IN_TOT * sc);
+  $("outVal").textContent = euro(OUT_TOT * sc);
+  for (let i = 0; i < 10; i++) {
+    const k = p(t, 17.0 + i * 0.07, 0.55, ease.back);
+    const hi = INCOME[i] / MAXV * BAR_H * k, ho = SPEND[i] / MAXV * BAR_H * p(t, 17.05 + i * 0.07, 0.55, ease.back);
+    bi[i].setAttribute("y", 180 - Math.max(hi, 0)); bi[i].setAttribute("height", Math.max(hi, 0));
+    bo[i].setAttribute("y", 180 - Math.max(ho, 0)); bo[i].setAttribute("height", Math.max(ho, 0));
+  }
+  catBars.forEach((el, i) => { el.style.width = CATS[i][1] / 34 * 100 * p(t, 18.2 + i * 0.12, 0.7) + "%"; });
+
+  // portfolio
+  const dk = p(t, 21.35, 1.4, ease.inOut);
+  let acc = 0;
+  segs.forEach((c, i) => {
+    const share = PILLARS[i][0] / 100, start = acc;
+    acc += share;
+    const visible = clamp((dk - start) / share) * share * CIRC;
+    c.setAttribute("stroke-dasharray", `${Math.max(visible - 2, 0)} ${CIRC}`);
+    c.setAttribute("stroke-dashoffset", -start * CIRC);
+  });
+  $("portVal").textContent = euro(TOTAL * dk, 0);
+  const lk = p(t, 22.3, 1.8, ease.inOut);
+  $("linePath").style.strokeDashoffset = LINE_LEN * (1 - lk);
+  const pt = $("linePath").getPointAtLength(LINE_LEN * lk);
+  $("lineDot").setAttribute("cx", pt.x); $("lineDot").setAttribute("cy", pt.y);
+  $("lineDot").style.opacity = lk > 0.01 ? 1 : 0;
+  $("lineArea").setAttribute("d", lineD + `L${PTS[PTS.length - 1][0]},150L${PTS[0][0]},150Z`);
+  $("lineArea").style.opacity = p(t, 23.6, 0.6);
+  holdRows.forEach((el, i) => {
+    const k = p(t, 22.9 + i * 0.15, 0.45, ease.back);
+    set(el, clamp(k * 2), `translateX(${(1 - k) * 60}px)`);
+  });
+  const bu = p(t, 23.7, 0.5, ease.back), buOut = p(t, 25.3, 0.4);
+  set($("badgeUp"), clamp(bu * 2) * (1 - buOut), `translateY(${(1 - bu) * 30}px) scale(${lerp(0.8, 1, bu)})`);
+
+  // end card
+  const el = p(t, 25.9, 0.9, ease.back);
+  set($("endLogo"), clamp(el * 1.5), `rotate(${(1 - el) * -90}deg) scale(${lerp(0.4, 1, el)})`);
+  [["endName", 26.2], ["endTag", 26.45], ["endUrl", 27.3], ["endSub", 27.5]].forEach(([id, a]) => {
+    const k = p(t, a, 0.6);
+    set($(id), k, `translateY(${(1 - k) * 30}px)`);
+  });
+  [...$("endChips").children].forEach((c, i) => {
+    const k = p(t, 26.75 + i * 0.1, 0.5, ease.back);
+    set(c, clamp(k * 2), `translateY(${(1 - k) * 24}px) scale(${lerp(0.85, 1, k)})`);
+  });
+}
+window.seek = seek;
+window.DURATION = DURATION;
+
+// Played live unless render.mjs drives it (it adds ?render to the URL).
+function fit() {
+  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  $("stage").style.transform = `scale(${s})`;
+}
+if (!location.search.includes("render")) {
+  fit(); addEventListener("resize", fit);
+  const t0 = performance.now();
+  const loop = () => { seek(((performance.now() - t0) / 1000) % DURATION); requestAnimationFrame(loop); };
+  document.fonts.ready.then(loop);
+} else {
+  seek(0);
+}
+</script>
+</body>
+</html>

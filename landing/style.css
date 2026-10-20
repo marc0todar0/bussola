@@ -223,6 +223,20 @@ h1 {
 .shot figcaption { margin-top: 14px; color: var(--muted); font-size: 0.95rem; }
 .shot.wide img { box-shadow: 0 30px 60px -30px rgb(19 35 58 / 0.35); }
 
+/* The promo video, between the hero and the four reasons. Its own dark
+   backdrop, so the frame reads the same in either theme. */
+.video { padding-block: 0 96px; }
+.shot video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: #0b1624;
+  box-shadow: 0 30px 60px -30px rgb(19 35 58 / 0.35);
+}
+
 .halves {
   display: grid;
   grid-template-columns: 1fr 1fr;
