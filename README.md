@@ -8,14 +8,15 @@
   <strong>All your money, in one place, adding up.</strong><br>
   Every bank, card, wallet, broker and pocket of cash: your spending <em>and</em> your net worth.<br>
   Self-hosted, free and open source, no telemetry.<br>
-  <a href="https://demo-bussola.marcotodaro.dev"><strong>Try the demo</strong></a>
+  <a href="https://demo-bussola.marcotodaro.dev"><strong>Try the demo</strong></a> - 
+    <a href="https://bussola.marcotodaro.dev"><strong>Website</strong></a>
 </p>
 
 <p align="center">
-  <a href="docs/using.md">Docs</a> ·
-  <a href="https://github.com/marc0todar0/bussola/releases/latest">Latest release</a> ·
-  <a href="https://github.com/marc0todar0/bussola/issues/new?template=bug.md">Report a bug</a> ·
-  <a href="https://github.com/marc0todar0/bussola/discussions">Ask a question</a> ·
+  <a href="docs/using.md">Docs</a> -
+  <a href="https://github.com/marc0todar0/bussola/releases/latest">Latest release</a> -
+  <a href="https://github.com/marc0todar0/bussola/issues/new?template=bug.md">Report a bug</a> -
+  <a href="https://github.com/marc0todar0/bussola/discussions">Ask a question</a> -
   <a href="#support-the-development">🙏 Donate</a>
 </p>
 
