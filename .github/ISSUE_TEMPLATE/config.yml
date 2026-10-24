@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/marc0todar0/bussola/security/advisories/new
+    about: Report it privately, never in a public issue.
+  - name: Question or help with an installation
+    url: https://github.com/marc0todar0/bussola/discussions
+    about: Ask in Discussions.

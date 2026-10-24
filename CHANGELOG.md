@@ -9,6 +9,23 @@ API starts; an entry that touches the schema names its migration.
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-10-24
+
+The repository is public. Nothing in the application changed: the images are
+the 0.3.0 code rebuilt, and upgrading needs no step.
+
+### Added
+
+- **A security policy** (`SECURITY.md`): vulnerabilities are reported
+  privately through GitHub's *Report a vulnerability*, never in a public
+  issue. It says what to expect, which versions get fixes and what is in
+  scope.
+- **A code of conduct** (`CODE_OF_CONDUCT.md`, the Contributor Covenant 2.1),
+  a pull request template with the checks a change must pass, and issue
+  links that send security reports and questions to the right place.
+- **A thirty-second video** of the main features, on the landing page and in
+  the README.
+
 ## [0.3.0] - 2026-10-08
 
 ### Added
