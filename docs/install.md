@@ -79,4 +79,4 @@ docker exec -i bussola-postgres sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB
 
 ## More
 
-- [Security notes](security.md): how passwords, sessions, lockouts and wallet isolation work
+- [Security notes](security.md): how passwords, sessions, lockouts and wallet isolation work. To report a vulnerability, see [SECURITY.md](../SECURITY.md)
