@@ -9,6 +9,17 @@ API starts; an entry that touches the schema names its migration.
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-11-03
+
+Dependency updates only; upgrading needs no step.
+
+### Changed
+
+- **API**: `proxy-addr` 2.0.8 and `body-parser` 1.20.9 (both under Express),
+  `brace-expansion` 1.1.21 and 5.0.12 (development tools only).
+- **Frontend**: `vite` 6.4.4, `source-map-js` 1.2.2 and `brace-expansion`
+  1.1.21 (build tools only).
+
 ## [0.3.1] - 2026-10-24
 
 The repository is public. Nothing in the application changed: the images are
