@@ -107,7 +107,7 @@ How it compares with Firefly III, Actual, Ghostfolio and Sure, and who it is *no
 - [Contributing](CONTRIBUTING.md)
 
 <p align="center">
-  <img src="docs/architecture.svg" width="760" alt="Bussola's containers: frontend (nginx, the only published port) proxies /api to the api (Express), which stores everything in postgres. An optional quotes container fetches prices; an optional OpenAI-compatible model reads bank notifications.">
+  <img src="docs/architecture.svg" width="760" alt="Bussola's containers: a browser, and an automation app (MacroDroid, Automate or Shortcuts) forwarding bank notifications, reach the frontend (nginx, the only published port), which proxies /api to the api (Express), which stores everything in postgres. An optional quotes container fetches prices; an optional OpenAI-compatible model reads bank notifications.">
 </p>
 
 ## Support the development
