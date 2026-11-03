@@ -9,6 +9,18 @@ API starts; an entry that touches the schema names its migration.
 
 ## [Unreleased]
 
+## [0.3.3] - 2026-11-03
+
+Dependency updates only; upgrading needs no step.
+
+### Security
+
+- **API**: `qs` 6.17.1 (under Express; a crafted array could throw in
+  `qs.stringify`) and `uuid` 11.1.1 (under `node-cron`, which only calls
+  `v4()`, so the missing buffer bounds check was not reachable).
+- **Frontend**: `vite` 6.4.5 (`server.fs.deny` could be bypassed with
+  queries; development server only, the images serve a built bundle).
+
 ## [0.3.2] - 2026-11-03
 
 Dependency updates only; upgrading needs no step.
